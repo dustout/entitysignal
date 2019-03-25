@@ -5,8 +5,11 @@
 
 <div ng-controller="testController">
   <div class="row">
-    <div class="col">
-      <button ng-click="subscribe()" class="btn btn-primary btn-block btn-lg">Subscribe</button>
+    <div class="col-6">
+      <button ng-click="subscribeToMessages()" class="btn btn-primary btn-block btn-lg">Subscribe To Messages</button>
+    </div>
+    <div class="col-6">
+      <button ng-click="subscribeToJokes()" class="btn btn-primary btn-block btn-lg">Subscribe To Jokes</button>
     </div>
   </div>
   <br />
@@ -31,17 +34,15 @@
   </div>
   <br />
 
-  @*<div class="row">
-    <div class="col">
-      <button ng-click="test()" class="btn btn-primary btn-block btn-lg">Test</button>
-    </div>
-  </div>
-  <br />*@
-
   <div class="row">
-    <div class="col">
+    <div class="col-6">
       <p ng-repeat="message in messages">
         {{message}}
+      </p>
+    </div>
+    <div class="col-6">
+      <p ng-repeat="joke in jokes">
+        {{joke}}
       </p>
     </div>
   </div>

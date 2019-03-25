@@ -21,13 +21,15 @@ interface Message {
 
 interface testScope extends ng.IScope {
   messages: Message[];
+  jokes: any[];
 
   createNew(): void;
   changeRandom(): void;
   deleteAll(): void;
   test(): void;
 
-  subscribe(): void;
+  subscribeToMessages(): void;
+  subscribeToJokes(): void;
 }
 
 interface EntitySignal {
@@ -38,6 +40,10 @@ interface EntitySignal {
 
 interface SyncPost {
   connectionId: string;
+}
+
+interface SyncSubscription {
+  [key: string]: any[];
 }
 
 angular.module("EntitySignal", [])
@@ -52,9 +58,7 @@ angular.module("EntitySignal").factory("EntitySignal", [
   ) {
     var vm: EntitySignal = <EntitySignal>{};
 
-    var subscriptions = {};
-
-    var values:any[];
+    var subscriptions: SyncSubscription = {};
 
     vm.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub").build();
     vm.hub.start().then(function (x) {
@@ -63,25 +67,24 @@ angular.module("EntitySignal").factory("EntitySignal", [
       return console.error(err.toString());
       });
 
-    vm.hub.on("Sync", (data: DataContainer<Message>[]) => {
+    vm.hub.on("Sync", (data: DataContainer<Message>[], url:string) => {
       $timeout(() => {
         data.forEach(x => {
           if (x.state == EntityState.Added) {
-            values.push(x.object);
+            subscriptions[url].push(x.object);
           }
           else if (x.state == EntityState.Modified) {
-            values.forEach(msg => {
+            subscriptions[url].forEach(msg => {
               if (x.object.id == msg.id) {
-                msg.name = x.object.name;
-                msg.message = x.object.message;
+                angular.copy(x.object, msg);
               }
             })
           }
           else if (x.state == EntityState.Deleted) {
-            for (var i = values.length - 1; i >= 0; i--) {
-              var currentRow = values[i];
+            for (var i = subscriptions[url].length - 1; i >= 0; i--) {
+              var currentRow = subscriptions[url][i];
               if (currentRow.id == x.object.id) {
-                values.splice(i, 1);
+                subscriptions[url].splice(i, 1);
               }
             }
           }
@@ -100,12 +103,11 @@ angular.module("EntitySignal").factory("EntitySignal", [
       }
 
       //otherwise attempt to subscribe
-      return $http.post(url, syncPost)
+      return $http.post<any[]>(url, syncPost)
         .then(x => {
           if (subscriptions[url] == null) {
             subscriptions[url] = x.data;
           }
-          values = subscriptions[url];
 
           return subscriptions[url];
         });
@@ -143,10 +145,17 @@ angular.module("app").controller("testController", [
       $http.get("/home/Test");
     };
 
-    $scope.subscribe = () => {
+    $scope.subscribeToMessages = () => {
       EntitySignal.syncWith("/home/SubscribeTest")
         .then(x => {
           $scope.messages = x;
+        })
+    };
+
+    $scope.subscribeToJokes = () => {
+      EntitySignal.syncWith("/home/SubscribeJokesTest")
+        .then(x => {
+          $scope.jokes = x;
         })
     };
   }]);

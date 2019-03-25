@@ -17,6 +17,7 @@ namespace EntitySignal.Data
     public IHubContext<DataHub, IDataClient> _dataHubContext { get; }
 
     public DbSet<Messages> Messages { get; set; }
+    public DbSet<Jokes> Jokes { get; set; }
 
     public ApplicationDbContext(
       DbContextOptions<ApplicationDbContext> options,
@@ -55,7 +56,7 @@ namespace EntitySignal.Data
               IdField = "id",
               Object = x.Entity,
               State = x.State,
-              Type = x.Entity.GetType().Name
+              Type = x.Entity.GetType()
             })
             .ToList();
 
@@ -67,7 +68,20 @@ namespace EntitySignal.Data
 
     public async Task PostSave(IEnumerable<DataContainer> changedData)
     {
-        await _dataHubContext.Clients.Group("Subscribed").Sync(changedData);
+      var changedByType = changedData
+        .GroupBy(x => x.Type)
+        .ToList();
+
+      foreach (var typeGroup in changedByType)
+      {
+        if (DataSync.TypeDictionary.ContainsKey(typeGroup.Key)){
+          var list = DataSync.TypeDictionary[typeGroup.Key];
+          foreach (var user in list)
+          {
+            await _dataHubContext.Clients.Client(user.ConnectionId).Sync(typeGroup, user.Url);
+          }
+        }
+      }
     }
 
 

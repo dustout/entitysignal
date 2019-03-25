@@ -40,11 +40,6 @@ namespace EntitySignal.Controllers
       return View();
     }
 
-    public async Task<ActionResult> Test()
-    {
-      return Ok();
-    }
-
     public async Task<ActionResult> Create()
     {
       var a = new Messages()
@@ -54,6 +49,13 @@ namespace EntitySignal.Controllers
       };
 
       _db.Messages.Add(a);
+
+      var b = new Jokes()
+      {
+        Leadup = "Why did the chicken cross the road",
+        Punchline = "To get to the other side"
+      };
+      _db.Jokes.Add(b);
       await _db.SaveChangesAsync();
 
       return Ok();
@@ -64,23 +66,53 @@ namespace EntitySignal.Controllers
     {
       //check if user has permissions to view this data
 
-      //subscribe user
-      await _dataHubContext.Groups.AddToGroupAsync(postSubscribe.ConnectionId, "Subscribed");
+      var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
+
+      var userContainer = new UserContainer()
+      {
+        ConnectionId = postSubscribe.ConnectionId,
+        Url = url
+      };
+
+      DataSync.AddUser(typeof(Messages), userContainer);
 
       //initialize data for subscription
       return await _db.Messages.ToListAsync();
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<IEnumerable<Jokes>>> SubscribeJokesTest([FromBody] SubscribePost postSubscribe)
+    {
+      var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
+
+      var userContainer = new UserContainer()
+      {
+        ConnectionId = postSubscribe.ConnectionId,
+        Url = url
+      };
+
+      DataSync.AddUser(typeof(Jokes), userContainer);
+
+      //initialize data for subscription
+      return await _db.Jokes.ToListAsync();
     }
 
     public async Task<ActionResult> ChangeRandom()
     {
       var messageCount = await _db.Messages.CountAsync();
       var random = new Random().Next(messageCount);
-
       var randomMessage = await _db.Messages
         .Skip(random)
         .FirstAsync();
-
       randomMessage.Message = Guid.NewGuid().ToString();
+
+      var jokeCount = await _db.Jokes.CountAsync();
+      var randomJokeSkip = new Random().Next(jokeCount);
+      var randomJoke = await _db.Jokes
+        .Skip(randomJokeSkip)
+        .FirstAsync();
+      randomJoke.Punchline = Guid.NewGuid().ToString();
+
       await _db.SaveChangesAsync();
 
       return Ok();
@@ -90,19 +122,12 @@ namespace EntitySignal.Controllers
     {
       var messages =  _db.Messages;
       _db.RemoveRange(messages);
+
+      var jokes = _db.Jokes;
+      _db.RemoveRange(jokes);
       await _db.SaveChangesAsync();
 
       return Ok();
-    }
-
-    public async Task<ActionResult<IEnumerable<Messages>>> GetAll()
-    {
-      return await _db.Messages.ToListAsync();
-    }
-
-    public IActionResult Privacy()
-    {
-      return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

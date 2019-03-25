@@ -15,32 +15,30 @@ angular.module("EntitySignal").factory("EntitySignal", [
     function ($http, $q, $timeout) {
         var vm = {};
         var subscriptions = {};
-        var values;
         vm.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub").build();
         vm.hub.start().then(function (x) {
             vm.connectionId = signalR.connectionId;
         }).catch(function (err) {
             return console.error(err.toString());
         });
-        vm.hub.on("Sync", function (data) {
+        vm.hub.on("Sync", function (data, url) {
             $timeout(function () {
                 data.forEach(function (x) {
                     if (x.state == EntityState.Added) {
-                        values.push(x.object);
+                        subscriptions[url].push(x.object);
                     }
                     else if (x.state == EntityState.Modified) {
-                        values.forEach(function (msg) {
+                        subscriptions[url].forEach(function (msg) {
                             if (x.object.id == msg.id) {
-                                msg.name = x.object.name;
-                                msg.message = x.object.message;
+                                angular.copy(x.object, msg);
                             }
                         });
                     }
                     else if (x.state == EntityState.Deleted) {
-                        for (var i = values.length - 1; i >= 0; i--) {
-                            var currentRow = values[i];
+                        for (var i = subscriptions[url].length - 1; i >= 0; i--) {
+                            var currentRow = subscriptions[url][i];
                             if (currentRow.id == x.object.id) {
-                                values.splice(i, 1);
+                                subscriptions[url].splice(i, 1);
                             }
                         }
                     }
@@ -61,7 +59,6 @@ angular.module("EntitySignal").factory("EntitySignal", [
                 if (subscriptions[url] == null) {
                     subscriptions[url] = x.data;
                 }
-                values = subscriptions[url];
                 return subscriptions[url];
             });
         };
@@ -87,10 +84,16 @@ angular.module("app").controller("testController", [
         $scope.test = function () {
             $http.get("/home/Test");
         };
-        $scope.subscribe = function () {
+        $scope.subscribeToMessages = function () {
             EntitySignal.syncWith("/home/SubscribeTest")
                 .then(function (x) {
                 $scope.messages = x;
+            });
+        };
+        $scope.subscribeToJokes = function () {
+            EntitySignal.syncWith("/home/SubscribeJokesTest")
+                .then(function (x) {
+                $scope.jokes = x;
             });
         };
     }
