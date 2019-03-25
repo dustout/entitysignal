@@ -1,0 +1,54 @@
+﻿@{
+  ViewData["Title"] = "Home Page";
+}
+
+
+<div ng-controller="testController">
+  <div class="row">
+    <div class="col">
+      <button ng-click="subscribe()" class="btn btn-primary btn-block btn-lg">Subscribe</button>
+    </div>
+  </div>
+  <br />
+
+  <div class="row">
+    <div class="col">
+      <button ng-click="createNew()" class="btn btn-primary btn-block btn-lg">Create New</button>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <button ng-click="changeRandom()" class="btn btn-primary btn-block btn-lg">Change Random</button>
+    </div>
+  </div>
+  <br />
+
+  <div class="row">
+    <div class="col">
+      <button ng-click="deleteAll()" class="btn btn-primary btn-block btn-lg">Delete All</button>
+    </div>
+  </div>
+  <br />
+
+  @*<div class="row">
+    <div class="col">
+      <button ng-click="test()" class="btn btn-primary btn-block btn-lg">Test</button>
+    </div>
+  </div>
+  <br />*@
+
+  <div class="row">
+    <div class="col">
+      <p ng-repeat="message in messages">
+        {{message}}
+      </p>
+    </div>
+  </div>
+</div>
+
+@section Scripts{
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
+  <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+  <script src="~/ts/data.js" asp-append-version="true"></script>
+}
