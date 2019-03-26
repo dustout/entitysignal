@@ -96,6 +96,12 @@ angular.module("app").controller("testController", [
                 $scope.jokes = x;
             });
         };
+        $scope.subscribeToOddIdMessages = function () {
+            EntitySignal.syncWith("/home/SubscribeFilterTest")
+                .then(function (x) {
+                $scope.filterMessages = x;
+            });
+        };
     }
 ]);
 //# sourceMappingURL=data.js.map

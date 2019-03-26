@@ -5,10 +5,13 @@
 
 <div ng-controller="testController">
   <div class="row">
-    <div class="col-6">
+    <div class="col-4">
       <button ng-click="subscribeToMessages()" class="btn btn-primary btn-block btn-lg">Subscribe To Messages</button>
     </div>
-    <div class="col-6">
+    <div class="col-4">
+      <button ng-click="subscribeToOddIdMessages()" class="btn btn-primary btn-block btn-lg">Subscribe Odd Id Messages</button>
+    </div>
+    <div class="col-4">
       <button ng-click="subscribeToJokes()" class="btn btn-primary btn-block btn-lg">Subscribe To Jokes</button>
     </div>
   </div>
@@ -35,15 +38,14 @@
   <br />
 
   <div class="row">
-    <div class="col-6">
-      <p ng-repeat="message in messages">
-        {{message}}
-      </p>
+    <div class="col-4">
+      <pre ng-repeat="message in messages">{{message | json}}</pre>
     </div>
-    <div class="col-6">
-      <p ng-repeat="joke in jokes">
-        {{joke}}
-      </p>
+    <div class="col-4">
+      <pre ng-repeat="filterMessages in filterMessages">{{filterMessages | json}}</pre>
+    </div>
+    <div class="col-4">
+      <pre ng-repeat="joke in jokes">{{joke | json}}</pre>
     </div>
   </div>
 </div>

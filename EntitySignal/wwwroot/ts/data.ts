@@ -21,6 +21,7 @@ interface Message {
 
 interface testScope extends ng.IScope {
   messages: Message[];
+  filterMessages: Message[];
   jokes: any[];
 
   createNew(): void;
@@ -29,6 +30,7 @@ interface testScope extends ng.IScope {
   test(): void;
 
   subscribeToMessages(): void;
+  subscribeToOddIdMessages(): void;
   subscribeToJokes(): void;
 }
 
@@ -156,6 +158,13 @@ angular.module("app").controller("testController", [
       EntitySignal.syncWith("/home/SubscribeJokesTest")
         .then(x => {
           $scope.jokes = x;
+        })
+    };
+
+    $scope.subscribeToOddIdMessages = () => {
+      EntitySignal.syncWith("/home/SubscribeFilterTest")
+        .then(x => {
+          $scope.filterMessages = x;
         })
     };
   }]);

@@ -81,6 +81,31 @@ namespace EntitySignal.Controllers
     }
 
     [HttpPost]
+    public async Task<IEnumerable<Messages>> SubscribeFilterTest([FromBody] SubscribePost postSubscribe)
+    {
+      //check if user has permissions to view this data
+
+      var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
+
+      var linqFilter = _db.Messages
+        .Where(x => x.Id % 2 == 1);
+
+      var filterResults = await linqFilter.ToListAsync();
+
+      var userContainer = new UserContainer()
+      {
+        ConnectionId = postSubscribe.ConnectionId,
+        Url = url,
+        Query = linqFilter
+      };
+
+      DataSync.AddUser(typeof(Messages), userContainer);
+
+      //initialize data for subscription
+      return filterResults;
+    }
+
+    [HttpPost]
     public async Task<ActionResult<IEnumerable<Jokes>>> SubscribeJokesTest([FromBody] SubscribePost postSubscribe)
     {
       var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
@@ -111,6 +136,7 @@ namespace EntitySignal.Controllers
       var randomJoke = await _db.Jokes
         .Skip(randomJokeSkip)
         .FirstAsync();
+      randomJoke.Leadup = "Why did the guid cross the road?";
       randomJoke.Punchline = Guid.NewGuid().ToString();
 
       await _db.SaveChangesAsync();

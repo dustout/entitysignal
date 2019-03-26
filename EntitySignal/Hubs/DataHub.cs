@@ -25,13 +25,12 @@ namespace EntitySignal.Hubs
   {
     public string ConnectionId;
     public string Url;
+    public IQueryable Query;
   }
 
   public class DataSync
   {
     public static Dictionary<Type, List<UserContainer>> TypeDictionary { get; set; } = new Dictionary<Type, List<UserContainer>>();
-
-    public static List<UserContainer> Users { get; set; } = new List<UserContainer>();
 
     public static void AddUser(Type type, UserContainer user)
     {
@@ -50,7 +49,7 @@ namespace EntitySignal.Hubs
   {
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-      DataSync.Users.RemoveAll(x => x.ConnectionId == Context.ConnectionId);
+      //DataSync.Users.RemoveAll(x => x.ConnectionId == Context.ConnectionId);
 
       await base.OnDisconnectedAsync(exception);
     }
