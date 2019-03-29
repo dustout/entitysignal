@@ -29,6 +29,7 @@ interface testScope extends ng.IScope {
   createFiveNew(): void;
   changeRandom(): void;
   deleteAll(): void;
+  deleteRandom(): void;
   test(): void;
 
   subscribeToMessages(): void;
@@ -154,6 +155,10 @@ angular.module("app").controller("testController", [
     $scope.deleteAll = () => {
       $http.get("/home/DeleteAll");
     };
+
+    $scope.deleteRandom = () => {
+      $http.get("/home/DeleteRandom");
+    }
 
     $scope.test = () => {
       $http.get("/home/Test");

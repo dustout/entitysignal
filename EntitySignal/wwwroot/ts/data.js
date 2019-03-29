@@ -89,6 +89,9 @@ angular.module("app").controller("testController", [
         $scope.deleteAll = function () {
             $http.get("/home/DeleteAll");
         };
+        $scope.deleteRandom = function () {
+            $http.get("/home/DeleteRandom");
+        };
         $scope.test = function () {
             $http.get("/home/Test");
         };

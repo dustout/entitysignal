@@ -18,6 +18,7 @@ namespace EntitySignal.Controllers
     public string ConnectionId { get; set; }
   }
 
+  [ResponseCache(NoStore = true, Duration = 0)]
   public class HomeController : Controller
   {
     private ApplicationDbContext _db;
@@ -200,6 +201,27 @@ namespace EntitySignal.Controllers
 
       var jokes = _db.Jokes;
       _db.RemoveRange(jokes);
+      await _db.SaveChangesAsync();
+
+      return Ok();
+    }
+
+    public async Task<ActionResult> DeleteRandom()
+    {
+      var messageCount = await _db.Messages.CountAsync();
+      var random = new Random().Next(messageCount);
+      var randomMessage = await _db.Messages
+        .Skip(random)
+        .FirstAsync();
+      _db.Messages.Remove(randomMessage);
+
+      var jokeCount = await _db.Jokes.CountAsync();
+      var randomJokeSkip = new Random().Next(jokeCount);
+      var randomJoke = await _db.Jokes
+        .Skip(randomJokeSkip)
+        .FirstAsync();
+      _db.Jokes.Remove(randomJoke);
+
       await _db.SaveChangesAsync();
 
       return Ok();

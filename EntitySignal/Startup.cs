@@ -55,7 +55,6 @@ namespace EntitySignal
       {
         app.UseDeveloperExceptionPage();
         app.UseDatabaseErrorPage();
-        app.UseBrowserLink();
       }
       else
       {
