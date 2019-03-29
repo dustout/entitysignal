@@ -5,21 +5,11 @@
 
 <div ng-controller="testController">
   <div class="row">
-    <div class="col-4">
-      <button ng-click="subscribeToMessages()" class="btn btn-primary btn-block btn-lg">Subscribe To Messages</button>
+    <div class="col-6">
+      <button ng-click="createNew()" class="btn btn-primary btn-block btn-lg">Create 1 New</button>
     </div>
-    <div class="col-4">
-      <button ng-click="subscribeToOddIdMessages()" class="btn btn-primary btn-block btn-lg">Subscribe Odd Id Messages</button>
-    </div>
-    <div class="col-4">
-      <button ng-click="subscribeToJokes()" class="btn btn-primary btn-block btn-lg">Subscribe To Jokes</button>
-    </div>
-  </div>
-  <br />
-
-  <div class="row">
-    <div class="col">
-      <button ng-click="createNew()" class="btn btn-primary btn-block btn-lg">Create New</button>
+    <div class="col-6">
+      <button ng-click="createFiveNew()" class="btn btn-primary btn-block btn-lg">Create 5 New</button>
     </div>
   </div>
   <br />
@@ -38,14 +28,33 @@
   <br />
 
   <div class="row">
-    <div class="col-4">
+    <div class="col-3">
+      <button ng-click="subscribeToMessages()" class="btn btn-primary btn-block btn-lg">Subscribe To Messages</button>
+    </div>
+    <div class="col-3">
+      <button ng-click="subscribeToOddIdMessages()" class="btn btn-primary btn-block btn-lg">Subscribe Odd Id Messages</button>
+    </div>
+    <div class="col-3">
+      <button ng-click="subscribeToJokes()" class="btn btn-primary btn-block btn-lg">Subscribe To Jokes</button>
+    </div>
+    <div class="col-3">
+      <button ng-click="subscribeToGuidJokes()" class="btn btn-primary btn-block btn-lg">Subscribe GUID Jokes</button>
+    </div>
+  </div>
+  <br />
+
+  <div class="row">
+    <div class="col-3">
       <pre ng-repeat="message in messages">{{message | json}}</pre>
     </div>
-    <div class="col-4">
+    <div class="col-3">
       <pre ng-repeat="filterMessages in filterMessages">{{filterMessages | json}}</pre>
     </div>
-    <div class="col-4">
+    <div class="col-3">
       <pre ng-repeat="joke in jokes">{{joke | json}}</pre>
+    </div>
+    <div class="col-3">
+      <pre ng-repeat="joke in guidJokes">{{joke | json}}</pre>
     </div>
   </div>
 </div>

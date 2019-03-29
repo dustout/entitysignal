@@ -23,8 +23,10 @@ interface testScope extends ng.IScope {
   messages: Message[];
   filterMessages: Message[];
   jokes: any[];
+  guidJokes: any[];
 
   createNew(): void;
+  createFiveNew(): void;
   changeRandom(): void;
   deleteAll(): void;
   test(): void;
@@ -32,6 +34,7 @@ interface testScope extends ng.IScope {
   subscribeToMessages(): void;
   subscribeToOddIdMessages(): void;
   subscribeToJokes(): void;
+  subscribeToGuidJokes(): void;
 }
 
 interface EntitySignal {
@@ -76,11 +79,16 @@ angular.module("EntitySignal").factory("EntitySignal", [
             subscriptions[url].push(x.object);
           }
           else if (x.state == EntityState.Modified) {
+            var changeCount = 0;
             subscriptions[url].forEach(msg => {
               if (x.object.id == msg.id) {
                 angular.copy(x.object, msg);
+                changeCount++;
               }
             })
+            if (changeCount == 0) {
+              subscriptions[url].push(x.object);
+            }
           }
           else if (x.state == EntityState.Deleted) {
             for (var i = subscriptions[url].length - 1; i >= 0; i--) {
@@ -135,6 +143,10 @@ angular.module("app").controller("testController", [
       $http.get("/home/create");
     };
 
+    $scope.createFiveNew = () => {
+      $http.get("/home/createFive");
+    };
+
     $scope.changeRandom = () => {
       $http.get("/home/ChangeRandom");
     };
@@ -165,6 +177,13 @@ angular.module("app").controller("testController", [
       EntitySignal.syncWith("/home/SubscribeFilterTest")
         .then(x => {
           $scope.filterMessages = x;
+        })
+    };
+
+    $scope.subscribeToGuidJokes = () => {
+      EntitySignal.syncWith("/home/SubscribeGuidJokesTest")
+        .then(x => {
+          $scope.guidJokes = x;
         })
     };
   }]);

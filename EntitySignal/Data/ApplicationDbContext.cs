@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +28,6 @@ namespace EntitySignal.Data
     {
       _dataHubContext = dataHubContext;
     }
-
 
     public override int SaveChanges()
     {
@@ -74,16 +74,23 @@ namespace EntitySignal.Data
 
       foreach (var typeGroup in changedByType)
       {
+        var queryableTypeGroup = typeGroup
+          .ToList();
+
         if (DataSync.TypeDictionary.ContainsKey(typeGroup.Key)){
           var list = DataSync.TypeDictionary[typeGroup.Key];
-          foreach (var user in list)
+
+          var method = typeof(DataSync).GetMethod("GetSubscribed");
+          var genericMethod = method.MakeGenericMethod(new[] { typeGroup.Key });
+          var subscribedUsers = (IEnumerable<UserContainerResult>)genericMethod.Invoke(null, new[] { list, queryableTypeGroup});
+
+          foreach (var subscribedUser in subscribedUsers)
           {
-            await _dataHubContext.Clients.Client(user.ConnectionId).Sync(typeGroup, user.Url);
+            await _dataHubContext.Clients.Client(subscribedUser.ConnectionId).Sync(subscribedUser.Data, subscribedUser.Url);
           }
         }
       }
     }
-
 
     public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
     {

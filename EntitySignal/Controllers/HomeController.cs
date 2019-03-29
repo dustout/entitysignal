@@ -1,14 +1,14 @@
-﻿using System;
+﻿using EntitySignal.Data;
+using EntitySignal.Hubs;
+using EntitySignal.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using EntitySignal.Models;
-using Microsoft.AspNetCore.SignalR;
-using EntitySignal.Hubs;
-using EntitySignal.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace EntitySignal.Controllers
 {
@@ -61,6 +61,34 @@ namespace EntitySignal.Controllers
       return Ok();
     }
 
+
+    public async Task<ActionResult> CreateFive()
+    {
+      for (var i = 0; i < 5; i++)
+      {
+        var a = new Messages()
+        {
+          Name = "Dustin",
+          Message = "Hey"
+        };
+        _db.Messages.Add(a);
+      }
+
+      for (var i = 0; i < 5; i++)
+      {
+        var b = new Jokes()
+        {
+          Leadup = "Why did the chicken cross the road",
+          Punchline = "To get to the other side"
+        };
+        _db.Jokes.Add(b);
+      }
+
+      await _db.SaveChangesAsync();
+
+      return Ok();
+    }
+
     [HttpPost]
     public async Task<ActionResult<IEnumerable<Messages>>> SubscribeTest([FromBody] SubscribePost postSubscribe)
     {
@@ -68,40 +96,38 @@ namespace EntitySignal.Controllers
 
       var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
 
-      var userContainer = new UserContainer()
+      var userContainer = new UserContainer<Messages>()
       {
         ConnectionId = postSubscribe.ConnectionId,
         Url = url
       };
 
-      DataSync.AddUser(typeof(Messages), userContainer);
+      DataSync.AddUser(userContainer);
 
       //initialize data for subscription
       return await _db.Messages.ToListAsync();
     }
 
     [HttpPost]
-    public async Task<IEnumerable<Messages>> SubscribeFilterTest([FromBody] SubscribePost postSubscribe)
+    public IEnumerable<Messages> SubscribeFilterTest([FromBody] SubscribePost postSubscribe)
     {
       //check if user has permissions to view this data
 
       var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
 
-      var linqFilter = _db.Messages
-        .Where(x => x.Id % 2 == 1);
-
-      var filterResults = await linqFilter.ToListAsync();
-
-      var userContainer = new UserContainer()
+      var userContainer = new UserContainer<Messages>()
       {
         ConnectionId = postSubscribe.ConnectionId,
         Url = url,
-        Query = linqFilter
+        Query = x => x.Id % 2 == 1
       };
 
-      DataSync.AddUser(typeof(Messages), userContainer);
+      DataSync.AddUser(userContainer);
 
-      //initialize data for subscription
+      var filterResults = _db.Messages
+        .Where(userContainer.Query)
+        .ToList();
+
       return filterResults;
     }
 
@@ -110,16 +136,39 @@ namespace EntitySignal.Controllers
     {
       var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
 
-      var userContainer = new UserContainer()
+      var userContainer = new UserContainer<Jokes>()
       {
         ConnectionId = postSubscribe.ConnectionId,
         Url = url
       };
 
-      DataSync.AddUser(typeof(Jokes), userContainer);
+      DataSync.AddUser(userContainer);
 
       //initialize data for subscription
       return await _db.Jokes.ToListAsync();
+    }
+
+    [HttpPost]
+    public IEnumerable<Jokes> SubscribeGuidJokesTest([FromBody] SubscribePost postSubscribe)
+    {
+      //check if user has permissions to view this data
+
+      var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
+
+      var userContainer = new UserContainer<Jokes>()
+      {
+        ConnectionId = postSubscribe.ConnectionId,
+        Url = url,
+        Query = x => Guid.TryParse(x.Punchline, out Guid g)
+      };
+
+      DataSync.AddUser(userContainer);
+
+      var filterResults = _db.Jokes
+        .Where(userContainer.Query)
+        .ToList();
+
+      return filterResults;
     }
 
     public async Task<ActionResult> ChangeRandom()
@@ -146,7 +195,7 @@ namespace EntitySignal.Controllers
 
     public async Task<ActionResult> DeleteAll()
     {
-      var messages =  _db.Messages;
+      var messages = _db.Messages;
       _db.RemoveRange(messages);
 
       var jokes = _db.Jokes;

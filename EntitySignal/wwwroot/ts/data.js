@@ -28,11 +28,16 @@ angular.module("EntitySignal").factory("EntitySignal", [
                         subscriptions[url].push(x.object);
                     }
                     else if (x.state == EntityState.Modified) {
+                        var changeCount = 0;
                         subscriptions[url].forEach(function (msg) {
                             if (x.object.id == msg.id) {
                                 angular.copy(x.object, msg);
+                                changeCount++;
                             }
                         });
+                        if (changeCount == 0) {
+                            subscriptions[url].push(x.object);
+                        }
                     }
                     else if (x.state == EntityState.Deleted) {
                         for (var i = subscriptions[url].length - 1; i >= 0; i--) {
@@ -75,6 +80,9 @@ angular.module("app").controller("testController", [
         $scope.createNew = function () {
             $http.get("/home/create");
         };
+        $scope.createFiveNew = function () {
+            $http.get("/home/createFive");
+        };
         $scope.changeRandom = function () {
             $http.get("/home/ChangeRandom");
         };
@@ -100,6 +108,12 @@ angular.module("app").controller("testController", [
             EntitySignal.syncWith("/home/SubscribeFilterTest")
                 .then(function (x) {
                 $scope.filterMessages = x;
+            });
+        };
+        $scope.subscribeToGuidJokes = function () {
+            EntitySignal.syncWith("/home/SubscribeGuidJokesTest")
+                .then(function (x) {
+                $scope.guidJokes = x;
             });
         };
     }
