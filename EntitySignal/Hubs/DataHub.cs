@@ -42,6 +42,9 @@ namespace EntitySignal.Hubs
 
   public class DataSync
   {
+    public static Dictionary<Type, Object> TypeDictionary { get; set; } = new Dictionary<Type, Object>();
+
+
     public static List<UserContainer<T>> DictionaryValueToUserContainerList<T>(object obj)
     {
       if (obj.GetType() == typeof(List<UserContainer<T>>))
@@ -84,32 +87,6 @@ namespace EntitySignal.Hubs
       return results;
     }
 
-    public static UserContainerResult RunFilter<T>(UserContainer<T> userContainer, IQueryable<T> values)
-    {
-      var result = new UserContainerResult()
-      {
-        ConnectionId = userContainer.ConnectionId,
-        Url = userContainer.Url
-      };
-
-      if (userContainer.Query == null)
-      {
-        return result;
-      }
-
-      var isValid = values
-        .Where(userContainer.Query)
-        .Any();
-
-      if (isValid)
-      {
-        return result;
-      }
-
-      return null;
-    }
-
-    public static Dictionary<Type, Object> TypeDictionary { get; set; } = new Dictionary<Type, Object>();
 
     public static void AddUser<T>(UserContainer<T> user)
     {
@@ -126,19 +103,31 @@ namespace EntitySignal.Hubs
         typedList.Add(user);
       }
     }
+
+    public static void RemoveConnectionsFromList<T>(List<UserContainer<T>> userContainers, string connectionId)
+    {
+      userContainers
+        .RemoveAll(x=>x.ConnectionId == connectionId);
+    }
+
+    public static void RemoveConnection(string connectionId)
+    {
+      foreach (var key in TypeDictionary.Keys)
+      {
+        var value = TypeDictionary[key];
+
+        var method = typeof(DataSync).GetMethod("RemoveConnectionsFromList");
+        var genericMethod = method.MakeGenericMethod(new[] { key });
+        var subscribedUsers = (IEnumerable<UserContainerResult>)genericMethod.Invoke(null, new[] { value, connectionId});
+      }
+    }
   }
 
   public class DataHub : Hub<IDataClient>
   {
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-      foreach (var key in DataSync.TypeDictionary.Keys)
-      {
-
-      }
-
-      //DataSync.Users.RemoveAll(x => x.ConnectionId == Context.ConnectionId);
-
+      DataSync.RemoveConnection(Context.ConnectionId);
       await base.OnDisconnectedAsync(exception);
     }
 
