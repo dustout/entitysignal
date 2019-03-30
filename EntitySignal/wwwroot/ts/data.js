@@ -24,10 +24,7 @@ angular.module("EntitySignal").factory("EntitySignal", [
         vm.hub.on("Sync", function (data, url) {
             $timeout(function () {
                 data.forEach(function (x) {
-                    if (x.state == EntityState.Added) {
-                        subscriptions[url].push(x.object);
-                    }
-                    else if (x.state == EntityState.Modified) {
+                    if (x.state == EntityState.Added || x.state == EntityState.Modified) {
                         var changeCount = 0;
                         subscriptions[url].forEach(function (msg) {
                             if (x.object.id == msg.id) {
