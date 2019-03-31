@@ -116,6 +116,10 @@ angular.module("app").controller("testController", [
                 $scope.guidJokes = x;
             });
         };
+        $scope.subscribeToMessages();
+        $scope.subscribeToJokes();
+        $scope.subscribeToGuidJokes();
+        $scope.subscribeToOddIdMessages();
     }
 ]);
 //# sourceMappingURL=data.js.map

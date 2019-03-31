@@ -30,7 +30,7 @@
   </div>
   <br />
 
-  <div class="row">
+  @*<div class="row">
     <div class="col-3">
       <button ng-click="subscribeToMessages()" class="btn btn-primary btn-block btn-lg">Subscribe To Messages</button>
     </div>
@@ -44,19 +44,23 @@
       <button ng-click="subscribeToGuidJokes()" class="btn btn-primary btn-block btn-lg">Subscribe GUID Jokes</button>
     </div>
   </div>
-  <br />
+  <br />*@
 
   <div class="row">
-    <div class="col-3">
+    <div class="col-sm-3">
+      <h2>Messages</h2>
       <pre ng-repeat="message in messages">{{message | json}}</pre>
     </div>
-    <div class="col-3">
+    <div class="col-sm-3">
+      <h2>Messages with odd id</h2>
       <pre ng-repeat="filterMessages in filterMessages">{{filterMessages | json}}</pre>
     </div>
-    <div class="col-3">
+    <div class="col-sm-3">
+      <h2>Jokes</h2>
       <pre ng-repeat="joke in jokes">{{joke | json}}</pre>
     </div>
-    <div class="col-3">
+    <div class="col-sm-3">
+      <h2>Jokes with guid answer</h2>
       <pre ng-repeat="joke in guidJokes">{{joke | json}}</pre>
     </div>
   </div>
