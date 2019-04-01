@@ -86,6 +86,11 @@ namespace EntitySignal.Data
 
           foreach (var subscribedUser in subscribedUsers)
           {
+            if(subscribedUser.ConnectionId == null)
+            {
+              return;
+            }
+
             await _dataHubContext.Clients.Client(subscribedUser.ConnectionId).Sync(subscribedUser.Data, subscribedUser.Url);
           }
         }

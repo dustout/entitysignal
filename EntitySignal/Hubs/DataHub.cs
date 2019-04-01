@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace EntitySignal.Hubs
 
   public class DataSync
   {
-    public static Dictionary<Type, Object> TypeDictionary { get; set; } = new Dictionary<Type, Object>();
+    public static ConcurrentDictionary<Type, Object> TypeDictionary { get; set; } = new ConcurrentDictionary<Type, Object>();
 
 
     public static List<UserContainer<T>> DictionaryValueToUserContainerList<T>(object obj)
@@ -93,7 +94,7 @@ namespace EntitySignal.Hubs
       if (TypeDictionary.ContainsKey(typeof(T)) == false)
       {
         var newList = new List<UserContainer<T>>();
-        TypeDictionary.Add(typeof(T), newList);
+        TypeDictionary.TryAdd(typeof(T), newList);
       }
 
       var list = TypeDictionary[typeof(T)];

@@ -7,6 +7,12 @@ var EntityState;
     EntityState[EntityState["Added"] = 4] = "Added";
 })(EntityState || (EntityState = {}));
 ;
+var EntitySignalStatus;
+(function (EntitySignalStatus) {
+    EntitySignalStatus[EntitySignalStatus["Disconnected"] = 0] = "Disconnected";
+    EntitySignalStatus[EntitySignalStatus["Connecting"] = 1] = "Connecting";
+    EntitySignalStatus[EntitySignalStatus["Connected"] = 2] = "Connected";
+})(EntitySignalStatus || (EntitySignalStatus = {}));
 angular.module("EntitySignal", []);
 angular.module("EntitySignal").factory("EntitySignal", [
     "$http",
@@ -14,13 +20,46 @@ angular.module("EntitySignal").factory("EntitySignal", [
     "$timeout",
     function ($http, $q, $timeout) {
         var vm = {};
+        vm.status = EntitySignalStatus.Disconnected;
         var subscriptions = {};
+        var connectingDefer;
         vm.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub").build();
-        vm.hub.start().then(function (x) {
-            vm.connectionId = signalR.connectionId;
-        }).catch(function (err) {
-            return console.error(err.toString());
+        vm.hub.onclose(function () {
+            vm.status = EntitySignalStatus.Disconnected;
+            reconnect();
         });
+        function reconnect() {
+            $timeout(1000)
+                .then(function () {
+                connect().then(function () {
+                }, function (x) {
+                    reconnect();
+                });
+            });
+        }
+        function connect() {
+            if (vm.status == EntitySignalStatus.Connected) {
+                return $q.when();
+            }
+            if (vm.status == EntitySignalStatus.Connecting) {
+                return connectingDefer.promise;
+            }
+            if (vm.status == EntitySignalStatus.Disconnected) {
+                vm.status = EntitySignalStatus.Connecting;
+                connectingDefer = $q.defer();
+                vm.hub.start().then(function (x) {
+                    vm.status = EntitySignalStatus.Connected;
+                    vm.connectionId = signalR.connectionId;
+                    connectingDefer.resolve();
+                }).catch(function (err) {
+                    alert("Error connecting");
+                    vm.status = EntitySignalStatus.Disconnected;
+                    connectingDefer.reject(err);
+                    return console.error(err.toString());
+                });
+            }
+        }
+        connect();
         vm.hub.on("Sync", function (data, url) {
             $timeout(function () {
                 data.forEach(function (x) {
@@ -47,33 +86,53 @@ angular.module("EntitySignal").factory("EntitySignal", [
                 });
             });
         });
+        vm.getSyncedUrls = function () {
+            var urls = [];
+            for (var propertyName in subscriptions) {
+                console.log(propertyName);
+            }
+            return urls;
+        };
+        window["a"] = subscriptions;
         vm.syncWith = function (url) {
-            var syncPost = {
-                connectionId: vm.connectionId
-            };
             //if already subscribed to then return array
             if (subscriptions[url]) {
                 return $q.when(subscriptions[url]);
             }
             //otherwise attempt to subscribe
-            return $http.post(url, syncPost)
-                .then(function (x) {
-                if (subscriptions[url] == null) {
-                    subscriptions[url] = x.data;
-                }
-                return subscriptions[url];
+            return connect().then(function () {
+                var syncPost = {
+                    connectionId: vm.connectionId
+                };
+                return $http.post(url, syncPost)
+                    .then(function (x) {
+                    if (subscriptions[url] == null) {
+                        subscriptions[url] = x.data;
+                    }
+                    return subscriptions[url];
+                });
             });
         };
         return vm;
     }
 ]);
-angular.module("app", ["EntitySignal"]);
+angular.module("app", ["EntitySignal"])
+    .run([
+    "EntitySignal",
+    function (EntitySignal) {
+        var entitySignalOptions = {
+            autoreconnect: true
+        };
+        EntitySignal.options = entitySignalOptions;
+    }
+]);
 angular.module("app").controller("testController", [
     "$scope",
     "$http",
     "$timeout",
     "EntitySignal",
     function ($scope, $http, $timeout, EntitySignal) {
+        $scope.entitySignal = EntitySignal;
         $scope.createNew = function () {
             $http.get("/home/create");
         };

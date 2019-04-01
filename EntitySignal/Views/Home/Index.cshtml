@@ -5,6 +5,22 @@
 
 <div ng-controller="testController">
   <div class="row">
+    <div class="col">
+      <div ng-show="entitySignal.status == 2" ng-cloak class="alert alert-success text-center" role="alert">
+        Connected to entity framework through signalr (ID: {{entitySignal.connectionId}})
+      </div>
+
+      <div ng-show="entitySignal.status == 0" class="alert alert-dark text-center" role="alert">
+        Disconnected
+      </div>
+
+      <div ng-show="entitySignal.status == 1" ng-cloak class="alert alert-primary text-center" role="alert">
+        Connecting to entity framework through signalr
+      </div>
+    </div>
+  </div>
+
+  <div class="row pb-3">
     <div class="col-6">
       <button ng-click="createNew()" class="btn btn-secondary btn-block btn-lg">Create 1 New</button>
     </div>
@@ -12,15 +28,12 @@
       <button ng-click="createFiveNew()" class="btn btn-secondary btn-block btn-lg">Create 5 New</button>
     </div>
   </div>
-  <br />
-  <div class="row">
+  <div class="row pb-3">
     <div class="col">
       <button ng-click="changeRandom()" class="btn btn-secondary btn-block btn-lg">Change Random</button>
     </div>
   </div>
-  <br />
-
-  <div class="row">
+  <div class="row pb-3">
     <div class="col-6">
       <button ng-click="deleteAll()" class="btn btn-secondary btn-block btn-lg">Delete All</button>
     </div>
@@ -28,23 +41,22 @@
       <button ng-click="deleteRandom()" class="btn btn-secondary btn-block btn-lg">Delete Random</button>
     </div>
   </div>
-  <br />
 
   @*<div class="row">
-    <div class="col-3">
-      <button ng-click="subscribeToMessages()" class="btn btn-primary btn-block btn-lg">Subscribe To Messages</button>
+      <div class="col-3">
+        <button ng-click="subscribeToMessages()" class="btn btn-primary btn-block btn-lg">Subscribe To Messages</button>
+      </div>
+      <div class="col-3">
+        <button ng-click="subscribeToOddIdMessages()" class="btn btn-primary btn-block btn-lg">Subscribe Odd Id Messages</button>
+      </div>
+      <div class="col-3">
+        <button ng-click="subscribeToJokes()" class="btn btn-primary btn-block btn-lg">Subscribe To Jokes</button>
+      </div>
+      <div class="col-3">
+        <button ng-click="subscribeToGuidJokes()" class="btn btn-primary btn-block btn-lg">Subscribe GUID Jokes</button>
+      </div>
     </div>
-    <div class="col-3">
-      <button ng-click="subscribeToOddIdMessages()" class="btn btn-primary btn-block btn-lg">Subscribe Odd Id Messages</button>
-    </div>
-    <div class="col-3">
-      <button ng-click="subscribeToJokes()" class="btn btn-primary btn-block btn-lg">Subscribe To Jokes</button>
-    </div>
-    <div class="col-3">
-      <button ng-click="subscribeToGuidJokes()" class="btn btn-primary btn-block btn-lg">Subscribe GUID Jokes</button>
-    </div>
-  </div>
-  <br />*@
+    <br />*@
 
   <div class="row">
     <div class="col-sm-3">
