@@ -63,7 +63,7 @@ namespace EntitySignal.Hubs
     public static ConcurrentDictionary<Type, SubscriptionsByUser> SubscriptionsByType { get; set; } = new ConcurrentDictionary<Type, SubscriptionsByUser>();
 
 
-    // DO NOT REMOVE, ACCESS BY STRING
+    // DO NOT REMOVE, ACCESSED BY STRING
     public static List<UserContainerResult> GetSubscribed<T>(SubscriptionsByUser subscriptionsByUser, List<DataContainer> values)
     {
       var results = new List<UserContainerResult>();
@@ -171,14 +171,19 @@ namespace EntitySignal.Hubs
       subscriptionsByUrl.ByUrl.AddOrUpdate(user.Url, user, (key, oldValue) => oldValue = user);
     }
 
-    public static void RemoveConnectionsFromList<T>(List<UserContainer<T>> userContainers, string connectionId)
-    {
-      userContainers
-        .RemoveAll(x => x.ConnectionId == connectionId);
-    }
-
     public static void RemoveConnection(string connectionId)
     {
+      foreach (var typeSubscription in SubscriptionsByType)
+      {
+        if(typeSubscription.Value == null)
+        {
+          continue;
+        }
+
+        SubscriptionsByUrl outValue;
+        typeSubscription.Value.ByUser.TryRemove(connectionId, out outValue);
+      }
+
       return;
     }
   }

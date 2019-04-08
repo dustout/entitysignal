@@ -129,13 +129,18 @@ angular.module("EntitySignal").factory("EntitySignal", [
         connectingDefer = $q.defer<void>();
 
         vm.hub.start().then(function (x) {
-          vm.status = EntitySignalStatus.Connected;
-          vm.connectionId = signalR.connectionId;
-          connectingDefer.resolve();
+          $timeout().then(() => {
+            vm.status = EntitySignalStatus.Connected;
+            vm.connectionId = signalR.connectionId;
+            connectingDefer.resolve();
+          });
         }).catch(function (err) {
-          alert("Error connecting");
-          vm.status = EntitySignalStatus.Disconnected;
-          connectingDefer.reject(err);
+          $timeout().then(() => {
+            alert("Error connecting");
+            vm.status = EntitySignalStatus.Disconnected;
+            connectingDefer.reject(err);
+          });
+          
           return console.error(err.toString());
         });
       }

@@ -48,13 +48,17 @@ angular.module("EntitySignal").factory("EntitySignal", [
                 vm.status = EntitySignalStatus.Connecting;
                 connectingDefer = $q.defer();
                 vm.hub.start().then(function (x) {
-                    vm.status = EntitySignalStatus.Connected;
-                    vm.connectionId = signalR.connectionId;
-                    connectingDefer.resolve();
+                    $timeout().then(function () {
+                        vm.status = EntitySignalStatus.Connected;
+                        vm.connectionId = signalR.connectionId;
+                        connectingDefer.resolve();
+                    });
                 }).catch(function (err) {
-                    alert("Error connecting");
-                    vm.status = EntitySignalStatus.Disconnected;
-                    connectingDefer.reject(err);
+                    $timeout().then(function () {
+                        alert("Error connecting");
+                        vm.status = EntitySignalStatus.Disconnected;
+                        connectingDefer.reject(err);
+                    });
                     return console.error(err.toString());
                 });
             }
