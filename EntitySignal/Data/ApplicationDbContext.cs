@@ -77,12 +77,14 @@ namespace EntitySignal.Data
         var queryableTypeGroup = typeGroup
           .ToList();
 
-        if (DataSync.TypeDictionary.ContainsKey(typeGroup.Key)){
-          var list = DataSync.TypeDictionary[typeGroup.Key];
+        SubscriptionsByUser subscriptionsByType;
+        DataSync.SubscriptionsByType.TryGetValue(typeGroup.Key, out subscriptionsByType);
 
+        if (subscriptionsByType != null)
+        {
           var method = typeof(DataSync).GetMethod("GetSubscribed");
           var genericMethod = method.MakeGenericMethod(new[] { typeGroup.Key });
-          var subscribedUsers = (IEnumerable<UserContainerResult>)genericMethod.Invoke(null, new[] { list, queryableTypeGroup});
+          var subscribedUsers = (IEnumerable<UserContainerResult>)genericMethod.Invoke(null, new Object[] { subscriptionsByType, queryableTypeGroup});
 
           foreach (var subscribedUser in subscribedUsers)
           {
@@ -91,7 +93,7 @@ namespace EntitySignal.Data
               return;
             }
 
-            await _dataHubContext.Clients.Client(subscribedUser.ConnectionId).Sync(subscribedUser.Data, subscribedUser.Url);
+            await _dataHubContext.Clients.Client(subscribedUser.ConnectionId).Sync(subscribedUser);
           }
         }
       }

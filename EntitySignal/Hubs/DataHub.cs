@@ -19,10 +19,10 @@ namespace EntitySignal.Hubs
 
   public interface IDataClient
   {
-    Task Sync(IEnumerable<DataContainer> data, string url);
+    Task Sync(UserContainerResult data);
   }
 
-  public class UserContainer<T>: IUserContainer
+  public class UserContainer<T> : IUserContainer
   {
     public string ConnectionId { get; set; }
     public string Url { get; set; }
@@ -37,49 +37,78 @@ namespace EntitySignal.Hubs
   public class UserContainerResult
   {
     public string ConnectionId;
+    public List<UserUrlSubscriptions> Urls = new List<UserUrlSubscriptions>();
+  }
+
+  public class UserUrlSubscriptions
+  {
     public string Url;
     public List<DataContainer> Data = new List<DataContainer>();
   }
 
+  public class SubscriptionsByUser
+  {
+    public ConcurrentDictionary<string, SubscriptionsByUrl> ByUser = new ConcurrentDictionary<string, SubscriptionsByUrl>();
+    public Type SubscriptionType;
+  }
+
+  public class SubscriptionsByUrl
+  {
+    public ConcurrentDictionary<string, IUserContainer> ByUrl = new ConcurrentDictionary<string, IUserContainer>();
+    public Type SubscriptionType;
+  }
+
   public class DataSync
   {
-    public static ConcurrentDictionary<Type, Object> TypeDictionary { get; set; } = new ConcurrentDictionary<Type, Object>();
+    public static ConcurrentDictionary<Type, SubscriptionsByUser> SubscriptionsByType { get; set; } = new ConcurrentDictionary<Type, SubscriptionsByUser>();
 
 
-    public static List<UserContainer<T>> DictionaryValueToUserContainerList<T>(object obj)
-    {
-      if (obj.GetType() == typeof(List<UserContainer<T>>))
-      {
-        var typedList = (List<UserContainer<T>>)obj;
-        return typedList;
-      }
-
-      return null;
-    }
-
-    public static List<UserContainerResult> GetSubscribed<T>(List<UserContainer<T>> userContainers, List<DataContainer> values)
+    // DO NOT REMOVE, ACCESS BY STRING
+    public static List<UserContainerResult> GetSubscribed<T>(SubscriptionsByUser subscriptionsByUser, List<DataContainer> values)
     {
       var results = new List<UserContainerResult>();
 
-      foreach (var user in userContainers)
+      foreach (var user in subscriptionsByUser.ByUser)
       {
+        if(user.Value == null)
+        {
+          continue;
+        }
+
         var userResults = new UserContainerResult
         {
-          ConnectionId = user.ConnectionId,
-          Url = user.Url
+          ConnectionId = user.Key
         };
 
-        foreach (var value in values)
+        foreach (var url in user.Value.ByUrl)
         {
-          var typedObject = (T)value.Object;
-
-          if (user.Query == null || user.Query.Invoke(typedObject))
+          if(url.Value == null)
           {
-            userResults.Data.Add(value);
+            continue;
+          }
+
+          IUserContainer interfaceSubscription = url.Value;
+          UserContainer<T> typedSubscription = (UserContainer<T>)interfaceSubscription;
+
+          foreach (var value in values)
+          {
+            var typedObject = (T)value.Object;
+
+            if (typedSubscription.Query == null || typedSubscription.Query.Invoke(typedObject))
+            {
+              var newUrl = new UserUrlSubscriptions
+              {
+                Url = url.Key
+              };
+
+              newUrl.Data.Add(value);
+
+              userResults.Urls.Add(newUrl);
+            }
           }
         }
 
-        if (userResults.Data.Any())
+        if (userResults.Urls.Any())
         {
           results.Add(userResults);
         }
@@ -91,36 +120,66 @@ namespace EntitySignal.Hubs
 
     public static void AddUser<T>(UserContainer<T> user)
     {
-      if (TypeDictionary.ContainsKey(typeof(T)) == false)
+      //attempt to get type subscription
+      SubscriptionsByUser subscriptionsByUser;
+      SubscriptionsByType.TryGetValue(typeof(T), out subscriptionsByUser);
+
+      //if unable to get attempt to add
+      if (subscriptionsByUser == null)
       {
-        var newList = new List<UserContainer<T>>();
-        TypeDictionary.TryAdd(typeof(T), newList);
+        subscriptionsByUser = new SubscriptionsByUser()
+        {
+          SubscriptionType = typeof(T)
+        };
+
+        //add new type subscription
+        var wasAdded = SubscriptionsByType.TryAdd(typeof(T), subscriptionsByUser);
+
+        //if add failed then likely another thread was adding at the same time, try again
+        if (!wasAdded)
+        {
+          AddUser<T>(user);
+          return;
+        }
       }
 
-      var list = TypeDictionary[typeof(T)];
-      var typedList = DictionaryValueToUserContainerList<T>(list);
-      if (typedList != null)
+
+      //attempt to get user subscription
+      SubscriptionsByUrl subscriptionsByUrl;
+      subscriptionsByUser.ByUser.TryGetValue(user.ConnectionId, out subscriptionsByUrl);
+
+      //if unable to get attempt to add
+      if(subscriptionsByUrl == null)
       {
-        typedList.Add(user);
+        subscriptionsByUrl = new SubscriptionsByUrl()
+        {
+          SubscriptionType = typeof(T)
+        };
+
+        //add new type subscription
+        var wasAdded = subscriptionsByUser.ByUser.TryAdd(user.ConnectionId, subscriptionsByUrl);
+
+        //if add failed then likely another thread was adding at the same time, try again
+        if (!wasAdded)
+        {
+          AddUser<T>(user);
+          return;
+        }
       }
+
+      //add or update value with new value
+      subscriptionsByUrl.ByUrl.AddOrUpdate(user.Url, user, (key, oldValue) => oldValue = user);
     }
 
     public static void RemoveConnectionsFromList<T>(List<UserContainer<T>> userContainers, string connectionId)
     {
       userContainers
-        .RemoveAll(x=>x.ConnectionId == connectionId);
+        .RemoveAll(x => x.ConnectionId == connectionId);
     }
 
     public static void RemoveConnection(string connectionId)
     {
-      foreach (var key in TypeDictionary.Keys)
-      {
-        var value = TypeDictionary[key];
-
-        var method = typeof(DataSync).GetMethod("RemoveConnectionsFromList");
-        var genericMethod = method.MakeGenericMethod(new[] { key });
-        var subscribedUsers = (IEnumerable<UserContainerResult>)genericMethod.Invoke(null, new[] { value, connectionId});
-      }
+      return;
     }
   }
 

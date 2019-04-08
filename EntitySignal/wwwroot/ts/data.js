@@ -60,29 +60,31 @@ angular.module("EntitySignal").factory("EntitySignal", [
             }
         }
         connect();
-        vm.hub.on("Sync", function (data, url) {
+        vm.hub.on("Sync", function (data) {
             $timeout(function () {
-                data.forEach(function (x) {
-                    if (x.state == EntityState.Added || x.state == EntityState.Modified) {
-                        var changeCount = 0;
-                        subscriptions[url].forEach(function (msg) {
-                            if (x.object.id == msg.id) {
-                                angular.copy(x.object, msg);
-                                changeCount++;
-                            }
-                        });
-                        if (changeCount == 0) {
-                            subscriptions[url].push(x.object);
-                        }
-                    }
-                    else if (x.state == EntityState.Deleted) {
-                        for (var i = subscriptions[url].length - 1; i >= 0; i--) {
-                            var currentRow = subscriptions[url][i];
-                            if (currentRow.id == x.object.id) {
-                                subscriptions[url].splice(i, 1);
+                data.urls.forEach(function (url) {
+                    url.data.forEach(function (x) {
+                        if (x.state == EntityState.Added || x.state == EntityState.Modified) {
+                            var changeCount = 0;
+                            subscriptions[url.url].forEach(function (msg) {
+                                if (x.object.id == msg.id) {
+                                    angular.copy(x.object, msg);
+                                    changeCount++;
+                                }
+                            });
+                            if (changeCount == 0) {
+                                subscriptions[url.url].push(x.object);
                             }
                         }
-                    }
+                        else if (x.state == EntityState.Deleted) {
+                            for (var i = subscriptions[url.url].length - 1; i >= 0; i--) {
+                                var currentRow = subscriptions[url.url][i];
+                                if (currentRow.id == x.object.id) {
+                                    subscriptions[url.url].splice(i, 1);
+                                }
+                            }
+                        }
+                    });
                 });
             });
         });

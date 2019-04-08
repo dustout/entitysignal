@@ -40,6 +40,16 @@ interface TestScope extends ng.IScope {
   subscribeToGuidJokes(): void;
 }
 
+interface UserResult {
+  connectionId: string;
+  urls: UserUrlResult[];
+}
+
+interface UserUrlResult {
+  url: string;
+  data: DataContainer<any>[];
+}
+
 enum EntitySignalStatus {
   Disconnected = 0,
   Connecting = 1,
@@ -101,7 +111,7 @@ angular.module("EntitySignal").factory("EntitySignal", [
           },
             x => {
               reconnect();
-          });
+            });
         });
     }
 
@@ -132,29 +142,32 @@ angular.module("EntitySignal").factory("EntitySignal", [
     }
     connect();
 
-    vm.hub.on("Sync", (data: DataContainer<Message>[], url: string) => {
+    vm.hub.on("Sync", (data: UserResult) => {
       $timeout(() => {
-        data.forEach(x => {
-          if (x.state == EntityState.Added || x.state == EntityState.Modified) {
-            var changeCount = 0;
-            subscriptions[url].forEach(msg => {
-              if (x.object.id == msg.id) {
-                angular.copy(x.object, msg);
-                changeCount++;
-              }
-            })
-            if (changeCount == 0) {
-              subscriptions[url].push(x.object);
-            }
-          }
-          else if (x.state == EntityState.Deleted) {
-            for (var i = subscriptions[url].length - 1; i >= 0; i--) {
-              var currentRow = subscriptions[url][i];
-              if (currentRow.id == x.object.id) {
-                subscriptions[url].splice(i, 1);
+        data.urls.forEach(url => {
+          url.data.forEach(x => {
+            if (x.state == EntityState.Added || x.state == EntityState.Modified) {
+              var changeCount = 0;
+              subscriptions[url.url].forEach(msg => {
+                if (x.object.id == msg.id) {
+                  angular.copy(x.object, msg);
+                  changeCount++;
+                }
+              })
+              if (changeCount == 0) {
+                subscriptions[url.url].push(x.object);
               }
             }
-          }
+            else if (x.state == EntityState.Deleted) {
+              for (var i = subscriptions[url.url].length - 1; i >= 0; i--) {
+                var currentRow = subscriptions[url.url][i];
+                if (currentRow.id == x.object.id) {
+                  subscriptions[url.url].splice(i, 1);
+                }
+              }
+            }
+
+          })
         });
       });
     });
