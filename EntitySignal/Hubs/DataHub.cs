@@ -62,6 +62,7 @@ namespace EntitySignal.Hubs
   {
     public static ConcurrentDictionary<Type, SubscriptionsByUser> SubscriptionsByType { get; set; } = new ConcurrentDictionary<Type, SubscriptionsByUser>();
 
+    public static int ConnectionCount;
 
     // DO NOT REMOVE, ACCESSED BY STRING
     public static List<UserContainerResult> GetSubscribed<T>(SubscriptionsByUser subscriptionsByUser, List<DataContainer> values)
@@ -190,8 +191,15 @@ namespace EntitySignal.Hubs
 
   public class DataHub : Hub<IDataClient>
   {
+    public override Task OnConnectedAsync()
+    {
+      DataSync.ConnectionCount++;
+      return base.OnConnectedAsync();
+    }
+
     public override async Task OnDisconnectedAsync(Exception exception)
     {
+      DataSync.ConnectionCount--;
       DataSync.RemoveConnection(Context.ConnectionId);
       await base.OnDisconnectedAsync(exception);
     }

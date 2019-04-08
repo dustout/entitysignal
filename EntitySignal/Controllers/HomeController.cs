@@ -41,6 +41,12 @@ namespace EntitySignal.Controllers
       return View();
     }
 
+    public async Task<IActionResult> Stats()
+    {
+      
+      return View();
+    }
+
     public async Task<ActionResult> Create()
     {
       var a = new Messages()
