@@ -2,9 +2,25 @@
   ViewData["Title"] = "Statistics Page";
 }
 
+@{ 
+  var connectedUsers = EntitySignal.Hubs.DataSync.SubscriptionsByType.SelectMany(x=>x.Value.ByUser.Select(y=>y.Key)).Distinct();
+}
 
 <div class="row">
   <div class="col">
-    <p><strong>Active Connections:</strong> @EntitySignal.Hubs.DataSync.ConnectionCount</p>
+    <p><strong>Active Connections (signalr):</strong> @EntitySignal.Hubs.DataSync.ConnectionCount</p>
+    <p><strong>Tracked Users (entity signal):</strong> @connectedUsers.Count()</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <strong>Users:</strong>
+    <ul class="list-unstyled">
+      @foreach (var user in connectedUsers)
+      {
+        <li>@user</li>
+      }
+    </ul>
   </div>
 </div>

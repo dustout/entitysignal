@@ -172,7 +172,7 @@ namespace EntitySignal.Hubs
       subscriptionsByUrl.ByUrl.AddOrUpdate(user.Url, user, (key, oldValue) => oldValue = user);
     }
 
-    public static void RemoveConnection(string connectionId)
+    public async static Task RemoveConnection(string connectionId)
     {
       foreach (var typeSubscription in SubscriptionsByType)
       {
@@ -181,8 +181,16 @@ namespace EntitySignal.Hubs
           continue;
         }
 
-        SubscriptionsByUrl outValue;
-        typeSubscription.Value.ByUser.TryRemove(connectionId, out outValue);
+        if (typeSubscription.Value.ByUser.ContainsKey(connectionId))
+        {
+          var removesuccess = typeSubscription.Value.ByUser.TryRemove(connectionId, out _);
+          if (!removesuccess)
+          {
+            var newRand = new Random();
+            await Task.Delay(newRand.Next(50));
+            await RemoveConnection(connectionId);
+          }
+        }
       }
 
       return;
@@ -200,7 +208,7 @@ namespace EntitySignal.Hubs
     public override async Task OnDisconnectedAsync(Exception exception)
     {
       DataSync.ConnectionCount--;
-      DataSync.RemoveConnection(Context.ConnectionId);
+      await DataSync.RemoveConnection(Context.ConnectionId);
       await base.OnDisconnectedAsync(exception);
     }
 
