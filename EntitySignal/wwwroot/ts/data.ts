@@ -136,7 +136,7 @@ angular.module("EntitySignal").factory("EntitySignal", [
           });
         }).catch(function (err) {
           $timeout().then(() => {
-            alert("Error connecting");
+            //alert("Error connecting");
             vm.status = EntitySignalStatus.Disconnected;
             connectingDefer.reject(err);
           });

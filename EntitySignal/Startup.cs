@@ -75,6 +75,7 @@ namespace EntitySignal
 
       app.UseAuthentication();
 
+      app.UseWebSockets();
       app.UseSignalR(routes =>
       {
         routes.MapHub<DataHub>("/dataHub");
