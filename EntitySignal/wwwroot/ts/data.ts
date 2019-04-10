@@ -97,7 +97,7 @@ angular.module("EntitySignal").factory("EntitySignal", [
     var subscriptions: SyncSubscription = {};
     var connectingDefer: ng.IDeferred<void>;
 
-    vm.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub").build();
+    vm.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
 
     vm.hub.onclose(() => {
       vm.status = EntitySignalStatus.Disconnected;
