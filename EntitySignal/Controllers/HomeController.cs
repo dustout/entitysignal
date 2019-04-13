@@ -41,13 +41,13 @@ namespace EntitySignal.Controllers
       return View();
     }
 
-    [HttpGet("/Stats")]
+    [HttpGet("stats")]
     public IActionResult Stats()
     {
       return View();
     }
 
-    [HttpGet("quick-start")]
+    [HttpGet("examples")]
     public IActionResult GetStarted()
     {
       return View();
