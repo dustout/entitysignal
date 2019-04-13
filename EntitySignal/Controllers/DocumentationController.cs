@@ -39,7 +39,8 @@ namespace EntitySignal.Controllers
     {
       string docsDirectory = Path.Combine(_hostingEnvironment.ContentRootPath, "Docs");
       var markdownFiles = Directory.GetFiles(docsDirectory)
-        .Select(x=>Path.GetFileNameWithoutExtension(x));
+        .Select(x=>Path.GetFileNameWithoutExtension(x))
+        .OrderBy(x=>x);
 
       if (markdownFiles.Contains(requestedDocmentation) == false)
       {
