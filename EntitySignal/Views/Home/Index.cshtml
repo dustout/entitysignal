@@ -1,79 +1,97 @@
 ﻿@{
   ViewData["Title"] = "Home Page";
 }
+<br />
+<br />
 
+<div class="container">
+  <div class="row mt-5 mb-5 pb-5">
+    <div class="col">
+      <div class="card">
+        <div class="card-body text-center">
+          <h1 class="mt-3">Entity Framework + SignalR = Entity Signal</h1>
+          <p class="lead" style="font-weight:400">Make all of your data real time. Recieve updates no matter where the object was created or edited!</p>
+          <p>
+            <img class="img-fluid" src="~/img/explainer/Explainer.gif" />
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br />
+<br />
+<br />
 
 <div ng-controller="testController">
   <div class="row">
+    <div class="col text-center">
+
+      <div ng-show="entitySignal.status == 2" ng-cloak class="card border-success mb-3">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="text-success">Connected</strong> to entity framework through signalr (ID: {{entitySignal.connectionId}})
+          </p>
+        </div>
+      </div>
+
+      <div ng-show="entitySignal.status == 0" class="card mb-3">
+        <div class="card-body">
+          <p class="card-text">
+            <strong>Disconnected</strong>
+          </p>
+        </div>
+      </div>
+
+      <div ng-show="entitySignal.status == 1" class="card mb-3 border-primary">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="text-primary">Connecting</strong> to entity framework through signalr
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pb-3">
+    <div class="col-6">
+      <button ng-click="createNew()" class="btn btn-primary btn-block btn-lg">Create 1 New</button>
+    </div>
+    <div class="col-6">
+      <button ng-click="createFiveNew()" class="btn btn-primary btn-block btn-lg">Create 5 New</button>
+    </div>
+  </div>
+  <div class="row pb-3">
     <div class="col">
-      <div ng-show="entitySignal.status == 2" ng-cloak class="alert alert-success text-center" role="alert">
-        Connected to entity framework through signalr (ID: {{entitySignal.connectionId}})
-      </div>
-
-      <div ng-show="entitySignal.status == 0" class="alert alert-dark text-center" role="alert">
-        Disconnected
-      </div>
-
-      <div ng-show="entitySignal.status == 1" ng-cloak class="alert alert-primary text-center" role="alert">
-        Connecting to entity framework through signalr
-      </div>
-    </div>
-  </div>
-
-  <div class="row pb-3">
-    <div class="col-6">
-      <button ng-click="createNew()" class="btn btn-secondary btn-block btn-lg">Create 1 New</button>
-    </div>
-    <div class="col-6">
-      <button ng-click="createFiveNew()" class="btn btn-secondary btn-block btn-lg">Create 5 New</button>
-    </div>
-  </div>
-  <div class="row pb-3">
-    <div class="col">
-      <button ng-click="changeRandom()" class="btn btn-secondary btn-block btn-lg">Change Random</button>
+      <button ng-click="changeRandom()" class="btn btn-primary btn-block btn-lg">Change Random</button>
     </div>
   </div>
   <div class="row pb-3">
     <div class="col-6">
-      <button ng-click="deleteAll()" class="btn btn-secondary btn-block btn-lg">Delete All</button>
+      <button ng-click="deleteAll()" class="btn btn-primary btn-block btn-lg">Delete All</button>
     </div>
     <div class="col-6">
-      <button ng-click="deleteRandom()" class="btn btn-secondary btn-block btn-lg">Delete Random</button>
+      <button ng-click="deleteRandom()" class="btn btn-primary btn-block btn-lg">Delete Random</button>
     </div>
   </div>
-
-  @*<div class="row">
-      <div class="col-3">
-        <button ng-click="subscribeToMessages()" class="btn btn-primary btn-block btn-lg">Subscribe To Messages</button>
-      </div>
-      <div class="col-3">
-        <button ng-click="subscribeToOddIdMessages()" class="btn btn-primary btn-block btn-lg">Subscribe Odd Id Messages</button>
-      </div>
-      <div class="col-3">
-        <button ng-click="subscribeToJokes()" class="btn btn-primary btn-block btn-lg">Subscribe To Jokes</button>
-      </div>
-      <div class="col-3">
-        <button ng-click="subscribeToGuidJokes()" class="btn btn-primary btn-block btn-lg">Subscribe GUID Jokes</button>
-      </div>
-    </div>
-    <br />*@
 
   <div class="row">
-    <div class="col-sm-3">
-      <h2>Messages</h2>
-      <pre ng-repeat="message in messages">{{message | json}}</pre>
+    <div class="col-sm-6 col-lg-3">
+      <h4>Messages</h4>
+      <pre ng-repeat="message in messages | orderBy:'-id'">{{message | json}}</pre>
     </div>
-    <div class="col-sm-3">
-      <h2>Messages with odd id</h2>
-      <pre ng-repeat="filterMessages in filterMessages">{{filterMessages | json}}</pre>
+    <div class="col-sm-6 col-lg-3">
+      <h4>Messages with odd id</h4>
+      <pre ng-repeat="filterMessages in filterMessages | orderBy:'-id'">{{filterMessages | json}}</pre>
     </div>
-    <div class="col-sm-3">
-      <h2>Jokes</h2>
-      <pre ng-repeat="joke in jokes">{{joke | json}}</pre>
+    <div class="col-sm-6 col-lg-3">
+      <h4>Jokes</h4>
+      <pre ng-repeat="joke in jokes | orderBy:'-id'">{{joke | json}}</pre>
     </div>
-    <div class="col-sm-3">
-      <h2>Jokes with guid answer</h2>
-      <pre ng-repeat="joke in guidJokes">{{joke | json}}</pre>
+    <div class="col-sm-6 col-lg-3">
+      <h4>Jokes with guid answer</h4>
+      <pre ng-repeat="joke in guidJokes | orderBy:'-id'">{{joke | json}}</pre>
     </div>
   </div>
 </div>

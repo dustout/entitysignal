@@ -198,7 +198,7 @@ namespace EntitySignal.Hubs
     }
   }
 
-  public class DataHub : Hub<IDataClient>
+  public class EntitySignalHub : Hub<IDataClient>
   {
     private static Mutex mut = new Mutex();
 

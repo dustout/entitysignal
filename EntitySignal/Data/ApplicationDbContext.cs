@@ -15,14 +15,14 @@ namespace EntitySignal.Data
 {
   public class ApplicationDbContext : IdentityDbContext
   {
-    public IHubContext<DataHub, IDataClient> _dataHubContext { get; }
+    public IHubContext<EntitySignalHub, IDataClient> _dataHubContext { get; }
 
     public DbSet<Messages> Messages { get; set; }
     public DbSet<Jokes> Jokes { get; set; }
 
     public ApplicationDbContext(
       DbContextOptions<ApplicationDbContext> options,
-      IHubContext<DataHub, IDataClient> dataHubContext
+      IHubContext<EntitySignalHub, IDataClient> dataHubContext
       )
         : base(options)
     {
@@ -72,6 +72,8 @@ namespace EntitySignal.Data
         .GroupBy(x => x.Type)
         .ToList();
 
+      var pendingTasks = new List<Task>();
+
       foreach (var typeGroup in changedByType)
       {
         var queryableTypeGroup = typeGroup
@@ -93,10 +95,13 @@ namespace EntitySignal.Data
               return;
             }
 
-            await _dataHubContext.Clients.Client(subscribedUser.ConnectionId).Sync(subscribedUser);
+            var newTask = _dataHubContext.Clients.Client(subscribedUser.ConnectionId).Sync(subscribedUser);
+            pendingTasks.Add(newTask);
           }
         }
       }
+
+      await Task.WhenAll(pendingTasks);
     }
 
     public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))

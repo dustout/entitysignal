@@ -140,43 +140,43 @@ angular.module("app").controller("testController", [
     function ($scope, $http, $timeout, EntitySignal) {
         $scope.entitySignal = EntitySignal;
         $scope.createNew = function () {
-            $http.get("/home/create");
+            $http.get("/subscribe/create");
         };
         $scope.createFiveNew = function () {
-            $http.get("/home/createFive");
+            $http.get("/subscribe/createFive");
         };
         $scope.changeRandom = function () {
-            $http.get("/home/ChangeRandom");
+            $http.get("/subscribe/ChangeRandom");
         };
         $scope.deleteAll = function () {
-            $http.get("/home/DeleteAll");
+            $http.get("/subscribe/DeleteAll");
         };
         $scope.deleteRandom = function () {
-            $http.get("/home/DeleteRandom");
+            $http.get("/subscribe/DeleteRandom");
         };
         $scope.test = function () {
-            $http.get("/home/Test");
+            $http.get("/subscribe/Test");
         };
         $scope.subscribeToMessages = function () {
-            EntitySignal.syncWith("/home/SubscribeTest")
+            EntitySignal.syncWith("/subscribe/SubscribeTest")
                 .then(function (x) {
                 $scope.messages = x;
             });
         };
         $scope.subscribeToJokes = function () {
-            EntitySignal.syncWith("/home/SubscribeJokesTest")
+            EntitySignal.syncWith("/subscribe/SubscribeJokesTest")
                 .then(function (x) {
                 $scope.jokes = x;
             });
         };
         $scope.subscribeToOddIdMessages = function () {
-            EntitySignal.syncWith("/home/SubscribeFilterTest")
+            EntitySignal.syncWith("/subscribe/SubscribeFilterTest")
                 .then(function (x) {
                 $scope.filterMessages = x;
             });
         };
         $scope.subscribeToGuidJokes = function () {
-            EntitySignal.syncWith("/home/SubscribeGuidJokesTest")
+            EntitySignal.syncWith("/subscribe/SubscribeGuidJokesTest")
                 .then(function (x) {
                 $scope.guidJokes = x;
             });

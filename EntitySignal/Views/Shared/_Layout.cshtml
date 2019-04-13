@@ -5,19 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>@ViewData["Title"] - EntitySignal</title>
 
-  <environment include="Development">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-  </environment>
-  <environment exclude="Development">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
-          asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-          asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
-          crossorigin="anonymous"
-          integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
-  </environment>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/litera/bootstrap.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="stylesheet" href="~/css/site.css" />
+  <style>
+    .nav-link {
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body ng-app="app">
+  <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand" href="#">
+      <img src="~/img/icon/LogoSmall.svg" alt="Entity Signal Logo" />
+    </a>
+
+
+    <div class="navbar-collapse justify-content-md-center collapse" id="navbarsExample08" style="">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/quick-start">Quick Start</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/documentation">Documentation</a>
+        </li>
+      </ul>
+    </div>
+    <form class="form-inline my-2 my-lg-0">
+      <a class="btn btn-primary my-2 my-sm-0" href="https://github.com/dustout/entitysignal" style="background-color:#C2255C;border-color:#b12355;"><i class="fab fa-github"></i> View On GitHub</a>
+    </form>
+  </nav>
+
   <br />
   <div class="container-fluid">
     <main role="main" class="pb-3">

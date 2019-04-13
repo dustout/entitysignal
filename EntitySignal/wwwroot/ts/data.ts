@@ -245,52 +245,52 @@ angular.module("app").controller("testController", [
     $scope.entitySignal = EntitySignal;
 
     $scope.createNew = () => {
-      $http.get("/home/create");
+      $http.get("/subscribe/create");
     };
 
     $scope.createFiveNew = () => {
-      $http.get("/home/createFive");
+      $http.get("/subscribe/createFive");
     };
 
     $scope.changeRandom = () => {
-      $http.get("/home/ChangeRandom");
+      $http.get("/subscribe/ChangeRandom");
     };
 
     $scope.deleteAll = () => {
-      $http.get("/home/DeleteAll");
+      $http.get("/subscribe/DeleteAll");
     };
 
     $scope.deleteRandom = () => {
-      $http.get("/home/DeleteRandom");
+      $http.get("/subscribe/DeleteRandom");
     }
 
     $scope.test = () => {
-      $http.get("/home/Test");
+      $http.get("/subscribe/Test");
     };
 
     $scope.subscribeToMessages = () => {
-      EntitySignal.syncWith("/home/SubscribeTest")
+      EntitySignal.syncWith("/subscribe/SubscribeTest")
         .then(x => {
           $scope.messages = x;
         })
     };
 
     $scope.subscribeToJokes = () => {
-      EntitySignal.syncWith("/home/SubscribeJokesTest")
+      EntitySignal.syncWith("/subscribe/SubscribeJokesTest")
         .then(x => {
           $scope.jokes = x;
         })
     };
 
     $scope.subscribeToOddIdMessages = () => {
-      EntitySignal.syncWith("/home/SubscribeFilterTest")
+      EntitySignal.syncWith("/subscribe/SubscribeFilterTest")
         .then(x => {
           $scope.filterMessages = x;
         })
     };
 
     $scope.subscribeToGuidJokes = () => {
-      EntitySignal.syncWith("/home/SubscribeGuidJokesTest")
+      EntitySignal.syncWith("/subscribe/SubscribeGuidJokesTest")
         .then(x => {
           $scope.guidJokes = x;
         })

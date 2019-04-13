@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="224" height="43" viewBox="0 0 224 43">
+  <defs>
+    <clipPath id="clip-LogoSmall_1">
+      <rect width="224" height="43"/>
+    </clipPath>
+  </defs>
+  <g id="LogoSmall_1" data-name="LogoSmall – 1" clip-path="url(#clip-LogoSmall_1)">
+    <rect width="224" height="43" fill="#fff"/>
+    <text id="Signal" transform="translate(110.555 32.141)" fill="#c2255c" font-size="38" font-family="SegoeUI-Bold, Segoe UI" font-weight="700"><tspan x="0" y="0">Signal</tspan></text>
+    <text id="Entity" transform="translate(0 31)" fill="#f06595" font-size="38" font-family="SegoeUI-Bold, Segoe UI" font-weight="700"><tspan x="0" y="0">Entity</tspan></text>
+  </g>
+</svg>
