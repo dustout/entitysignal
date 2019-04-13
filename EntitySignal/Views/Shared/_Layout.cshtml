@@ -20,9 +20,9 @@
     }
   </style>
 </head>
-<body ng-app="app">
+<body ng-app="app"> 
   <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler collapsed d-none d-sm-block d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -30,6 +30,9 @@
       <img src="~/img/icon/LogoSmall.svg" alt="Entity Signal Logo" />
     </a>
 
+    <button class="navbar-toggler collapsed d-block d-sm-none" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
     <div class="navbar-collapse justify-content-md-center collapse" id="navbarsExample08" style="">
       <ul class="navbar-nav">
