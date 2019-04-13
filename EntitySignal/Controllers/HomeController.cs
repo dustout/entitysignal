@@ -33,11 +33,8 @@ namespace EntitySignal.Controllers
       _dataHubContext = dataHubContext;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-      var messages = await _db.Messages
-         .ToListAsync();
-
       return View();
     }
 
@@ -48,7 +45,7 @@ namespace EntitySignal.Controllers
     }
 
     [HttpGet("examples")]
-    public IActionResult GetStarted()
+    public IActionResult Examples()
     {
       return View();
     }
