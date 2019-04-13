@@ -17,13 +17,13 @@
         <div class="list-group">
           @foreach (var doc in Model.Docs)
           {
-            <a href="/documentation/@doc" class="list-group-item list-group-item-action">@doc.Replace("-", " ")</a>
+            <a href="/documentation/@doc" class="list-group-item list-group-item-action @(doc == Model.RequestedDoc?"active":"")">@doc.Replace("-", " ")</a>
           }
         </div>
       </div>
       <div class="col-9">
         <p class="float-right">
-          <a href="" class="btn btn-secondary"><i class="fas fa-edit"></i> Edit</a>
+          <a href="https://github.com/dustout/entitysignal/blob/master/EntitySignal/Docs/@(Model.RequestedDoc).md" class="btn btn-secondary"><i class="fas fa-edit"></i> Edit</a>
         </p>
         <h2>@Model.Title</h2>
 

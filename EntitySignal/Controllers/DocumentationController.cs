@@ -14,6 +14,7 @@ namespace EntitySignal.Controllers
     public String Markdown;
     public IEnumerable<string> Docs;
     public String Title;
+    public String RequestedDoc;
   }
 
   [Route("Documentation")]
@@ -45,14 +46,16 @@ namespace EntitySignal.Controllers
         return BadRequest();
       }
 
-      var requestedFile = Path.Combine(docsDirectory, $"{requestedDocmentation}.md");
-      var markdownFileText = await System.IO.File.ReadAllTextAsync(requestedFile);
+      var requestedFile = $"{requestedDocmentation}.md";
+      var requestedFilePath = Path.Combine(docsDirectory, requestedFile);
+      var markdownFileText = await System.IO.File.ReadAllTextAsync(requestedFilePath);
 
       var documentationDisplayContainer = new DocumentationDisplayContainer
       {
         Docs = markdownFiles,
         Markdown = markdownFileText,
-        Title = requestedDocmentation.Replace("-", " ")
+        Title = requestedDocmentation.Replace("-", " "),
+        RequestedDoc = requestedDocmentation
       };
 
       return View("Get", documentationDisplayContainer);
