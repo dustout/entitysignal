@@ -17,7 +17,7 @@
         <div class="list-group">
           @foreach (var doc in Model.Docs)
           {
-            <a href="/documentation/@doc" class="list-group-item list-group-item-action @(doc == Model.RequestedDoc?"active":"")">@doc.Replace("-", " ")</a>
+            <a href="/documentation/@doc" class="list-group-item list-group-item-action @(doc == Model.RequestedDoc?"list-group-item-primary":"")">@doc.Replace("-", " ")</a>
           }
         </div>
       </div>
