@@ -11,6 +11,20 @@
     <Content Remove="wwwroot\ts\Template.tst" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Docs\another-test.md" />
+    <None Remove="Docs\test.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Docs\another-test.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Docs\test.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.16.0" />
