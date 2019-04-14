@@ -25,12 +25,9 @@ namespace EntitySignal.Controllers
       _db = context;
     }
 
-
     [HttpPost]
     public async Task<ActionResult<IEnumerable<Messages>>> SubscribeToAllMessages([FromBody] SubscribePost postSubscribe)
     {
-      //check if user has permissions to view this data
-
       var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
 
       var userContainer = new UserContainer<Messages>()
@@ -48,8 +45,6 @@ namespace EntitySignal.Controllers
     [HttpPost]
     public IEnumerable<Messages> SubscribeToOddIdMessages([FromBody] SubscribePost postSubscribe)
     {
-      //check if user has permissions to view this data
-
       var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
 
       var userContainer = new UserContainer<Messages>()
@@ -88,8 +83,6 @@ namespace EntitySignal.Controllers
     [HttpPost]
     public IEnumerable<Jokes> SubscribeToJokesWithGuidAnswer([FromBody] SubscribePost postSubscribe)
     {
-      //check if user has permissions to view this data
-
       var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
 
       var userContainer = new UserContainer<Jokes>()
