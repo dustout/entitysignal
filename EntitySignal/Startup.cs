@@ -13,9 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using EntitySignal.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using EntitySignal.Hubs;
 using Microsoft.AspNetCore.HttpOverrides;
-using EntitySignal.Services;
+using EntitySignal.Extensions;
 
 namespace EntitySignal
 {
