@@ -32,7 +32,6 @@ interface TestScope extends ng.IScope {
   changeRandom(): void;
   deleteAll(): void;
   deleteRandom(): void;
-  test(): void;
 
   subscribeToMessages(): void;
   subscribeToOddIdMessages(): void;
@@ -245,28 +244,24 @@ angular.module("app").controller("testController", [
     $scope.entitySignal = EntitySignal;
 
     $scope.createNew = () => {
-      $http.get("/subscribe/create");
+      $http.get("/crud/create");
     };
 
     $scope.createFiveNew = () => {
-      $http.get("/subscribe/createFive");
+      $http.get("/crud/createFive");
     };
 
     $scope.changeRandom = () => {
-      $http.get("/subscribe/ChangeRandom");
+      $http.get("/crud/changeRandom");
     };
 
     $scope.deleteAll = () => {
-      $http.get("/subscribe/DeleteAll");
+      $http.get("/crud/deleteAll");
     };
 
     $scope.deleteRandom = () => {
-      $http.get("/subscribe/DeleteRandom");
+      $http.get("/crud/deleteRandom");
     }
-
-    $scope.test = () => {
-      $http.get("/subscribe/Test");
-    };
 
     $scope.subscribeToMessages = () => {
       EntitySignal.syncWith("/subscribe/SubscribeTest")

@@ -140,22 +140,19 @@ angular.module("app").controller("testController", [
     function ($scope, $http, $timeout, EntitySignal) {
         $scope.entitySignal = EntitySignal;
         $scope.createNew = function () {
-            $http.get("/subscribe/create");
+            $http.get("/crud/create");
         };
         $scope.createFiveNew = function () {
-            $http.get("/subscribe/createFive");
+            $http.get("/crud/createFive");
         };
         $scope.changeRandom = function () {
-            $http.get("/subscribe/ChangeRandom");
+            $http.get("/crud/changeRandom");
         };
         $scope.deleteAll = function () {
-            $http.get("/subscribe/DeleteAll");
+            $http.get("/crud/deleteAll");
         };
         $scope.deleteRandom = function () {
-            $http.get("/subscribe/DeleteRandom");
-        };
-        $scope.test = function () {
-            $http.get("/subscribe/Test");
+            $http.get("/crud/deleteRandom");
         };
         $scope.subscribeToMessages = function () {
             EntitySignal.syncWith("/subscribe/SubscribeTest")
