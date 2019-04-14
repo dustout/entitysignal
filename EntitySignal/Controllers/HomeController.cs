@@ -50,7 +50,7 @@ namespace EntitySignal.Controllers
     }
 
     [HttpGet("quick-start")]
-    public async Task<IActionResult> Examples()
+    public async Task<IActionResult> QuickStart()
     {
       string quickStartPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Docs", "Quick-Start.md" );
       var markdownFileText = await System.IO.File.ReadAllTextAsync(quickStartPath);
