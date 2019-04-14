@@ -27,7 +27,7 @@ namespace EntitySignal.Controllers
 
 
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<Messages>>> SubscribeTest([FromBody] SubscribePost postSubscribe)
+    public async Task<ActionResult<IEnumerable<Messages>>> SubscribeToAllMessages([FromBody] SubscribePost postSubscribe)
     {
       //check if user has permissions to view this data
 
@@ -46,7 +46,7 @@ namespace EntitySignal.Controllers
     }
 
     [HttpPost]
-    public IEnumerable<Messages> SubscribeFilterTest([FromBody] SubscribePost postSubscribe)
+    public IEnumerable<Messages> SubscribeToOddIdMessages([FromBody] SubscribePost postSubscribe)
     {
       //check if user has permissions to view this data
 
@@ -69,7 +69,7 @@ namespace EntitySignal.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<Jokes>>> SubscribeJokesTest([FromBody] SubscribePost postSubscribe)
+    public async Task<ActionResult<IEnumerable<Jokes>>> SubscribeToAllJokes([FromBody] SubscribePost postSubscribe)
     {
       var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
 
@@ -86,7 +86,7 @@ namespace EntitySignal.Controllers
     }
 
     [HttpPost]
-    public IEnumerable<Jokes> SubscribeGuidJokesTest([FromBody] SubscribePost postSubscribe)
+    public IEnumerable<Jokes> SubscribeToJokesWithGuidAnswer([FromBody] SubscribePost postSubscribe)
     {
       //check if user has permissions to view this data
 

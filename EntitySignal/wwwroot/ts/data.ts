@@ -264,28 +264,28 @@ angular.module("app").controller("testController", [
     }
 
     $scope.subscribeToMessages = () => {
-      EntitySignal.syncWith("/subscribe/SubscribeTest")
+      EntitySignal.syncWith("/subscribe/SubscribeToAllMessages")
         .then(x => {
           $scope.messages = x;
         })
     };
 
     $scope.subscribeToJokes = () => {
-      EntitySignal.syncWith("/subscribe/SubscribeJokesTest")
+      EntitySignal.syncWith("/subscribe/SubscribeToAllJokes")
         .then(x => {
           $scope.jokes = x;
         })
     };
 
     $scope.subscribeToOddIdMessages = () => {
-      EntitySignal.syncWith("/subscribe/SubscribeFilterTest")
+      EntitySignal.syncWith("/subscribe/SubscribeToOddIdMessages")
         .then(x => {
           $scope.filterMessages = x;
         })
     };
 
     $scope.subscribeToGuidJokes = () => {
-      EntitySignal.syncWith("/subscribe/SubscribeGuidJokesTest")
+      EntitySignal.syncWith("/subscribe/SubscribeToJokesWithGuidAnswer")
         .then(x => {
           $scope.guidJokes = x;
         })

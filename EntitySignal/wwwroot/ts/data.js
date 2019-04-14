@@ -155,25 +155,25 @@ angular.module("app").controller("testController", [
             $http.get("/crud/deleteRandom");
         };
         $scope.subscribeToMessages = function () {
-            EntitySignal.syncWith("/subscribe/SubscribeTest")
+            EntitySignal.syncWith("/subscribe/SubscribeToAllMessages")
                 .then(function (x) {
                 $scope.messages = x;
             });
         };
         $scope.subscribeToJokes = function () {
-            EntitySignal.syncWith("/subscribe/SubscribeJokesTest")
+            EntitySignal.syncWith("/subscribe/SubscribeToAllJokes")
                 .then(function (x) {
                 $scope.jokes = x;
             });
         };
         $scope.subscribeToOddIdMessages = function () {
-            EntitySignal.syncWith("/subscribe/SubscribeFilterTest")
+            EntitySignal.syncWith("/subscribe/SubscribeToOddIdMessages")
                 .then(function (x) {
                 $scope.filterMessages = x;
             });
         };
         $scope.subscribeToGuidJokes = function () {
-            EntitySignal.syncWith("/subscribe/SubscribeGuidJokesTest")
+            EntitySignal.syncWith("/subscribe/SubscribeToJokesWithGuidAnswer")
                 .then(function (x) {
                 $scope.guidJokes = x;
             });
