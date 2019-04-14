@@ -1,9 +1,6 @@
 ﻿using EntitySignal.Hubs;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,35 +8,9 @@ using System.Threading.Tasks;
 
 namespace EntitySignal.Services
 {
-  public static class EntitySignalExtensions
-  {
-    public static IServiceCollection AddEntitySignal(this IServiceCollection services)
-    {
-      services.AddSignalR();
-
-      services.AddTransient<EntitySignalSubscribe>();
-      services.AddSingleton<EntitySignalDataProcess>();
-
-      return services;
-    }
-
-    public static IApplicationBuilder UseEntitySignal(
-        this IApplicationBuilder app)
-    {
-      app.UseWebSockets();
-
-      app.UseSignalR(routes =>
-      {
-        routes.MapHub<EntitySignalHub>("/dataHub");
-      });
-
-      return app;
-    }
-  }
-
   public class EntitySignalDataProcess
   {
-    public IHubContext<EntitySignalHub, IDataClient> _dataHubContext { get; }
+    private readonly IHubContext<EntitySignalHub, IDataClient> _dataHubContext;
 
     public EntitySignalDataProcess(
       IHubContext<EntitySignalHub, IDataClient> dataHubContext
@@ -120,34 +91,5 @@ namespace EntitySignal.Services
 
       await Task.WhenAll(pendingTasks);
     }
-  }
-
-  public class EntitySignalSubscribe
-  {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public EntitySignalSubscribe(
-      IHttpContextAccessor httpContextAccessor
-      )
-    {
-      _httpContextAccessor = httpContextAccessor;
-    }
-
-    public UserContainer<T> Subscribe<T>(string connectionId, Func<T, bool> query = null)
-    {
-      var url = $"{_httpContextAccessor.HttpContext.Request.Path}{_httpContextAccessor.HttpContext.Request.QueryString}";
-
-      var userContainer = new UserContainer<T>()
-      {
-        ConnectionId = connectionId,
-        Url = url,
-        Query = query
-      };
-
-      DataSync.AddUser(userContainer);
-
-      return userContainer;
-    }
-
   }
 }

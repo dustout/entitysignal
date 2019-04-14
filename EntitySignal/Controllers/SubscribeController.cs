@@ -1,5 +1,4 @@
 ﻿using EntitySignal.Data;
-using EntitySignal.Hubs;
 using EntitySignal.Models;
 using EntitySignal.Services;
 using Microsoft.AspNetCore.Mvc;
