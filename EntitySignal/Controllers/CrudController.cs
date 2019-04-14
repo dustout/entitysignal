@@ -41,7 +41,7 @@ namespace EntitySignal.Controllers
       return Ok();
     }
 
-    public async Task<ActionResult> CreateFive()
+    public ActionResult CreateFive()
     {
       for (var i = 0; i < 5; i++)
       {
@@ -63,7 +63,7 @@ namespace EntitySignal.Controllers
         _db.Jokes.Add(b);
       }
 
-      await _db.SaveChangesAsync();
+      _db.SaveChanges();
 
       return Ok();
     }

@@ -1,6 +1,7 @@
 ﻿using EntitySignal.Data;
 using EntitySignal.Hubs;
 using EntitySignal.Models;
+using EntitySignal.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -17,88 +18,51 @@ namespace EntitySignal.Controllers
   public class SubscribeController : Controller
   {
     private ApplicationDbContext _db;
+    private EntitySignalSubscribe _entitySignalSubscribe;
 
     public SubscribeController(
-      ApplicationDbContext context
+      ApplicationDbContext context,
+      EntitySignalSubscribe entitySignalSubscribe
       )
     {
       _db = context;
+      _entitySignalSubscribe = entitySignalSubscribe;
     }
 
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<Messages>>> SubscribeToAllMessages([FromBody] SubscribePost postSubscribe)
+    public ActionResult<IEnumerable<Messages>> SubscribeToAllMessages([FromBody] SubscribePost postSubscribe)
     {
-      var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
+      _entitySignalSubscribe.Subscribe<Messages>(postSubscribe.ConnectionId);
 
-      var userContainer = new UserContainer<Messages>()
-      {
-        ConnectionId = postSubscribe.ConnectionId,
-        Url = url
-      };
-
-      DataSync.AddUser(userContainer);
-
-      //initialize data for subscription
-      return await _db.Messages.ToListAsync();
+      return _db.Messages.ToList();
     }
 
     [HttpPost]
     public IEnumerable<Messages> SubscribeToOddIdMessages([FromBody] SubscribePost postSubscribe)
     {
-      var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
+      var userContainer = _entitySignalSubscribe.Subscribe<Messages>(postSubscribe.ConnectionId, x=> x.Id % 2 == 1);
 
-      var userContainer = new UserContainer<Messages>()
-      {
-        ConnectionId = postSubscribe.ConnectionId,
-        Url = url,
-        Query = x => x.Id % 2 == 1
-      };
-
-      DataSync.AddUser(userContainer);
-
-      var filterResults = _db.Messages
+      return _db.Messages
         .Where(userContainer.Query)
         .ToList();
-
-      return filterResults;
     }
 
     [HttpPost]
     public async Task<ActionResult<IEnumerable<Jokes>>> SubscribeToAllJokes([FromBody] SubscribePost postSubscribe)
     {
-      var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
+      _entitySignalSubscribe.Subscribe<Jokes>(postSubscribe.ConnectionId);
 
-      var userContainer = new UserContainer<Jokes>()
-      {
-        ConnectionId = postSubscribe.ConnectionId,
-        Url = url
-      };
-
-      DataSync.AddUser(userContainer);
-
-      //initialize data for subscription
       return await _db.Jokes.ToListAsync();
     }
 
     [HttpPost]
     public IEnumerable<Jokes> SubscribeToJokesWithGuidAnswer([FromBody] SubscribePost postSubscribe)
     {
-      var url = $"{HttpContext.Request.Path}{HttpContext.Request.QueryString}";
-
-      var userContainer = new UserContainer<Jokes>()
-      {
-        ConnectionId = postSubscribe.ConnectionId,
-        Url = url,
-        Query = x => Guid.TryParse(x.Punchline, out Guid g)
-      };
-
-      DataSync.AddUser(userContainer);
-
-      var filterResults = _db.Jokes
+      var userContainer = _entitySignalSubscribe.Subscribe<Jokes>(postSubscribe.ConnectionId, x => Guid.TryParse(x.Punchline, out Guid g));
+     
+      return _db.Jokes
         .Where(userContainer.Query)
         .ToList();
-
-      return filterResults;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

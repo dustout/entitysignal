@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EntitySignal.Hubs;
 using EntitySignal.Models;
+using EntitySignal.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -15,100 +16,33 @@ namespace EntitySignal.Data
 {
   public class ApplicationDbContext : IdentityDbContext
   {
-    public IHubContext<EntitySignalHub, IDataClient> _dataHubContext { get; }
+    public EntitySignalDataProcess _entitySignalDataProcess { get; }
 
     public DbSet<Messages> Messages { get; set; }
     public DbSet<Jokes> Jokes { get; set; }
 
     public ApplicationDbContext(
       DbContextOptions<ApplicationDbContext> options,
-      IHubContext<EntitySignalHub, IDataClient> dataHubContext
+      EntitySignalDataProcess entitySignalDataProcess
       )
         : base(options)
     {
-      _dataHubContext = dataHubContext;
+      _entitySignalDataProcess = entitySignalDataProcess;
     }
 
     public override int SaveChanges()
     {
-      var changedData = PreSave();
+      var changedData = _entitySignalDataProcess.PreSave(ChangeTracker);
       var result = base.SaveChanges();
-      PostSave(changedData).RunSynchronously();
+      _entitySignalDataProcess.PostSave(changedData).RunSynchronously();
       return result;
-    }
-
-    public IEnumerable<DataContainer> PreSave()
-    {
-      if (ChangeTracker == null)
-      {
-        return null;
-      }
-
-      var changedObjects = this.ChangeTracker
-        .Entries();
-
-      if (changedObjects.Any())
-      {
-
-        var changedData = changedObjects
-            .Select(x => new DataContainer
-            {
-              IdField = "id",
-              Object = x.Entity,
-              State = x.State,
-              Type = x.Entity.GetType()
-            })
-            .ToList();
-
-        return changedData;
-      }
-
-      return null;
-    }
-
-    public async Task PostSave(IEnumerable<DataContainer> changedData)
-    {
-      var changedByType = changedData
-        .GroupBy(x => x.Type)
-        .ToList();
-
-      var pendingTasks = new List<Task>();
-
-      foreach (var typeGroup in changedByType)
-      {
-        var queryableTypeGroup = typeGroup
-          .ToList();
-
-        SubscriptionsByUser subscriptionsByType;
-        DataSync.SubscriptionsByType.TryGetValue(typeGroup.Key, out subscriptionsByType);
-
-        if (subscriptionsByType != null)
-        {
-          var method = typeof(DataSync).GetMethod("GetSubscribed");
-          var genericMethod = method.MakeGenericMethod(new[] { typeGroup.Key });
-          var subscribedUsers = (IEnumerable<UserContainerResult>)genericMethod.Invoke(null, new Object[] { subscriptionsByType, queryableTypeGroup});
-
-          foreach (var subscribedUser in subscribedUsers)
-          {
-            if(subscribedUser.ConnectionId == null)
-            {
-              return;
-            }
-
-            var newTask = _dataHubContext.Clients.Client(subscribedUser.ConnectionId).Sync(subscribedUser);
-            pendingTasks.Add(newTask);
-          }
-        }
-      }
-
-      await Task.WhenAll(pendingTasks);
     }
 
     public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
     {
-      var changedData = PreSave();
+      var changedData = _entitySignalDataProcess.PreSave(ChangeTracker);
       var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-      await PostSave(changedData);
+      await _entitySignalDataProcess.PostSave(changedData);
       return result;
     }
 
