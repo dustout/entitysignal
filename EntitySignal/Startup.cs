@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using EntitySignal.Hubs;
 using Microsoft.AspNetCore.HttpOverrides;
+using EntitySignal.Services;
 
 namespace EntitySignal
 {
@@ -46,7 +47,7 @@ namespace EntitySignal
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-      services.AddSignalR();
+      services.AddEntitySignal();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,14 +73,8 @@ namespace EntitySignal
       app.UseHttpsRedirection();
       app.UseStaticFiles();
       app.UseCookiePolicy();
-
       app.UseAuthentication();
-
-      app.UseWebSockets();
-      app.UseSignalR(routes =>
-      {
-        routes.MapHub<EntitySignalHub>("/dataHub");
-      });
+      app.UseEntitySignal();
 
       app.UseMvc(routes =>
       {
