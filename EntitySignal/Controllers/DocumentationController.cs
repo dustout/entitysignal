@@ -24,7 +24,7 @@ namespace EntitySignal.Controllers
 
     public async Task<IActionResult> Index()
     {
-      return await Get("test");
+      return await Get("Test");
     }
 
     [HttpGet("{requestedDocmentation}")]
