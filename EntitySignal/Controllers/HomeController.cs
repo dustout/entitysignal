@@ -23,18 +23,12 @@ namespace EntitySignal.Controllers
   [ResponseCache(NoStore = true, Duration = 0)]
   public class HomeController : Controller
   {
-    private ApplicationDbContext _db;
-    public IHubContext<EntitySignalHub, IDataClient> _dataHubContext { get; }
     private IHostingEnvironment _hostingEnvironment;
 
     public HomeController(
-      ApplicationDbContext context,
-      IHubContext<EntitySignalHub, IDataClient> dataHubContext,
       IHostingEnvironment hostingEnvironment
       )
     {
-      _db = context;
-      _dataHubContext = dataHubContext;
       _hostingEnvironment = hostingEnvironment;
     }
 
@@ -52,7 +46,7 @@ namespace EntitySignal.Controllers
     [HttpGet("quick-start")]
     public async Task<IActionResult> QuickStart()
     {
-      string quickStartPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Docs", "Quick-Start.md" );
+      string quickStartPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Docs", "Quick-Start.md");
       var markdownFileText = await System.IO.File.ReadAllTextAsync(quickStartPath);
 
       return View(model: markdownFileText);
