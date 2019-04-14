@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using EntitySignal.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,14 +9,6 @@ using System.Threading.Tasks;
 
 namespace EntitySignal.Controllers
 {
-
-  public class DocumentationDisplayContainer
-  {
-    public String Markdown;
-    public IEnumerable<string> Docs;
-    public String Title;
-    public String RequestedDoc;
-  }
 
   [Route("Documentation")]
   public class DocumentationController : Controller
@@ -51,7 +44,7 @@ namespace EntitySignal.Controllers
       var requestedFilePath = Path.Combine(docsDirectory, requestedFile);
       var markdownFileText = await System.IO.File.ReadAllTextAsync(requestedFilePath);
 
-      var documentationDisplayContainer = new DocumentationDisplayContainer
+      var documentationDisplayContainer = new DocumentationViewModel
       {
         Docs = markdownFiles,
         Markdown = markdownFileText,

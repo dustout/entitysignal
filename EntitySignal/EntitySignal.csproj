@@ -13,10 +13,14 @@
 
   <ItemGroup>
     <None Remove="Docs\another-test.md" />
+    <None Remove="Docs\quick-start.md" />
     <None Remove="Docs\test.md" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Docs\quick-start.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Docs\another-test.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
