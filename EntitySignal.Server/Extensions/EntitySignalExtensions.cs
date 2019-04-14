@@ -1,8 +1,9 @@
 ﻿using EntitySignal.Hubs;
+using EntitySignal.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EntitySignal.Services
+namespace EntitySignal.Extensions
 {
   public static class EntitySignalExtensions
   {
