@@ -65,7 +65,7 @@ namespace EntitySignal.Hubs
 
     public static int ConnectionCount;
 
-    // DO NOT REMOVE, ACCESSED BY STRING
+    // DO NOT REMOVE, ACCESSED BY STRING, I KNOW IT'S NASTY
     public static List<UserContainerResult> GetSubscribed<T>(SubscriptionsByUser subscriptionsByUser, List<DataContainer> values)
     {
       var results = new List<UserContainerResult>();

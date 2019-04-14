@@ -34,7 +34,7 @@ namespace EntitySignal.Data
     {
       var changedData = _entitySignalDataProcess.PreSave(ChangeTracker);
       var result = base.SaveChanges();
-      _entitySignalDataProcess.PostSave(changedData).RunSynchronously();
+      _entitySignalDataProcess.PostSave(changedData);
       return result;
     }
 
@@ -42,7 +42,7 @@ namespace EntitySignal.Data
     {
       var changedData = _entitySignalDataProcess.PreSave(ChangeTracker);
       var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-      await _entitySignalDataProcess.PostSave(changedData);
+      await _entitySignalDataProcess.PostSaveAsync(changedData);
       return result;
     }
 

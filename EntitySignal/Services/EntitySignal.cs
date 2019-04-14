@@ -18,7 +18,7 @@ namespace EntitySignal.Services
       services.AddSignalR();
 
       services.AddTransient<EntitySignalSubscribe>();
-      services.AddTransient<EntitySignalDataProcess>();
+      services.AddSingleton<EntitySignalDataProcess>();
 
       return services;
     }
@@ -78,7 +78,12 @@ namespace EntitySignal.Services
       return null;
     }
 
-    public async Task PostSave(IEnumerable<DataContainer> changedData)
+    public void PostSave(IEnumerable<DataContainer> changedData)
+    {
+      PostSaveAsync(changedData).RunSynchronously();
+    }
+
+    public async Task PostSaveAsync(IEnumerable<DataContainer> changedData)
     {
       var changedByType = changedData
         .GroupBy(x => x.Type)
@@ -115,8 +120,6 @@ namespace EntitySignal.Services
 
       await Task.WhenAll(pendingTasks);
     }
-
-
   }
 
   public class EntitySignalSubscribe
