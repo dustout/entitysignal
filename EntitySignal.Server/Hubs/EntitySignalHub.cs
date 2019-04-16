@@ -11,7 +11,7 @@ namespace EntitySignal.Hubs
 
     public override Task OnConnectedAsync()
     {
-      mut.WaitOne(100);
+      mut.WaitOne(10);
       EntitySignalDataStore.ConnectionCount++;
       mut.ReleaseMutex();
 
@@ -20,7 +20,7 @@ namespace EntitySignal.Hubs
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-      mut.WaitOne(100);
+      mut.WaitOne(10);
       EntitySignalDataStore.ConnectionCount--;
       mut.ReleaseMutex();
 
