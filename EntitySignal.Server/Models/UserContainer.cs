@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EntitySignal.Hubs
+namespace EntitySignal.Models
 {
   public class UserContainer<T> : IUserContainer
   {

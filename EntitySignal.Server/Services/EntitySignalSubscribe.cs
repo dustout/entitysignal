@@ -1,4 +1,5 @@
 ﻿using EntitySignal.Hubs;
+using EntitySignal.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 

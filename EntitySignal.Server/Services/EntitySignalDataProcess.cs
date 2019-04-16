@@ -1,4 +1,5 @@
 ﻿using EntitySignal.Hubs;
+using EntitySignal.Models;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;

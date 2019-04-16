@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EntitySignal.Hubs
+namespace EntitySignal.Models
 {
   public class UserContainerResult
   {

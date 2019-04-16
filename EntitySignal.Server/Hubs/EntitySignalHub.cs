@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using EntitySignal.Models;
+using EntitySignal.Services;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

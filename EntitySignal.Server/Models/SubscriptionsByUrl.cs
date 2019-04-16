@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace EntitySignal.Hubs
+namespace EntitySignal.Models
 {
   public class SubscriptionsByUrl
   {

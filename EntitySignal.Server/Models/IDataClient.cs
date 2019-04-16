@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace EntitySignal.Hubs
+namespace EntitySignal.Models
 {
   public interface IDataClient
   {

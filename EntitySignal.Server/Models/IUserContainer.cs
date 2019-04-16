@@ -1,4 +1,4 @@
-﻿namespace EntitySignal.Hubs
+﻿namespace EntitySignal.Models
 {
   public interface IUserContainer
   {
