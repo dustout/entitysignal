@@ -11,14 +11,13 @@ namespace EntitySignal.Services
   public class EntitySignalDataProcess
   {
     private readonly IHubContext<EntitySignalHub, IDataClient> _dataHubContext;
-
+   
     public EntitySignalDataProcess(
       IHubContext<EntitySignalHub, IDataClient> dataHubContext
       )
     {
       _dataHubContext = dataHubContext;
     }
-
 
     public IEnumerable<DataContainer> PreSave(ChangeTracker changeTracker)
     {
@@ -68,11 +67,11 @@ namespace EntitySignal.Services
           .ToList();
 
         SubscriptionsByUser subscriptionsByType;
-        DataSync.SubscriptionsByType.TryGetValue(typeGroup.Key, out subscriptionsByType);
+        EntitySignalDataStore.SubscriptionsByType.TryGetValue(typeGroup.Key, out subscriptionsByType);
 
         if (subscriptionsByType != null)
         {
-          var method = typeof(DataSync).GetMethod("GetSubscribed");
+          var method = typeof(EntitySignalDataStore).GetMethod("GetSubscribed");
           var genericMethod = method.MakeGenericMethod(new[] { typeGroup.Key });
           var subscribedUsers = (IEnumerable<UserContainerResult>)genericMethod.Invoke(null, new Object[] { subscriptionsByType, queryableTypeGroup });
 

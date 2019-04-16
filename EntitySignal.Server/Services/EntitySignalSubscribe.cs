@@ -26,7 +26,7 @@ namespace EntitySignal.Services
         Query = query
       };
 
-      DataSync.AddUser(userContainer);
+      EntitySignalDataStore.AddUser(userContainer);
 
       return userContainer;
     }

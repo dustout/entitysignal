@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EntitySignal.Hubs
 {
-  public class DataSync
+  public class EntitySignalDataStore
   {
     public static ConcurrentDictionary<Type, SubscriptionsByUser> SubscriptionsByType { get; set; } = new ConcurrentDictionary<Type, SubscriptionsByUser>();
 
@@ -119,7 +119,7 @@ namespace EntitySignal.Hubs
       subscriptionsByUrl.ByUrl.AddOrUpdate(user.Url, user, (key, oldValue) => oldValue = user);
     }
 
-    public async static Task RemoveConnection(string connectionId)
+    public static async Task RemoveConnection(string connectionId)
     {
       foreach (var typeSubscription in SubscriptionsByType)
       {
