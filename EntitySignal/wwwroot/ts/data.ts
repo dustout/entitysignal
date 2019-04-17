@@ -25,6 +25,11 @@ interface TestScope extends ng.IScope {
   jokes: any[];
   guidJokes: any[];
 
+  maxMessagesCount: number;
+  maxFilteredMessagesCount: number;
+  maxJokesCount: number;
+  maxGuidJokesCount: number;
+
   entitySignal: EntitySignal;
 
   createNew(): void;
@@ -243,6 +248,11 @@ angular.module("app").controller("testController", [
   ) {
     $scope.entitySignal = EntitySignal;
 
+    $scope.maxMessagesCount = 4;
+    $scope.maxFilteredMessagesCount = 4;
+    $scope.maxJokesCount = 4;
+    $scope.maxGuidJokesCount = 4;
+    
     $scope.createNew = () => {
       $http.get("/crud/create");
     };

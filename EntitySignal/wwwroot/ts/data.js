@@ -139,6 +139,10 @@ angular.module("app").controller("testController", [
     "EntitySignal",
     function ($scope, $http, $timeout, EntitySignal) {
         $scope.entitySignal = EntitySignal;
+        $scope.maxMessagesCount = 4;
+        $scope.maxFilteredMessagesCount = 4;
+        $scope.maxJokesCount = 4;
+        $scope.maxGuidJokesCount = 4;
         $scope.createNew = function () {
             $http.get("/crud/create");
         };
