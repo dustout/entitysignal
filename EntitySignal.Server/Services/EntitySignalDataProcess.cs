@@ -11,16 +11,16 @@ namespace EntitySignal.Services
 {
   public class EntitySignalDataProcess
   {
-    private readonly IHubContext<EntitySignalHub, IDataClient> _dataHubContext;
+    private readonly IHubContext<EntitySignalHub, IEntitySignalHubClient> _dataHubContext;
    
     public EntitySignalDataProcess(
-      IHubContext<EntitySignalHub, IDataClient> dataHubContext
+      IHubContext<EntitySignalHub, IEntitySignalHubClient> dataHubContext
       )
     {
       _dataHubContext = dataHubContext;
     }
 
-    public IEnumerable<DataContainer> PreSave(ChangeTracker changeTracker)
+    public ChangedObjectsContainer PreSave(ChangeTracker changeTracker)
     {
       if (changeTracker == null)
       {
@@ -34,7 +34,7 @@ namespace EntitySignal.Services
       {
 
         var changedData = changedObjects
-            .Select(x => new DataContainer
+            .Select(x => new ChangedObject
             {
               IdField = "id",
               Object = x.Entity,
@@ -43,20 +43,25 @@ namespace EntitySignal.Services
             })
             .ToList();
 
-        return changedData;
+        var changedDataContainer = new ChangedObjectsContainer()
+        {
+          ChangedObjects = changedData
+        };
+
+        return changedDataContainer;
       }
 
       return null;
     }
 
-    public void PostSave(IEnumerable<DataContainer> changedData)
+    public void PostSave(ChangedObjectsContainer changedData)
     {
       PostSaveAsync(changedData).RunSynchronously();
     }
 
-    public async Task PostSaveAsync(IEnumerable<DataContainer> changedData)
+    public async Task PostSaveAsync(ChangedObjectsContainer changedData)
     {
-      var changedByType = changedData
+      var changedByType = changedData.ChangedObjects
         .GroupBy(x => x.Type)
         .ToList();
 

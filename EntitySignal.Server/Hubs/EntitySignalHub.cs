@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EntitySignal.Hubs
 {
-  public class EntitySignalHub : Hub<IDataClient>
+  public class EntitySignalHub : Hub<IEntitySignalHubClient>
   {
     private static Mutex mut = new Mutex();
 

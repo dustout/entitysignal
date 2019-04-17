@@ -15,7 +15,7 @@ namespace EntitySignal.Services
     public static int ConnectionCount;
 
     // DO NOT REMOVE, ACCESSED BY STRING, I KNOW IT'S NASTY
-    public static List<UserContainerResult> GetSubscribed<T>(SubscriptionsByUser subscriptionsByUser, List<DataContainer> values)
+    public static List<UserContainerResult> GetSubscribed<T>(SubscriptionsByUser subscriptionsByUser, List<ChangedObject> values)
     {
       var results = new List<UserContainerResult>();
 
@@ -38,8 +38,8 @@ namespace EntitySignal.Services
             continue;
           }
 
-          IUserContainer interfaceSubscription = url.Value;
-          UserContainer<T> typedSubscription = (UserContainer<T>)interfaceSubscription;
+          IUserSubscription interfaceSubscription = url.Value;
+          UserSubscription<T> typedSubscription = (UserSubscription<T>)interfaceSubscription;
 
           foreach (var value in values)
           {
@@ -68,7 +68,7 @@ namespace EntitySignal.Services
       return results;
     }
 
-    public static void AddUser<T>(UserContainer<T> user)
+    public static void AddUser<T>(UserSubscription<T> user)
     {
       //attempt to get type subscription
       SubscriptionsByUser subscriptionsByUser;

@@ -5,6 +5,6 @@ namespace EntitySignal.Models
   public class UserUrlSubscriptions
   {
     public string Url;
-    public List<DataContainer> Data = new List<DataContainer>();
+    public List<ChangedObject> Data = new List<ChangedObject>();
   }
 }

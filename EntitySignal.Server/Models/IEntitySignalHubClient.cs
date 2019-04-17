@@ -2,7 +2,7 @@
 
 namespace EntitySignal.Models
 {
-  public interface IDataClient
+  public interface IEntitySignalHubClient
   {
     Task Sync(UserContainerResult data);
   }

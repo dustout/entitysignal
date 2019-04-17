@@ -3,7 +3,7 @@ using System;
 
 namespace EntitySignal.Models
 {
-  public class DataContainer
+  public class ChangedObject
   {
     public Type Type { get; set; }
     public string IdField { get; set; }

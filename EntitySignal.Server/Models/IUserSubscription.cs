@@ -1,6 +1,6 @@
 ﻿namespace EntitySignal.Models
 {
-  public interface IUserContainer
+  public interface IUserSubscription
   {
     string ConnectionId { get; set; }
   }
