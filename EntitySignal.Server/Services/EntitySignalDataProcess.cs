@@ -12,7 +12,7 @@ namespace EntitySignal.Services
   public class EntitySignalDataProcess
   {
     private readonly IHubContext<EntitySignalHub, IEntitySignalHubClient> _dataHubContext;
-   
+
     public EntitySignalDataProcess(
       IHubContext<EntitySignalHub, IEntitySignalHubClient> dataHubContext
       )
@@ -56,7 +56,7 @@ namespace EntitySignal.Services
 
     public void PostSave(ChangedObjectsContainer changedData)
     {
-      PostSaveAsync(changedData).RunSynchronously();
+      PostSaveAsync(changedData).Wait();
     }
 
     public async Task PostSaveAsync(ChangedObjectsContainer changedData)
