@@ -1,6 +1,6 @@
 ﻿namespace EntitySignal.Models
 {
-  public interface IUserSubscription
+  public interface IURLSubscription
   {
     string ConnectionId { get; set; }
   }

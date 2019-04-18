@@ -72,14 +72,14 @@ namespace EntitySignal.Services
         var queryableTypeGroup = typeGroup
           .ToList();
 
-        SubscriptionsByUser subscriptionsByType;
+        SubscriptionsByType subscriptionsByType;
         EntitySignalDataStore.SubscriptionsByType.TryGetValue(typeGroup.Key, out subscriptionsByType);
 
         if (subscriptionsByType != null)
         {
           var method = typeof(EntitySignalDataStore).GetMethod("GetSubscribed");
           var genericMethod = method.MakeGenericMethod(new[] { typeGroup.Key });
-          var subscribedUsers = (IEnumerable<UserContainerResult>)genericMethod.Invoke(null, new Object[] { subscriptionsByType, queryableTypeGroup });
+          var subscribedUsers = (IEnumerable<UserSubscriptionResult>)genericMethod.Invoke(null, new Object[] { subscriptionsByType, queryableTypeGroup });
 
           foreach (var subscribedUser in subscribedUsers)
           {

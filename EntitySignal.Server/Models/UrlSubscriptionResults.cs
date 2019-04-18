@@ -2,7 +2,7 @@
 
 namespace EntitySignal.Models
 {
-  public class UserUrlSubscriptions
+  public class UrlSubscriptionResults
   {
     public string Url;
     public List<ChangedObject> Data = new List<ChangedObject>();

@@ -16,11 +16,11 @@ namespace EntitySignal.Services
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public UserSubscription<T> Subscribe<T>(string connectionId, Func<T, bool> query = null)
+    public UrlSubscription<T> Subscribe<T>(string connectionId, Func<T, bool> query = null)
     {
       var url = $"{_httpContextAccessor.HttpContext.Request.Path}{_httpContextAccessor.HttpContext.Request.QueryString}";
 
-      var userContainer = new UserSubscription<T>()
+      var userContainer = new UrlSubscription<T>()
       {
         ConnectionId = connectionId,
         Url = url,

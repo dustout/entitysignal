@@ -4,6 +4,6 @@ namespace EntitySignal.Models
 {
   public interface IEntitySignalHubClient
   {
-    Task Sync(UserContainerResult data);
+    Task Sync(UserSubscriptionResult data);
   }
 }

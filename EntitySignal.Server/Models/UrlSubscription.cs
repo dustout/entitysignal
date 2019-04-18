@@ -2,7 +2,7 @@
 
 namespace EntitySignal.Models
 {
-  public class UserSubscription<T> : IUserSubscription
+  public class UrlSubscription<T> : IURLSubscription
   {
     public string ConnectionId { get; set; }
     public string Url { get; set; }

@@ -2,9 +2,9 @@
 
 namespace EntitySignal.Models
 {
-  public class UserContainerResult
+  public class UserSubscriptionResult
   {
     public string ConnectionId;
-    public List<UserUrlSubscriptions> Urls = new List<UserUrlSubscriptions>();
+    public List<UrlSubscriptionResults> Urls = new List<UrlSubscriptionResults>();
   }
 }

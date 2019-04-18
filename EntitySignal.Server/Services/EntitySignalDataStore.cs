@@ -10,36 +10,39 @@ namespace EntitySignal.Services
 {
   public class EntitySignalDataStore
   {
-    public static ConcurrentDictionary<Type, SubscriptionsByUser> SubscriptionsByType { get; set; } = new ConcurrentDictionary<Type, SubscriptionsByUser>();
+
+    //HOW DATA IS STORED
+    //TYPE --> ConnectionId --> URL Subscription -->
+    public static ConcurrentDictionary<Type, SubscriptionsByType> SubscriptionsByType { get; set; } = new ConcurrentDictionary<Type, SubscriptionsByType>();
 
     public static int ConnectionCount;
 
     // DO NOT REMOVE, ACCESSED BY STRING, I KNOW IT'S NASTY
-    public static List<UserContainerResult> GetSubscribed<T>(SubscriptionsByUser subscriptionsByUser, List<ChangedObject> values)
+    public static List<UserSubscriptionResult> GetSubscribed<T>(SubscriptionsByType subscriptionsByUser, List<ChangedObject> values)
     {
-      var results = new List<UserContainerResult>();
+      var results = new List<UserSubscriptionResult>();
 
-      foreach (var user in subscriptionsByUser.ByUser)
+      foreach (var user in subscriptionsByUser.SubscriptionsByUser)
       {
         if(user.Value == null)
         {
           continue;
         }
 
-        var userResults = new UserContainerResult
+        var userResults = new UserSubscriptionResult
         {
           ConnectionId = user.Key
         };
 
-        foreach (var url in user.Value.ByUrl)
+        foreach (var url in user.Value.SubscriptionsByUrl)
         {
           if(url.Value == null)
           {
             continue;
           }
 
-          IUserSubscription interfaceSubscription = url.Value;
-          UserSubscription<T> typedSubscription = (UserSubscription<T>)interfaceSubscription;
+          IURLSubscription interfaceSubscription = url.Value;
+          UrlSubscription<T> typedSubscription = (UrlSubscription<T>)interfaceSubscription;
 
           foreach (var value in values)
           {
@@ -47,7 +50,7 @@ namespace EntitySignal.Services
 
             if (typedSubscription.Query == null || typedSubscription.Query.Invoke(typedObject))
             {
-              var newUrl = new UserUrlSubscriptions
+              var newUrl = new UrlSubscriptionResults
               {
                 Url = url.Key
               };
@@ -68,16 +71,16 @@ namespace EntitySignal.Services
       return results;
     }
 
-    public static void AddUser<T>(UserSubscription<T> user)
+    public static void AddUser<T>(UrlSubscription<T> user)
     {
       //attempt to get type subscription
-      SubscriptionsByUser subscriptionsByUser;
+      SubscriptionsByType subscriptionsByUser;
       SubscriptionsByType.TryGetValue(typeof(T), out subscriptionsByUser);
 
       //if unable to get attempt to add
       if (subscriptionsByUser == null)
       {
-        subscriptionsByUser = new SubscriptionsByUser()
+        subscriptionsByUser = new SubscriptionsByType()
         {
           SubscriptionType = typeof(T)
         };
@@ -95,19 +98,19 @@ namespace EntitySignal.Services
 
 
       //attempt to get user subscription
-      SubscriptionsByUrl subscriptionsByUrl;
-      subscriptionsByUser.ByUser.TryGetValue(user.ConnectionId, out subscriptionsByUrl);
+      SubscriptionsByUser subscriptionsByUrl;
+      subscriptionsByUser.SubscriptionsByUser.TryGetValue(user.ConnectionId, out subscriptionsByUrl);
 
       //if unable to get attempt to add
       if(subscriptionsByUrl == null)
       {
-        subscriptionsByUrl = new SubscriptionsByUrl()
+        subscriptionsByUrl = new SubscriptionsByUser()
         {
           SubscriptionType = typeof(T)
         };
 
         //add new type subscription
-        var wasAdded = subscriptionsByUser.ByUser.TryAdd(user.ConnectionId, subscriptionsByUrl);
+        var wasAdded = subscriptionsByUser.SubscriptionsByUser.TryAdd(user.ConnectionId, subscriptionsByUrl);
 
         //if add failed then likely another thread was adding at the same time, try again
         if (!wasAdded)
@@ -118,7 +121,7 @@ namespace EntitySignal.Services
       }
 
       //add or update value with new value
-      subscriptionsByUrl.ByUrl.AddOrUpdate(user.Url, user, (key, oldValue) => oldValue = user);
+      subscriptionsByUrl.SubscriptionsByUrl.AddOrUpdate(user.Url, user, (key, oldValue) => oldValue = user);
     }
 
     public static async Task RemoveConnection(string connectionId)
@@ -130,9 +133,9 @@ namespace EntitySignal.Services
           continue;
         }
 
-        if (typeSubscription.Value.ByUser.ContainsKey(connectionId))
+        if (typeSubscription.Value.SubscriptionsByUser.ContainsKey(connectionId))
         {
-          var removesuccess = typeSubscription.Value.ByUser.TryRemove(connectionId, out _);
+          var removesuccess = typeSubscription.Value.SubscriptionsByUser.TryRemove(connectionId, out _);
           if (!removesuccess)
           {
             var newRand = new Random();

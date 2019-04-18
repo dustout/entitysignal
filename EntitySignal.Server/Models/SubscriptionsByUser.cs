@@ -5,7 +5,9 @@ namespace EntitySignal.Models
 {
   public class SubscriptionsByUser
   {
-    public ConcurrentDictionary<string, SubscriptionsByUrl> ByUser = new ConcurrentDictionary<string, SubscriptionsByUrl>();
+    //dictionary of urls subscribed to by this user of this type
+    public ConcurrentDictionary<string, IURLSubscription> SubscriptionsByUrl = new ConcurrentDictionary<string, IURLSubscription>();
+
     public Type SubscriptionType;
   }
 }
