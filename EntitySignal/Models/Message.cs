@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace EntitySignal.Models
 {
-  public class Messages
+  public class Message
   {
     public int Id { get; set; }
     public string Name { get; set; }
-    public string Message { get; set; }
+    public string Text { get; set; }
   }
 }

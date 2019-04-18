@@ -20,22 +20,60 @@ namespace EntitySignal.Controllers
       _db = context;
     }
 
+    private string GetRandomName()
+    {
+      var possibleNames = new string[] { "Jennifer", "Amanda", "Jessica", "Melissa", "Sarah", "Heather", "Nicole", "Stephanie", "Michael", "Christopher", "Jason", "David", "Dustin" };
+
+      var random = new Random().Next(possibleNames.Count());
+      return possibleNames[random];
+    }
+
+    private string GetRandomMessageText()
+    {
+      var possibleMessages = new string[] { "Hi", "Morning", "How are things?", "What's New!", "G'day!", "It's good to see you"};
+
+      var random = new Random().Next(possibleMessages.Count());
+      return possibleMessages[random];
+    }
+
+    private Message GenerateNewMessage()
+    {
+      var newMessage = new Message()
+      {
+        Name = GetRandomName(),
+        Text = GetRandomMessageText()
+      };
+
+      return newMessage;
+    }
+
+    private string GetRandomAnimalName()
+    {
+      var possibleAnimals = new string[] { "Cat", "Dog", "Bird", "Lion", "Elephant", "Bear", "Tiger", "Fox", "Snake", "Rabbit", "Horse" };
+
+      var random = new Random().Next(possibleAnimals.Count());
+      return possibleAnimals[random];
+    }
+
+    private Joke GenerateNewJoke()
+    {
+      var newJoke = new Joke()
+      {
+        Leadup = $"Why did the {GetRandomAnimalName()} cross the road?",
+        Punchline = "To get to the other side!"
+      };
+
+      return newJoke;
+    }
+
     public async Task<ActionResult> Create()
     {
-      var a = new Messages()
-      {
-        Name = "Dustin",
-        Message = "Hey"
-      };
+      var newMessage = GenerateNewMessage();
+      _db.Messages.Add(newMessage);
 
-      _db.Messages.Add(a);
+      var newJoke = GenerateNewJoke();
+      _db.Jokes.Add(newJoke);
 
-      var b = new Jokes()
-      {
-        Leadup = "Why did the chicken cross the road",
-        Punchline = "To get to the other side"
-      };
-      _db.Jokes.Add(b);
       await _db.SaveChangesAsync();
 
       return Ok();
@@ -45,22 +83,14 @@ namespace EntitySignal.Controllers
     {
       for (var i = 0; i < 5; i++)
       {
-        var a = new Messages()
-        {
-          Name = "Dustin",
-          Message = "Hey"
-        };
-        _db.Messages.Add(a);
+        var newMessage = GenerateNewMessage();
+        _db.Messages.Add(newMessage);
       }
 
       for (var i = 0; i < 5; i++)
       {
-        var b = new Jokes()
-        {
-          Leadup = "Why did the chicken cross the road",
-          Punchline = "To get to the other side"
-        };
-        _db.Jokes.Add(b);
+        var newJoke = GenerateNewJoke();
+        _db.Jokes.Add(newJoke);
       }
 
       _db.SaveChanges();
@@ -75,14 +105,14 @@ namespace EntitySignal.Controllers
       var randomMessage = await _db.Messages
         .Skip(random)
         .FirstAsync();
-      randomMessage.Message = Guid.NewGuid().ToString();
+      randomMessage.Text = Guid.NewGuid().ToString();
 
       var jokeCount = await _db.Jokes.CountAsync();
       var randomJokeSkip = new Random().Next(jokeCount);
       var randomJoke = await _db.Jokes
         .Skip(randomJokeSkip)
         .FirstAsync();
-      randomJoke.Leadup = "Why did the guid cross the road?";
+      randomJoke.Leadup = "Why did the GUID cross the road?";
       randomJoke.Punchline = Guid.NewGuid().ToString();
 
       await _db.SaveChangesAsync();

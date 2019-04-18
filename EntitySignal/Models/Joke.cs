@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EntitySignal.Models
 {
-  public class Jokes
+  public class Joke
   {
     public int Id { get; set; }
     public string Leadup { get; set; }

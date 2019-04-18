@@ -29,17 +29,17 @@ namespace EntitySignal.Controllers
     }
 
     [HttpPost]
-    public ActionResult<IEnumerable<Messages>> SubscribeToAllMessages([FromBody] SubscribePost postSubscribe)
+    public ActionResult<IEnumerable<Message>> SubscribeToAllMessages([FromBody] SubscribePost postSubscribe)
     {
-      _entitySignalSubscribe.Subscribe<Messages>(postSubscribe.ConnectionId);
+      _entitySignalSubscribe.Subscribe<Message>(postSubscribe.ConnectionId);
 
       return _db.Messages.ToList();
     }
 
     [HttpPost]
-    public IEnumerable<Messages> SubscribeToOddIdMessages([FromBody] SubscribePost postSubscribe)
+    public IEnumerable<Message> SubscribeToOddIdMessages([FromBody] SubscribePost postSubscribe)
     {
-      var userContainer = _entitySignalSubscribe.Subscribe<Messages>(postSubscribe.ConnectionId, x=> x.Id % 2 == 1);
+      var userContainer = _entitySignalSubscribe.Subscribe<Message>(postSubscribe.ConnectionId, x=> x.Id % 2 == 1);
 
       return _db.Messages
         .Where(userContainer.Query)
@@ -47,17 +47,17 @@ namespace EntitySignal.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<Jokes>>> SubscribeToAllJokes([FromBody] SubscribePost postSubscribe)
+    public async Task<ActionResult<IEnumerable<Joke>>> SubscribeToAllJokes([FromBody] SubscribePost postSubscribe)
     {
-      _entitySignalSubscribe.Subscribe<Jokes>(postSubscribe.ConnectionId);
+      _entitySignalSubscribe.Subscribe<Joke>(postSubscribe.ConnectionId);
 
       return await _db.Jokes.ToListAsync();
     }
 
     [HttpPost]
-    public IEnumerable<Jokes> SubscribeToJokesWithGuidAnswer([FromBody] SubscribePost postSubscribe)
+    public IEnumerable<Joke> SubscribeToJokesWithGuidAnswer([FromBody] SubscribePost postSubscribe)
     {
-      var userContainer = _entitySignalSubscribe.Subscribe<Jokes>(postSubscribe.ConnectionId, x => Guid.TryParse(x.Punchline, out Guid g));
+      var userContainer = _entitySignalSubscribe.Subscribe<Joke>(postSubscribe.ConnectionId, x => Guid.TryParse(x.Punchline, out Guid g));
      
       return _db.Jokes
         .Where(userContainer.Query)

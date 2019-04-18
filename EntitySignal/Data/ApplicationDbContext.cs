@@ -18,8 +18,8 @@ namespace EntitySignal.Data
   {
     public EntitySignalDataProcess _entitySignalDataProcess { get; }
 
-    public DbSet<Messages> Messages { get; set; }
-    public DbSet<Jokes> Jokes { get; set; }
+    public DbSet<Message> Messages { get; set; }
+    public DbSet<Joke> Jokes { get; set; }
 
     public ApplicationDbContext(
       DbContextOptions<ApplicationDbContext> options,
