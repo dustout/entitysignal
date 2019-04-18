@@ -25,14 +25,22 @@ angular.module("EntitySignal").factory("EntitySignal", [
         var connectingDefer;
         vm.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
         vm.hub.onclose(function () {
-            vm.status = EntitySignalStatus.Disconnected;
-            reconnect();
+            $timeout().then(function () {
+                vm.status = EntitySignalStatus.Disconnected;
+                reconnect();
+            });
         });
         function reconnect() {
-            $timeout(1000)
+            console.log("Reconnecting");
+            $timeout(3000 + (Math.random() * 4000))
                 .then(function () {
                 connect().then(function () {
+                    console.log("Reconnect Success");
+                    for (var index in subscriptions) {
+                        vm.hardRefresh(index);
+                    }
                 }, function (x) {
+                    console.log("Reconnect Failed");
                     reconnect();
                 });
             });
@@ -44,6 +52,7 @@ angular.module("EntitySignal").factory("EntitySignal", [
             if (vm.status == EntitySignalStatus.Connecting) {
                 return connectingDefer.promise;
             }
+            console.log("Connecting");
             if (vm.status == EntitySignalStatus.Disconnected) {
                 vm.status = EntitySignalStatus.Connecting;
                 connectingDefer = $q.defer();
@@ -55,12 +64,13 @@ angular.module("EntitySignal").factory("EntitySignal", [
                     });
                 }).catch(function (err) {
                     $timeout().then(function () {
-                        //alert("Error connecting");
+                        console.log("Error Connecting");
                         vm.status = EntitySignalStatus.Disconnected;
                         connectingDefer.reject(err);
                     });
                     return console.error(err.toString());
                 });
+                return connectingDefer.promise;
             }
         }
         connect();
@@ -98,6 +108,44 @@ angular.module("EntitySignal").factory("EntitySignal", [
                 console.log(propertyName);
             }
             return urls;
+        };
+        vm.hardRefresh = function (url) {
+            console.log("Hard refreshing url:" + url);
+            //if not already subscribed to then just do regular sync
+            if (!subscriptions[url]) {
+                return vm.syncWith(url);
+            }
+            //otherwise do hard refresh
+            return connect().then(function () {
+                var syncPost = {
+                    connectionId: vm.connectionId
+                };
+                return $http.post(url, syncPost)
+                    .then(function (x) {
+                    if (subscriptions[url] == null) {
+                        subscriptions[url] = x.data;
+                    }
+                    else {
+                        subscriptions[url].splice(0);
+                        x.data.forEach(function (y) {
+                            subscriptions[url].push(y);
+                        });
+                    }
+                    return subscriptions[url];
+                }, function (x) {
+                    subscriptions[url].splice(0);
+                });
+            });
+        };
+        vm.desyncFrom = function (url) {
+            var newDefer = $q.defer();
+            vm.hub.invoke("DeSyncFrom", url)
+                .then(function (x) {
+                newDefer.resolve(x);
+            }, function (x) {
+                newDefer.reject(x);
+            });
+            return newDefer.promise;
         };
         vm.syncWith = function (url) {
             //if already subscribed to then return array

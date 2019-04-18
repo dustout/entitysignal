@@ -66,6 +66,7 @@ interface EntitySignal {
   hub: signalR.HubConnection;
   connectionId: string;
   syncWith(url: string): ng.IPromise<any>;
+  hardRefresh(url: string): ng.IPromise<any>;
   desyncFrom(url: string): ng.IPromise<any>;
 
   getSyncedUrls(): string[];
@@ -104,16 +105,27 @@ angular.module("EntitySignal").factory("EntitySignal", [
     vm.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
 
     vm.hub.onclose(() => {
-      vm.status = EntitySignalStatus.Disconnected;
-      reconnect();
+      $timeout().then(() => {
+        vm.status = EntitySignalStatus.Disconnected;
+        reconnect();
+      });
     });
 
     function reconnect() {
-      $timeout(1000)
+      console.log("Reconnecting");
+
+      $timeout(3000 + (Math.random() * 4000))
         .then(() => {
           connect().then(() => {
+            console.log("Reconnect Success");
+
+            for (var index in subscriptions) {
+              vm.hardRefresh(index);
+            }
           },
             x => {
+              console.log("Reconnect Failed");
+
               reconnect();
             });
         });
@@ -128,6 +140,8 @@ angular.module("EntitySignal").factory("EntitySignal", [
         return connectingDefer.promise;
       }
 
+      console.log("Connecting");
+
       if (vm.status == EntitySignalStatus.Disconnected) {
         vm.status = EntitySignalStatus.Connecting;
         connectingDefer = $q.defer<void>();
@@ -140,13 +154,15 @@ angular.module("EntitySignal").factory("EntitySignal", [
           });
         }).catch(function (err) {
           $timeout().then(() => {
-            //alert("Error connecting");
+            console.log("Error Connecting");
             vm.status = EntitySignalStatus.Disconnected;
             connectingDefer.reject(err);
           });
-          
+
           return console.error(err.toString());
         });
+
+        return connectingDefer.promise;
       }
     }
     connect();
@@ -189,6 +205,58 @@ angular.module("EntitySignal").factory("EntitySignal", [
       }
 
       return urls;
+    }
+
+    vm.hardRefresh = url => {
+      console.log("Hard refreshing url:" + url)
+
+      //if not already subscribed to then just do regular sync
+      if (!subscriptions[url]) {
+        return vm.syncWith(url);
+      }
+
+      //otherwise do hard refresh
+      return connect().then(
+        () => {
+          var syncPost = <SyncPost>{
+            connectionId: vm.connectionId
+          }
+
+          return $http.post<any[]>(url, syncPost)
+            .then(x => {
+              if (subscriptions[url] == null) {
+                subscriptions[url] = x.data;
+              }
+              else {
+                subscriptions[url].splice(0);
+                x.data.forEach(y => {
+                  subscriptions[url].push(y);
+                });
+              }
+
+              return subscriptions[url];
+            },
+              x => {
+                subscriptions[url].splice(0);
+              }
+            );
+        }
+      );
+
+    }
+
+    vm.desyncFrom = url => {
+      var newDefer = $q.defer<void>();
+
+      vm.hub.invoke("DeSyncFrom", url)
+        .then(x => {
+          newDefer.resolve(x);
+        },
+        x => {
+          newDefer.reject(x);
+        });
+
+      return newDefer.promise;
     }
 
     vm.syncWith = url => {
@@ -250,7 +318,7 @@ angular.module("app").controller("testController", [
     $scope.maxFilteredMessagesCount = 4;
     $scope.maxJokesCount = 4;
     $scope.maxGuidJokesCount = 4;
-    
+
     $scope.createNew = () => {
       $http.get("/crud/create");
     };
