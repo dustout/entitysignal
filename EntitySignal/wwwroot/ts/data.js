@@ -99,7 +99,6 @@ angular.module("EntitySignal").factory("EntitySignal", [
             }
             return urls;
         };
-        window["a"] = subscriptions;
         vm.syncWith = function (url) {
             //if already subscribed to then return array
             if (subscriptions[url]) {
