@@ -11,6 +11,11 @@ namespace EntitySignal.Hubs
   {
     private static Mutex mut = new Mutex();
 
+    public async Task DeSyncFrom(string url)
+    {
+      EntitySignalDataStore.RemoveUrlSubscription(Context.ConnectionId, url);
+    }
+
     public override Task OnConnectedAsync()
     {
       mut.WaitOne(10);

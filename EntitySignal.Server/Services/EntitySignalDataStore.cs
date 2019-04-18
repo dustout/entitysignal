@@ -124,6 +124,24 @@ namespace EntitySignal.Services
       subscriptionsByUrl.SubscriptionsByUrl.AddOrUpdate(user.Url, user, (key, oldValue) => oldValue = user);
     }
 
+    public static void RemoveUrlSubscription(string connectionId, string url)
+    {
+      foreach (var typeSubscription in SubscriptionsByType)
+      {
+        if (typeSubscription.Value == null)
+        {
+          continue;
+        }
+
+        SubscriptionsByUser userSubscription;
+        typeSubscription.Value.SubscriptionsByUser.TryGetValue(connectionId, out userSubscription);
+        if (userSubscription != null)
+        {
+          userSubscription.SubscriptionsByUrl.TryRemove(url, out _);
+        }
+      }
+    }
+
     public static async Task RemoveConnection(string connectionId)
     {
       foreach (var typeSubscription in SubscriptionsByType)
