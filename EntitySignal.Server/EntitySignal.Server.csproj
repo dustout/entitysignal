@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/dustout/entitysignal</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <PackageIconUrl>https://entitysignal.com/mstile-150x150.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
