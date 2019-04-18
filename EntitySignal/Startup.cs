@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.HttpOverrides;
 using EntitySignal.Extensions;
+using EntitySignal.Hubs;
 
 namespace EntitySignal
 {
@@ -46,6 +47,7 @@ namespace EntitySignal
 
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+      services.AddSignalR();
       services.AddEntitySignal();
     }
 
@@ -73,7 +75,12 @@ namespace EntitySignal
       app.UseStaticFiles();
       app.UseCookiePolicy();
       app.UseAuthentication();
-      app.UseEntitySignal();
+
+      app.UseWebSockets();
+      app.UseSignalR(routes =>
+      {
+        routes.MapHub<EntitySignalHub>("/dataHub");
+      });
 
       app.UseMvc(routes =>
       {
