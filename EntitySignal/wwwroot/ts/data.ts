@@ -41,8 +41,6 @@ angular.module("app", ["EntitySignal"])
       };
 
       EntitySignal.options = entitySignalOptions;
-
-
     }]);
 angular.module("app").controller("testController", [
   "$scope",

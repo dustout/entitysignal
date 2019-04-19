@@ -81,6 +81,10 @@ angular.module("EntitySignal").factory("EntitySignal", [
     });
 
     function reconnect() {
+      if (vm.options && vm.options.autoreconnect == false) {
+        return;
+      }
+
       console.log("Reconnecting");
 
       $timeout(3000 + (Math.random() * 4000))
