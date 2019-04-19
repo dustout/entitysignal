@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\ts\entitySignal.ts" />
+    <Content Remove="wwwroot\ts\ngEntitySignal.ts" />
     <Content Remove="wwwroot\ts\Template.tst" />
   </ItemGroup>
 
@@ -48,8 +49,9 @@
 
 
   <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\ts\data.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\testAngularApp.ts" />
     <TypeScriptCompile Include="wwwroot\ts\entitySignal.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\ngEntitySignal.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\AbortController.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\browser-index.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\Errors.d.ts" />

@@ -64,4 +64,4 @@ angular.module("app").controller("testController", [
         $scope.subscribeToOddIdMessages();
     }
 ]);
-//# sourceMappingURL=data.js.map
+//# sourceMappingURL=testAngularApp.js.map
