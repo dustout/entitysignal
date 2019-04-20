@@ -7,7 +7,7 @@ var EntitySignal;
         EntityState[EntityState["Deleted"] = 2] = "Deleted";
         EntityState[EntityState["Modified"] = 3] = "Modified";
         EntityState[EntityState["Added"] = 4] = "Added";
-    })(EntityState = EntitySignal.EntityState || (EntitySignal.EntityState = {}));
+    })(EntityState || (EntityState = {}));
     ;
     var EntitySignalStatus;
     (function (EntitySignalStatus) {
@@ -134,7 +134,7 @@ var EntitySignal;
             var _this = this;
             data.urls.forEach(function (url) {
                 url.data.forEach(function (x) {
-                    if (x.state == EntitySignal.EntityState.Added || x.state == EntitySignal.EntityState.Modified) {
+                    if (x.state == EntityState.Added || x.state == EntityState.Modified) {
                         var changeCount = 0;
                         _this.subscriptions[url.url].forEach(function (msg) {
                             if (x.object.id == msg.id) {
@@ -146,7 +146,7 @@ var EntitySignal;
                             _this.subscriptions[url.url].push(x.object);
                         }
                     }
-                    else if (x.state == EntitySignal.EntityState.Deleted) {
+                    else if (x.state == EntityState.Deleted) {
                         for (var i = _this.subscriptions[url.url].length - 1; i >= 0; i--) {
                             var currentRow = _this.subscriptions[url.url][i];
                             if (currentRow.id == x.object.id) {

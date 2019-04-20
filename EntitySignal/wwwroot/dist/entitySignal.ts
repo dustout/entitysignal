@@ -1,5 +1,5 @@
 ﻿namespace EntitySignal {
-  export enum EntityState {
+  enum EntityState {
     Detached = 0,
     Unchanged = 1,
     Deleted = 2,
@@ -14,7 +14,7 @@
     state: EntityState;
   }
 
-  export interface UserResult {
+  interface UserResult {
     connectionId: string;
     urls: UserUrlResult[];
   }
@@ -31,11 +31,11 @@
     WaitingForConnectionId = 3
   }
 
-  export interface SyncPost {
+  interface SyncPost {
     connectionId: string;
   }
 
-  export interface SyncSubscription {
+  interface SyncSubscription {
     [key: string]: any[];
   }
 
@@ -209,7 +209,7 @@
     processSync(data: UserResult) {
       data.urls.forEach(url => {
         url.data.forEach(x => {
-          if (x.state == EntitySignal.EntityState.Added || x.state == EntitySignal.EntityState.Modified) {
+          if (x.state == EntityState.Added || x.state == EntityState.Modified) {
             var changeCount = 0;
             this.subscriptions[url.url].forEach(msg => {
               if (x.object.id == msg.id) {
@@ -221,7 +221,7 @@
               this.subscriptions[url.url].push(x.object);
             }
           }
-          else if (x.state == EntitySignal.EntityState.Deleted) {
+          else if (x.state == EntityState.Deleted) {
             for (var i = this.subscriptions[url.url].length - 1; i >= 0; i--) {
               var currentRow = this.subscriptions[url.url][i];
               if (currentRow.id == x.object.id) {
@@ -254,7 +254,7 @@
     hardRefresh(url: string) {
       return new Promise((resolve, reject) => {
         this.connect().then(() => {
-          var syncPost = <EntitySignal.SyncPost>{
+          var syncPost = <SyncPost>{
             connectionId: this.connectionId
           }
 
