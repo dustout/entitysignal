@@ -27,7 +27,8 @@
   export enum EntitySignalStatus {
     Disconnected = 0,
     Connecting = 1,
-    Connected = 2
+    Connected = 2,
+    WaitingForConnectionId = 3
   }
 
   export interface SyncPost {
@@ -132,7 +133,7 @@
         return Promise.resolve();
       }
 
-      if (this.status == EntitySignalStatus.Connecting) {
+      if (this.status == EntitySignalStatus.Connecting || this.status == EntitySignalStatus.WaitingForConnectionId) {
         return this.connectingDefer;
       }
 
@@ -143,11 +144,23 @@
 
         this.connectingDefer = new Promise(
           (resolve, reject) => {
+            this.hub.on("ConnectionIdChanged", (connectionId: string) => {
+
+              //this should be a one shot so just remove handler after first use
+              this.hub.off("ConnectionIdChanged");
+
+              this.status = EntitySignalStatus.Connected;
+              this.connectionId = connectionId;
+
+              resolve();
+            });
+
             this.hub.start().then(
               x => {
-                this.status = EntitySignalStatus.Connected;
+                this.status = EntitySignalStatus.WaitingForConnectionId;
                 this.connectionId = signalR.connectionId;
-                resolve();
+
+                setTimeout(() => { if (this.status == EntitySignalStatus.WaitingForConnectionId) { reject() } }, 5000);
               }
             ).catch(
               err => {

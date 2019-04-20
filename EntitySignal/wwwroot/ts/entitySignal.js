@@ -14,6 +14,7 @@ var EntitySignal;
         EntitySignalStatus[EntitySignalStatus["Disconnected"] = 0] = "Disconnected";
         EntitySignalStatus[EntitySignalStatus["Connecting"] = 1] = "Connecting";
         EntitySignalStatus[EntitySignalStatus["Connected"] = 2] = "Connected";
+        EntitySignalStatus[EntitySignalStatus["WaitingForConnectionId"] = 3] = "WaitingForConnectionId";
     })(EntitySignalStatus = EntitySignal.EntitySignalStatus || (EntitySignal.EntitySignalStatus = {}));
     var Client = /** @class */ (function () {
         function Client(options) {
@@ -79,17 +80,26 @@ var EntitySignal;
             if (this.status == EntitySignalStatus.Connected) {
                 return Promise.resolve();
             }
-            if (this.status == EntitySignalStatus.Connecting) {
+            if (this.status == EntitySignalStatus.Connecting || this.status == EntitySignalStatus.WaitingForConnectionId) {
                 return this.connectingDefer;
             }
             this.debugPrint("Connecting");
             if (this.status == EntitySignalStatus.Disconnected) {
                 this.status = EntitySignalStatus.Connecting;
                 this.connectingDefer = new Promise(function (resolve, reject) {
-                    _this.hub.start().then(function (x) {
+                    _this.hub.on("ConnectionIdChanged", function (connectionId) {
+                        //this should be a one shot so just remove handler after first use
+                        _this.hub.off("ConnectionIdChanged");
                         _this.status = EntitySignalStatus.Connected;
-                        _this.connectionId = signalR.connectionId;
+                        _this.connectionId = connectionId;
                         resolve();
+                    });
+                    _this.hub.start().then(function (x) {
+                        _this.status = EntitySignalStatus.WaitingForConnectionId;
+                        _this.connectionId = signalR.connectionId;
+                        setTimeout(function () { if (_this.status == EntitySignalStatus.WaitingForConnectionId) {
+                            reject();
+                        } }, 5000);
                     }).catch(function (err) {
                         _this.debugPrint("Error Connecting");
                         _this.status = EntitySignal.EntitySignalStatus.Disconnected;

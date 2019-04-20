@@ -76,4 +76,9 @@
     <TypeScriptCompile Include="wwwroot\typings\signalr\WebSocketTransport.d.ts" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
 </Project>
