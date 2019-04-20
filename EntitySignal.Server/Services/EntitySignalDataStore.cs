@@ -15,8 +15,6 @@ namespace EntitySignal.Services
     //TYPE --> ConnectionId --> URL Subscription -->
     public static ConcurrentDictionary<Type, SubscriptionsByType> SubscriptionsByType { get; set; } = new ConcurrentDictionary<Type, SubscriptionsByType>();
 
-    public static int ConnectionCount;
-
     // DO NOT REMOVE, ACCESSED BY STRING, I KNOW IT'S NASTY
     public static List<UserSubscriptionResult> GetSubscribed<T>(SubscriptionsByType subscriptionsByUser, List<ChangedObject> values)
     {
