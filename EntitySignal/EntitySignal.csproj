@@ -49,9 +49,9 @@
 
 
   <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\dist\testAngularApp.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\testAngularApp.ts" />
     <TypeScriptCompile Include="wwwroot\dist\entitySignal.ts" />
-    <TypeScriptCompile Include="wwwroot\dist\ngEntitySignal.ts" />
+    <TypeScriptCompile Include="wwwroot\dist\angularJs\ngEntitySignal.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\AbortController.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\browser-index.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\Errors.d.ts" />
