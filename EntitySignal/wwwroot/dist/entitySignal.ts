@@ -152,13 +152,15 @@
               this.status = EntitySignalStatus.Connected;
               this.connectionId = connectionId;
 
+              this.debugPrint("Connected");
+
               resolve();
             });
 
             this.hub.start().then(
               x => {
                 this.status = EntitySignalStatus.WaitingForConnectionId;
-                this.connectionId = signalR.connectionId;
+                this.debugPrint("Connected, waiting for connectionId");
 
                 setTimeout(() => { if (this.status == EntitySignalStatus.WaitingForConnectionId) { reject() } }, 5000);
               }

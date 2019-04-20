@@ -92,11 +92,12 @@ var EntitySignal;
                         _this.hub.off("ConnectionIdChanged");
                         _this.status = EntitySignalStatus.Connected;
                         _this.connectionId = connectionId;
+                        _this.debugPrint("Connected");
                         resolve();
                     });
                     _this.hub.start().then(function (x) {
                         _this.status = EntitySignalStatus.WaitingForConnectionId;
-                        _this.connectionId = signalR.connectionId;
+                        _this.debugPrint("Connected, waiting for connectionId");
                         setTimeout(function () { if (_this.status == EntitySignalStatus.WaitingForConnectionId) {
                             reject();
                         } }, 5000);
