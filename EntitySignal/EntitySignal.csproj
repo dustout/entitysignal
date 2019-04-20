@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\ts\entitySignal.ts" />
-    <Content Remove="wwwroot\ts\ngEntitySignal.ts" />
-    <Content Remove="wwwroot\ts\Template.tst" />
+    <Content Remove="wwwroot\dist\entitySignal.ts" />
+    <Content Remove="wwwroot\dist\ngEntitySignal.ts" />
+    <Content Remove="wwwroot\dist\Template.tst" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,9 +49,9 @@
 
 
   <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\ts\testAngularApp.ts" />
-    <TypeScriptCompile Include="wwwroot\ts\entitySignal.ts" />
-    <TypeScriptCompile Include="wwwroot\ts\ngEntitySignal.ts" />
+    <TypeScriptCompile Include="wwwroot\dist\testAngularApp.ts" />
+    <TypeScriptCompile Include="wwwroot\dist\entitySignal.ts" />
+    <TypeScriptCompile Include="wwwroot\dist\ngEntitySignal.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\AbortController.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\browser-index.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\Errors.d.ts" />
@@ -74,11 +74,6 @@
     <TypeScriptCompile Include="wwwroot\typings\signalr\TextMessageFormat.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\Utils.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\WebSocketTransport.d.ts" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>
