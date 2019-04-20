@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace EntitySignal.Controllers
 {
+  [ResponseCache(NoStore = true, Duration = 0)]
   public class CrudController : Controller
   {
     private ApplicationDbContext _db;
