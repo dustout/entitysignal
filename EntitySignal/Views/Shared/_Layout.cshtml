@@ -3,7 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@ViewData["Title"] - EntitySignal</title>
+  @if (ViewData["IsRoot"] != null && (Boolean)ViewData["IsRoot"] == true)
+  {
+    <title>Entity Signal - @ViewData["Title"]</title>
+  }
+  else
+  {
+    <title>@ViewData["Title"] - Entity Signal</title>
+  }
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -17,11 +24,11 @@
   <style>
     .nav-link {
       font-weight: 700;
-      font-size:1.15em;
+      font-size: 1.15em;
     }
   </style>
 </head>
-<body ng-app="app"> 
+<body ng-app="app">
   <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler collapsed d-none d-sm-block d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -40,10 +47,10 @@
         <li class="nav-item @(ViewData["ActiveNavItem"] == null ? "active": "")">
           <a class="nav-link" href="/">Home</a>
         </li>
-        <li class="nav-item  @(ViewData["ActiveNavItem"] == "Examples" ? "active": "")">
+        <li class="nav-item  @((string)ViewData["ActiveNavItem"] == "Examples" ? "active": "")">
           <a class="nav-link" href="/quick-start">Quick Start</a>
         </li>
-        <li class="nav-item  @(ViewData["ActiveNavItem"] == "Docs" ? "active": "")">
+        <li class="nav-item  @((string)ViewData["ActiveNavItem"] == "Docs" ? "active": "")">
           <a class="nav-link" href="/documentation">Documentation</a>
         </li>
         <li class="nav-item d-block d-sm-none">

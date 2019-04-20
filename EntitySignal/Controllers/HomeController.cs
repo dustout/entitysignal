@@ -33,6 +33,7 @@ namespace EntitySignal.Controllers
 
     public IActionResult Index()
     {
+      ViewData["IsRoot"] = true;
       return View();
     }
 

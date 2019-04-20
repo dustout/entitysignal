@@ -1,5 +1,5 @@
 ﻿@{
-  ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Real Time Entity Framework (EF) and ASP.NET core";
 }
 <br class="d-none d-sm-block" />
 
@@ -8,8 +8,8 @@
     <div class="col">
       <div class="card">
         <div class="card-body text-center">
-          <h1 class="mt-3">EF Core + SignalR Core = Entity Signal</h1>
-          <p class="lead" style="font-weight:400">Make all of your data real time. Recieve updates no matter where the object was created or edited!</p>
+          <h1 class="mt-3">@ViewData["Title"]</h1>
+          <p class="lead" style="font-weight:400">Make all of your data real time. Recieve updates no matter where the object was created or edited! Uses existing ASP.NET core permissions system.</p>
           <p class="pb-3">
             <img class="img-fluid" src="~/img/explainer/Explainer.gif" />
           </p>
@@ -24,6 +24,38 @@
 
 <br class="d-none d-sm-block" />
 <br class="d-none d-sm-block" />
+
+<div class="container pl-0 pr-0">
+  <h2>Top 3 Features</h2>
+  <hr />
+  <h3>1 <small>Make all entity framework data real time</small></h3>
+  <h3>2 <small>Use existing permissions</small></h3>
+  <h3>3 <small>Database agnostic</small></h3>
+</div>
+<br />
+<br />
+<br />
+
+<div class="container pl-0 pr-0">
+  <h2>What is Entity Signal?</h2>
+  <hr />
+  <p>
+    Entity Framework Core + SignalR = Entity Signal. Is the simplest way to think of it, basically Entity Signal allows you
+    to connect to Entity Framework through SignalR and get updates on subscribed data in real time. This lowers the number
+    of refreshes done by the user and ultimatly allows you to do more with fewer servers.
+  </p>
+</div>
+<br />
+<br />
+<br />
+
+
+
+
+<div class="container pl-0 pr-0">
+  <h2>Example</h2>
+  <hr />
+</div>
 
 <div ng-controller="testController">
   <div class="row">
