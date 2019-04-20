@@ -46,6 +46,7 @@
     debug: boolean;
     suppressInternalDataProcessing: boolean;
     hubUrl: string;
+    maxWaitForConnectionId: number;
   }
 
   type OnStatusChangedCallback = (status: EntitySignalStatus) => void;
@@ -79,7 +80,8 @@
         suppressInternalDataProcessing: false,
         hubUrl: "/dataHub",
         reconnectMinTime: 4000,
-        reconnectVariance: 3000
+        reconnectVariance: 3000,
+        maxWaitForConnectionId: 5000
       };
 
       if (options) {
@@ -162,7 +164,7 @@
                 this.status = EntitySignalStatus.WaitingForConnectionId;
                 this.debugPrint("Connected, waiting for connectionId");
 
-                setTimeout(() => { if (this.status == EntitySignalStatus.WaitingForConnectionId) { reject() } }, 5000);
+                setTimeout(() => { if (this.status == EntitySignalStatus.WaitingForConnectionId) { reject() } }, this.options.maxWaitForConnectionId);
               }
             ).catch(
               err => {

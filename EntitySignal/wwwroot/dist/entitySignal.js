@@ -25,7 +25,8 @@ var EntitySignal;
                 suppressInternalDataProcessing: false,
                 hubUrl: "/dataHub",
                 reconnectMinTime: 4000,
-                reconnectVariance: 3000
+                reconnectVariance: 3000,
+                maxWaitForConnectionId: 5000
             };
             if (options) {
                 Object.assign(this.options, options);
@@ -100,7 +101,7 @@ var EntitySignal;
                         _this.debugPrint("Connected, waiting for connectionId");
                         setTimeout(function () { if (_this.status == EntitySignalStatus.WaitingForConnectionId) {
                             reject();
-                        } }, 5000);
+                        } }, _this.options.maxWaitForConnectionId);
                     }).catch(function (err) {
                         _this.debugPrint("Error Connecting");
                         _this.status = EntitySignal.EntitySignalStatus.Disconnected;
