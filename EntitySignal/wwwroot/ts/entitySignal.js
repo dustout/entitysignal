@@ -18,14 +18,14 @@ var EntitySignal;
     var Client = /** @class */ (function () {
         function Client(options) {
             var _this = this;
-            if (options == null) {
-                this.options = {
-                    autoreconnect: true,
-                    debug: false
-                };
-            }
-            else {
-                this.options = options;
+            this.options = {
+                autoreconnect: true,
+                debug: false,
+                suppressInternalDataProcessing: false,
+                hubUrl: "/dataHub"
+            };
+            if (options) {
+                Object.assign(this.options, options);
             }
             this.onStatusChangeCallbacks = [];
             this.OnSyncCallbacks = [];

@@ -42,6 +42,7 @@
     autoreconnect: boolean;
     debug: boolean;
     suppressInternalDataProcessing: boolean;
+    hubUrl: string;
   }
 
   type OnStatusChangedCallback = (status: EntitySignalStatus) => void;
@@ -58,7 +59,7 @@
     private OnSyncCallbacks: OnSyncCallback[];
 
     private _status: EntitySignalStatus;
-    get status():EntitySignalStatus {
+    get status(): EntitySignalStatus {
       return this._status;
     }
     set status(newStatus: EntitySignalStatus) {
@@ -69,14 +70,15 @@
     }
 
     constructor(options?: EntitySignalOptions) {
-      if (options == null) {
-        this.options = <EntitySignalOptions>{
-          autoreconnect: true,
-          debug: false
-        };
-      }
-      else {
-        this.options = options;
+      this.options = <EntitySignalOptions>{
+        autoreconnect: true,
+        debug: false,
+        suppressInternalDataProcessing: false,
+        hubUrl: "/dataHub"
+      };
+
+      if (options) {
+        Object.assign(this.options, options);
       }
 
       this.onStatusChangeCallbacks = [];
@@ -110,7 +112,7 @@
       this.OnSyncCallbacks.push(callback);
     }
 
-    private  onClose() {
+    private onClose() {
       this.status = EntitySignalStatus.Disconnected;
       this.reconnect();
     }
@@ -272,7 +274,7 @@
       });
     }
 
-    syncWith(url:string):Promise<any> {
+    syncWith(url: string): Promise<any> {
       //if already subscribed to then return array
       if (this.subscriptions[url]) {
         return Promise.resolve(this.subscriptions[url])
