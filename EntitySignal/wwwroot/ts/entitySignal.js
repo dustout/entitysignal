@@ -183,6 +183,9 @@ var EntitySignal;
                                 resolve(_this.subscriptions[url]);
                             }
                             else if (xhr.status == 204) {
+                                if (_this.subscriptions[url] == null) {
+                                    _this.subscriptions[url] = data;
+                                }
                                 resolve(_this.subscriptions[url]);
                             }
                             else {

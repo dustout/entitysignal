@@ -263,6 +263,10 @@
                 resolve(this.subscriptions[url]);
               }
               else if (xhr.status == 204) {
+                if (this.subscriptions[url] == null) {
+                  this.subscriptions[url] = data;
+                }
+
                 resolve(this.subscriptions[url]);
               }
               else {
