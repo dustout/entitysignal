@@ -15,7 +15,7 @@ interface TestScope extends ng.IScope {
   maxJokesCount: number;
   maxGuidJokesCount: number;
 
-  entitySignal: EntitySignal;
+  entitySignal: ngEntitySignal;
 
   createNew(): void;
   createFiveNew(): void;
@@ -33,14 +33,11 @@ angular.module("app", ["EntitySignal"])
   .run([
     "EntitySignal",
     function (
-      EntitySignal: EntitySignal
+      EntitySignal: ngEntitySignal
     ) {
 
-      var entitySignalOptions = <EntitySignalOptions>{
-        autoreconnect: true
-      };
-
-      EntitySignal.options = entitySignalOptions;
+      EntitySignal.client.options.autoreconnect = true;
+      EntitySignal.client.connect();
     }]);
 angular.module("app").controller("testController", [
   "$scope",
@@ -51,7 +48,7 @@ angular.module("app").controller("testController", [
     $scope: TestScope,
     $http: ng.IHttpService,
     $timeout: ng.ITimeoutService,
-    EntitySignal: EntitySignal
+    EntitySignal: ngEntitySignal
   ) {
     $scope.entitySignal = EntitySignal;
 

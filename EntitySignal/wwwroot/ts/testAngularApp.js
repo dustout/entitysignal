@@ -2,10 +2,8 @@ angular.module("app", ["EntitySignal"])
     .run([
     "EntitySignal",
     function (EntitySignal) {
-        var entitySignalOptions = {
-            autoreconnect: true
-        };
-        EntitySignal.options = entitySignalOptions;
+        EntitySignal.client.options.autoreconnect = true;
+        EntitySignal.client.connect();
     }
 ]);
 angular.module("app").controller("testController", [
