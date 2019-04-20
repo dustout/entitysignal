@@ -22,7 +22,9 @@ var EntitySignal;
                 autoreconnect: true,
                 debug: false,
                 suppressInternalDataProcessing: false,
-                hubUrl: "/dataHub"
+                hubUrl: "/dataHub",
+                reconnectMinTime: 4000,
+                reconnectVariance: 3000
             };
             if (options) {
                 Object.assign(this.options, options);
@@ -111,7 +113,7 @@ var EntitySignal;
                 }
             }, function (x) {
                 _this.debugPrint("Reconnect Failed");
-                var reconnectTime = 3000 + (Math.random() * 4000);
+                var reconnectTime = _this.options.reconnectMinTime + (Math.random() * _this.options.reconnectVariance);
                 _this.debugPrint("Attempting reconnect in " + reconnectTime + "ms");
                 setTimeout(function () { _this.reconnect(); }, reconnectTime);
             });

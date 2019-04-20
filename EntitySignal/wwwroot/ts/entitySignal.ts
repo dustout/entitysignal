@@ -40,6 +40,8 @@
 
   export interface EntitySignalOptions {
     autoreconnect: boolean;
+    reconnectMinTime: number;
+    reconnectVariance: number;
     debug: boolean;
     suppressInternalDataProcessing: boolean;
     hubUrl: string;
@@ -74,7 +76,9 @@
         autoreconnect: true,
         debug: false,
         suppressInternalDataProcessing: false,
-        hubUrl: "/dataHub"
+        hubUrl: "/dataHub",
+        reconnectMinTime: 4000,
+        reconnectVariance: 3000
       };
 
       if (options) {
@@ -168,7 +172,6 @@
 
       this.debugPrint("Reconnecting");
 
-
       this.connect().then(
         () => {
           this.debugPrint("Reconnect Success");
@@ -179,7 +182,7 @@
         },
         x => {
           this.debugPrint("Reconnect Failed");
-          var reconnectTime = 3000 + (Math.random() * 4000);
+          var reconnectTime = this.options.reconnectMinTime + (Math.random() * this.options.reconnectVariance);
           this.debugPrint("Attempting reconnect in " + reconnectTime + "ms");
           setTimeout(() => { this.reconnect(); }, reconnectTime);
         }
