@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EntitySignal.Hubs;
 using EntitySignal.Models;
+using EntitySignal.Server.EFDbContext.Data;
 using EntitySignal.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
@@ -14,9 +15,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntitySignal.Data
 {
-  public class ApplicationDbContext : IdentityDbContext
+  public class ApplicationDbContext : EntitySignalIdentityDbContext
   {
-    public EntitySignalDataProcess _entitySignalDataProcess { get; }
 
     public DbSet<Message> Messages { get; set; }
     public DbSet<Joke> Jokes { get; set; }
@@ -25,30 +25,10 @@ namespace EntitySignal.Data
       DbContextOptions<ApplicationDbContext> options,
       EntitySignalDataProcess entitySignalDataProcess
       )
-        : base(options)
+        : base(options, entitySignalDataProcess)
     {
-      _entitySignalDataProcess = entitySignalDataProcess;
+
     }
 
-    public override int SaveChanges()
-    {
-      var changedData = _entitySignalDataProcess.PreSave(ChangeTracker);
-      var result = base.SaveChanges();
-      _entitySignalDataProcess.PostSave(changedData);
-      return result;
-    }
-
-    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
-    {
-      var changedData = _entitySignalDataProcess.PreSave(ChangeTracker);
-      var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-      await _entitySignalDataProcess.PostSaveAsync(changedData);
-      return result;
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
-    {
-      return base.SaveChangesAsync(cancellationToken: cancellationToken);
-    }
   }
 }

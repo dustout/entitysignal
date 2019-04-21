@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySignal", "EntitySignal\EntitySignal.csproj", "{7433A848-477A-48DA-BBDC-A786406314D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntitySignal.Server", "EntitySignal.Server\EntitySignal.Server.csproj", "{A9EA1E59-DE0A-4390-B82E-737426EA9E30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySignal.Server", "EntitySignal.Server\EntitySignal.Server.csproj", "{A9EA1E59-DE0A-4390-B82E-737426EA9E30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
