@@ -16,7 +16,7 @@ var EntitySignal;
         EntitySignalStatus[EntitySignalStatus["Connected"] = 2] = "Connected";
         EntitySignalStatus[EntitySignalStatus["WaitingForConnectionId"] = 3] = "WaitingForConnectionId";
     })(EntitySignalStatus = EntitySignal.EntitySignalStatus || (EntitySignal.EntitySignalStatus = {}));
-    var Client = /** @class */ (function () {
+    var Client = (function () {
         function Client(options) {
             var _this = this;
             this.options = {
@@ -35,7 +35,6 @@ var EntitySignal;
             this.OnSyncCallbacks = [];
             this.subscriptions = {};
             this.status = EntitySignalStatus.Disconnected;
-            //this.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
             this.hub = new window["signalR"].HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
             this.hub.onclose(function () {
                 _this.onClose();
@@ -90,7 +89,6 @@ var EntitySignal;
                 this.status = EntitySignalStatus.Connecting;
                 this.connectingDefer = new Promise(function (resolve, reject) {
                     _this.hub.on("ConnectionIdChanged", function (connectionId) {
-                        //this should be a one shot so just remove handler after first use
                         _this.hub.off("ConnectionIdChanged");
                         _this.status = EntitySignalStatus.Connected;
                         _this.connectionId = connectionId;
@@ -211,7 +209,6 @@ var EntitySignal;
             });
         };
         Client.prototype.syncWith = function (url) {
-            //if already subscribed to then return array
             if (this.subscriptions[url]) {
                 return Promise.resolve(this.subscriptions[url]);
             }
