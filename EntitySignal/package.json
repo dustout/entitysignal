@@ -1,0 +1,26 @@
+{
+  "version": "0.0.3",
+  "name": "entity-signal",
+  "description": "Real Time Entity Framework (EF) and ASP.NET core",
+  "homepage": "https://entitysignal.com",
+  "bugs": {
+    "email": "dustout@gmail.com",
+    "url": "https://github.com/dustout/entitysignal/issues"
+  },
+  "author": {
+    "name": "Dustin Gamester",
+    "email": "dustout@gmail.com",
+    "url": "https://github.com/dustout"
+  },
+  "files": [
+    "wwwroot/dist/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dustout/entitysignal.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "publish-to-npm": "npm publish"
+  }
+}
