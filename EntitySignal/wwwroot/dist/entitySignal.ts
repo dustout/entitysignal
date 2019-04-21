@@ -54,7 +54,7 @@
 
   export class Client {
     subscriptions: SyncSubscription;
-    hub: signalR.HubConnection;
+    hub: any; //signalR.HubConnection;
     options: EntitySignalOptions;
     private connectingDefer: Promise<void>;
     connectionId: string;
@@ -94,7 +94,8 @@
       this.subscriptions = {};
       this.status = EntitySignalStatus.Disconnected;
 
-      this.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
+      //this.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
+      this.hub = new window["signalR"].HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
 
       this.hub.onclose(() => {
         this.onClose();

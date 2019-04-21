@@ -35,7 +35,8 @@ var EntitySignal;
             this.OnSyncCallbacks = [];
             this.subscriptions = {};
             this.status = EntitySignalStatus.Disconnected;
-            this.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
+            //this.hub = new signalR.HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
+            this.hub = new window["signalR"].HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
             this.hub.onclose(function () {
                 _this.onClose();
             });
