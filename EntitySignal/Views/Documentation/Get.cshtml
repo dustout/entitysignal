@@ -3,33 +3,44 @@
   ViewData["Title"] = Model.Title;
   ViewData["ActiveNavItem"] = "Docs";
 }
-  <div class="container pl-0 pr-0">
-    <div class="row">
-      <div class="col">
-        <h1>Documentation</h1>
-        <hr />
-        <br />
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-12 col-lg-3">
-        <div class="list-group">
-          @foreach (var doc in Model.Docs)
-          {
-            <a href="/documentation/@doc" class="list-group-item list-group-item-action @(doc == Model.RequestedDoc?"list-group-item-primary":"")">@doc.Replace("-", " ")</a>
-          }
-        </div>
-        <br />
-      </div>
-      <div class="col-sm-12 col-lg-9">
-        <p class="float-right mb-0">
-          <a href="https://github.com/dustout/entitysignal/blob/master/EntitySignal/Docs/@(Model.RequestedDoc).md" class="btn btn-secondary"><i class="fas fa-edit"></i> Edit</a>
-        </p>
-        <h2>@Model.Title</h2>
-
-        @Html.Raw(@Markdig.Markdown.ToHtml(Model.Markdown))
-      </div>
+<div class="container pl-0 pr-0">
+  <div class="row">
+    <div class="col">
+      <h1>Documentation</h1>
+      <hr />
+      <br />
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-lg-3">
+      <div class="list-group">
+        @foreach (var doc in Model.Docs)
+        {
+          <a href="/documentation/@doc" class="list-group-item list-group-item-action @(doc == Model.RequestedDoc?"list-group-item-primary":"")">@doc.Replace("-", " ")</a>
+        }
+      </div>
+      <br />
+    </div>
+    <div class="col-sm-12 col-lg-9">
+      <p class="float-right mb-0">
+        <a href="https://github.com/dustout/entitysignal/blob/master/EntitySignal/Docs/@(Model.RequestedDoc).md" class="btn btn-secondary"><i class="fas fa-edit"></i> Edit</a>
+      </p>
+      <h2>@Model.Title</h2>
+
+      @Html.Raw(@Markdig.Markdown.ToHtml(Model.Markdown))
+    </div>
+  </div>
+</div>
+
+
+@section Scripts{
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/javascript.min.js"></script>
+
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+}
+
 
