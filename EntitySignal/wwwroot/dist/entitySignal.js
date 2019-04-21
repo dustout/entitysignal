@@ -92,6 +92,7 @@ var EntitySignal;
                         _this.hub.off("ConnectionIdChanged");
                         _this.status = EntitySignalStatus.Connected;
                         _this.connectionId = connectionId;
+                        document.cookie = "signalrConnectionId=" + _this.connectionId;
                         _this.debugPrint("Connected");
                         resolve();
                     });
@@ -172,11 +173,8 @@ var EntitySignal;
             var _this = this;
             return new Promise(function (resolve, reject) {
                 _this.connect().then(function () {
-                    var syncPost = {
-                        connectionId: _this.connectionId
-                    };
                     var xhr = new XMLHttpRequest();
-                    xhr.open("POST", url, true);
+                    xhr.open("GET", url, true);
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState == 4) {
@@ -204,7 +202,7 @@ var EntitySignal;
                             }
                         }
                     };
-                    xhr.send(JSON.stringify(syncPost));
+                    xhr.send();
                 });
             });
         };

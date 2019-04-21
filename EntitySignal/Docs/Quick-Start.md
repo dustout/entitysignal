@@ -32,7 +32,9 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 ```
 
 ### Use Entity Signal Data Context
-Replace `IdentityDbContext` with `EntitySignalIdentityDbContext` or `DbContext` with `EntitySignalDbContext`. Add a `EntitySignalDataProcess` dependency injection and pass into the base class.
+Replace `IdentityDbContext` with `EntitySignalIdentityDbContext` or `DbContext` with `EntitySignalDbContext`.
+
+Add a `EntitySignalDataProcess` dependency injection and pass into the base class.
 ```csharp
 public class ApplicationDbContext : EntitySignalIdentityDbContext
   {
@@ -44,3 +46,4 @@ public class ApplicationDbContext : EntitySignalIdentityDbContext
   }
 ```
 
+### Create Subscribe Endpoint

@@ -155,6 +155,8 @@
               this.status = EntitySignalStatus.Connected;
               this.connectionId = connectionId;
 
+              document.cookie = `signalrConnectionId=${this.connectionId}`
+
               this.debugPrint("Connected");
 
               resolve();
@@ -255,12 +257,9 @@
     hardRefresh(url: string) {
       return new Promise((resolve, reject) => {
         this.connect().then(() => {
-          var syncPost = <SyncPost>{
-            connectionId: this.connectionId
-          }
 
           var xhr = new XMLHttpRequest();
-          xhr.open("POST", url, true);
+          xhr.open("GET", url, true);
           xhr.setRequestHeader('Content-Type', 'application/json');
 
           xhr.onreadystatechange = () => {
@@ -293,8 +292,7 @@
             }
           }
 
-          xhr.send(JSON.stringify(syncPost));
-
+          xhr.send();
         });
       });
     }

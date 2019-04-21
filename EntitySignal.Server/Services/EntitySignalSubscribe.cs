@@ -16,9 +16,17 @@ namespace EntitySignal.Services
       _httpContextAccessor = httpContextAccessor;
     }
 
-    public UrlSubscription<T> Subscribe<T>(string connectionId, Func<T, bool> query = null)
+    public UrlSubscription<T> Subscribe<T>(Func<T, bool> query = null)
     {
       var url = $"{_httpContextAccessor.HttpContext.Request.Path}{_httpContextAccessor.HttpContext.Request.QueryString}";
+
+      string connectionId;
+      _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue("signalrConnectionId", out connectionId);
+
+      if (string.IsNullOrEmpty(connectionId))
+      {
+        return null;
+      }
 
       var userContainer = new UrlSubscription<T>()
       {

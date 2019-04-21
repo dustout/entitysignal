@@ -28,36 +28,36 @@ namespace EntitySignal.Controllers
       _entitySignalSubscribe = entitySignalSubscribe;
     }
 
-    [HttpPost]
-    public ActionResult<IEnumerable<Message>> SubscribeToAllMessages([FromBody] SubscribePost postSubscribe)
+    [HttpGet]
+    public ActionResult<IEnumerable<Message>> SubscribeToAllMessages()
     {
-      _entitySignalSubscribe.Subscribe<Message>(postSubscribe.ConnectionId);
+      _entitySignalSubscribe.Subscribe<Message>();
 
       return _db.Messages.ToList();
     }
 
-    [HttpPost]
-    public IEnumerable<Message> SubscribeToOddIdMessages([FromBody] SubscribePost postSubscribe)
+    [HttpGet]
+    public IEnumerable<Message> SubscribeToOddIdMessages()
     {
-      var userContainer = _entitySignalSubscribe.Subscribe<Message>(postSubscribe.ConnectionId, x=> x.Id % 2 == 1);
+      var userContainer = _entitySignalSubscribe.Subscribe<Message>(x=> x.Id % 2 == 1);
 
       return _db.Messages
         .Where(userContainer.Query)
         .ToList();
     }
 
-    [HttpPost]
-    public async Task<ActionResult<IEnumerable<Joke>>> SubscribeToAllJokes([FromBody] SubscribePost postSubscribe)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Joke>>> SubscribeToAllJokes()
     {
-      _entitySignalSubscribe.Subscribe<Joke>(postSubscribe.ConnectionId);
+      _entitySignalSubscribe.Subscribe<Joke>();
 
       return await _db.Jokes.ToListAsync();
     }
 
-    [HttpPost]
-    public IEnumerable<Joke> SubscribeToJokesWithGuidAnswer([FromBody] SubscribePost postSubscribe)
+    [HttpGet]
+    public IEnumerable<Joke> SubscribeToJokesWithGuidAnswer()
     {
-      var userContainer = _entitySignalSubscribe.Subscribe<Joke>(postSubscribe.ConnectionId, x => Guid.TryParse(x.Punchline, out Guid g));
+      var userContainer = _entitySignalSubscribe.Subscribe<Joke>(x => Guid.TryParse(x.Punchline, out Guid g));
      
       return _db.Jokes
         .Where(userContainer.Query)
