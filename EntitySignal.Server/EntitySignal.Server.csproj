@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://entitysignal.com/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dustout/entitysignal</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Added EntitySignalDbContext and EntitySignalIdentityDbContext as helpers so the user doesn't have to override onsave</PackageReleaseNotes>
     <PackageIconUrl>https://entitysignal.com/mstile-150x150.png</PackageIconUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags />
