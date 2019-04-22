@@ -37,6 +37,7 @@ angular.module("app", ["EntitySignal"])
     ) {
 
       EntitySignal.client.options.autoreconnect = true;
+      EntitySignal.client.options.debug = true;
       EntitySignal.client.connect();
     }]);
 angular.module("app").controller("testController", [

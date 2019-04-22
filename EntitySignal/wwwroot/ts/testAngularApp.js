@@ -3,6 +3,7 @@ angular.module("app", ["EntitySignal"])
     "EntitySignal",
     function (EntitySignal) {
         EntitySignal.client.options.autoreconnect = true;
+        EntitySignal.client.options.debug = true;
         EntitySignal.client.connect();
     }
 ]);
