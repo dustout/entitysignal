@@ -24,7 +24,7 @@ namespace EntitySignal.Controllers
 
     public async Task<IActionResult> Index()
     {
-      return await Get("Test");
+      return await Get(null);
     }
 
     [HttpGet("{requestedDocmentation}")]
@@ -35,7 +35,11 @@ namespace EntitySignal.Controllers
         .Select(x=>Path.GetFileNameWithoutExtension(x))
         .OrderBy(x=>x);
 
-      if (markdownFiles.Contains(requestedDocmentation) == false)
+      if(requestedDocmentation == null)
+      {
+        requestedDocmentation = markdownFiles.First();
+      }
+      else if(markdownFiles.Contains(requestedDocmentation) == false)
       {
         return BadRequest();
       }
