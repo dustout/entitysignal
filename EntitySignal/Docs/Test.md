@@ -1,1 +1,0 @@
-﻿This is some **markdown** text and some `code`.

@@ -14,19 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Docs\Another-Test.md" />
     <None Remove="Docs\Quick-Start.md" />
-    <None Remove="Docs\Test.md" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Docs\Quick-Start.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Docs\Another-Test.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Docs\Test.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
