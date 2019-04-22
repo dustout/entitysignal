@@ -164,8 +164,10 @@
 
             this.hub.start().then(
               x => {
-                this.status = EntitySignalStatus.WaitingForConnectionId;
-                this.debugPrint("Connected, waiting for connectionId");
+                if (this.status == EntitySignalStatus.Connecting) {
+                  this.debugPrint("Connected, waiting for connectionId");
+                  this.status = EntitySignalStatus.WaitingForConnectionId;
+                }
 
                 setTimeout(() => { if (this.status == EntitySignalStatus.WaitingForConnectionId) { reject() } }, this.options.maxWaitForConnectionId);
               }

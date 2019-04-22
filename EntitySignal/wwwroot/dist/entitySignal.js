@@ -97,8 +97,10 @@ var EntitySignal;
                         resolve();
                     });
                     _this.hub.start().then(function (x) {
-                        _this.status = EntitySignalStatus.WaitingForConnectionId;
-                        _this.debugPrint("Connected, waiting for connectionId");
+                        if (_this.status == EntitySignalStatus.Connecting) {
+                            _this.debugPrint("Connected, waiting for connectionId");
+                            _this.status = EntitySignalStatus.WaitingForConnectionId;
+                        }
                         setTimeout(function () { if (_this.status == EntitySignalStatus.WaitingForConnectionId) {
                             reject();
                         } }, _this.options.maxWaitForConnectionId);
