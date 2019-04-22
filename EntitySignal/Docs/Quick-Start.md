@@ -1,9 +1,7 @@
-﻿### Configure Back End
+﻿## Back End
 
 #### Install Packages
 *Nuget:* `Install-Package EntitySignal.Server`
-
-*NPM:* `npm i entity-signal`
 
 
 #### Configure Startup.cs
@@ -57,7 +55,7 @@ public ActionResult<IEnumerable<Message>> SubscribeToAllMessages()
 }
 ```
 
-The below function subscribes to all changes of type `Message` where the ID is odd
+The below function subscribes to all changes of type `Message` where the ID is odd.
 ```csharp
 [HttpGet]
 public IEnumerable<Message> SubscribeToOddIdMessages()
@@ -68,4 +66,26 @@ public IEnumerable<Message> SubscribeToOddIdMessages()
     .Where(userContainer.Query)
     .ToList();
 }
+```
+
+
+## Front End
+
+
+
+#### Install Packages
+*NPM:* `npm install entity-signal`
+or
+[download from GitHub](https://github.com/dustout/entitysignal/releases)
+
+#### Add Javascript Files To Html After SignalR
+```html
+<script src="https://cdn.jsdelivr.net/npm/@@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
+<script src="~/dist/entitySignal.js" asp-append-version="true"></script>
+```
+
+#### Create Client and Begin Syncing Data
+```javascript
+var client = new EntitySignal.Client();
+var syncedList = client.syncWith("/SubscribeToAllMessages");
 ```
