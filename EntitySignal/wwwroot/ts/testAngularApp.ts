@@ -35,20 +35,16 @@ angular.module("app", ["EntitySignal"])
     function (
       EntitySignal: ngEntitySignal
     ) {
-
-      EntitySignal.client.options.autoreconnect = true;
       EntitySignal.client.options.debug = true;
       EntitySignal.client.connect();
     }]);
 angular.module("app").controller("testController", [
   "$scope",
   "$http",
-  "$timeout",
   "EntitySignal",
   function (
     $scope: TestScope,
     $http: ng.IHttpService,
-    $timeout: ng.ITimeoutService,
     EntitySignal: ngEntitySignal
   ) {
     $scope.entitySignal = EntitySignal;

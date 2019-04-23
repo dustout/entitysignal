@@ -2,7 +2,6 @@ angular.module("app", ["EntitySignal"])
     .run([
     "EntitySignal",
     function (EntitySignal) {
-        EntitySignal.client.options.autoreconnect = true;
         EntitySignal.client.options.debug = true;
         EntitySignal.client.connect();
     }
@@ -10,9 +9,8 @@ angular.module("app", ["EntitySignal"])
 angular.module("app").controller("testController", [
     "$scope",
     "$http",
-    "$timeout",
     "EntitySignal",
-    function ($scope, $http, $timeout, EntitySignal) {
+    function ($scope, $http, EntitySignal) {
         $scope.entitySignal = EntitySignal;
         $scope.maxMessagesCount = 4;
         $scope.maxFilteredMessagesCount = 4;
