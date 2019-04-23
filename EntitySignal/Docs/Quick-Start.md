@@ -15,7 +15,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-Map a EntitySignalHub with SignalR to */dataHub* endpoint.
+Map a `EntitySignalHub` with SignalR to `/dataHub` endpoint.
 ```csharp
 public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 {
@@ -69,7 +69,7 @@ public IEnumerable<Message> SubscribeToOddIdMessages()
 ```
 
 
-## Front End
+## Front End (VanillaJs)
 
 
 
@@ -80,7 +80,7 @@ or
 
 #### Add Javascript Files To Html After SignalR
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
 <script src="~/dist/entitySignal.js" asp-append-version="true"></script>
 ```
 
@@ -89,3 +89,12 @@ or
 var client = new EntitySignal.Client();
 var syncedList = client.syncWith("/SubscribeToAllMessages");
 ```
+
+#### Not using VanillaJs?
+[Configure Front End Using AngularJs](https://entitysignal.com/documentation/AngularJs-Integration)
+
+[Configure Front End Using Angular 2+](https://entitysignal.com/documentation/Angular-Integration)
+
+[Configure Front End Using React](https://entitysignal.com/documentation/React-Integration)
+
+[Configure Front End Using Vue](https://entitysignal.com/documentation/Vue-Integration)
