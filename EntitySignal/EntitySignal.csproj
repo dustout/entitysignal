@@ -14,11 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Docs\Angular-Integration.md" />
+    <None Remove="Docs\AngularJs-Integration.md" />
     <None Remove="Docs\Quick-Start.md" />
+    <None Remove="Docs\React-Integration.md" />
+    <None Remove="Docs\Vue-Integration.md" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Docs\Quick-Start.md">
+    <Content Include="Docs\*.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
