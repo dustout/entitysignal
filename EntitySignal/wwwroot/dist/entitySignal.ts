@@ -102,6 +102,7 @@
       });
 
       this.hub.on("Sync", (data: UserResult) => {
+
         if (!this.options.suppressInternalDataProcessing) {
           this.processSync(data);
         }
@@ -154,8 +155,6 @@
 
               this.status = EntitySignalStatus.Connected;
               this.connectionId = connectionId;
-
-              document.cookie = `signalrConnectionId=${this.connectionId}`
 
               this.debugPrint("Connected");
 
@@ -263,6 +262,7 @@
           var xhr = new XMLHttpRequest();
           xhr.open("GET", url, true);
           xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.setRequestHeader('SignalRConnectionId', this.connectionId);
 
           xhr.onreadystatechange = () => {
             if (xhr.readyState == 4) {

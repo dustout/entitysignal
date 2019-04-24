@@ -92,7 +92,6 @@ var EntitySignal;
                         _this.hub.off("ConnectionIdChanged");
                         _this.status = EntitySignalStatus.Connected;
                         _this.connectionId = connectionId;
-                        document.cookie = "signalrConnectionId=" + _this.connectionId;
                         _this.debugPrint("Connected");
                         resolve();
                     });
@@ -178,6 +177,7 @@ var EntitySignal;
                     var xhr = new XMLHttpRequest();
                     xhr.open("GET", url, true);
                     xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.setRequestHeader('SignalRConnectionId', _this.connectionId);
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState == 4) {
                             if (xhr.status == 200) {

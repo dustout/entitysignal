@@ -12,5 +12,10 @@ namespace EntitySignal.Controllers
     {
       return View();
     }
+
+    public IActionResult VueJs()
+    {
+      return View();
+    }
   }
 }

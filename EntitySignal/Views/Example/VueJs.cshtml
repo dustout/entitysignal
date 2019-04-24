@@ -1,0 +1,23 @@
+﻿<div id="app">
+  {{ list }}
+</div>
+
+<br />
+<br />
+<div id="app2">
+  {{status}}
+  <ul id="example-1">
+    <li v-for="item in list">
+      {{ item }}
+    </li>
+  </ul>
+</div>
+
+@section Scripts{
+  <script src="https://cdn.jsdelivr.net/npm/@@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
+  <script src="~/dist/entitySignal.js" asp-append-version="true"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.11/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+  <script src="~/sampleApps/vueJs/testVueApp.js"></script>
+}

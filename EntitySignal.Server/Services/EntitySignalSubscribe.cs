@@ -20,8 +20,7 @@ namespace EntitySignal.Services
     {
       var url = $"{_httpContextAccessor.HttpContext.Request.Path}{_httpContextAccessor.HttpContext.Request.QueryString}";
 
-      string connectionId;
-      _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue("signalrConnectionId", out connectionId);
+      string connectionId = _httpContextAccessor.HttpContext.Request.Headers["SignalRConnectionId"];
 
       if (string.IsNullOrEmpty(connectionId))
       {
