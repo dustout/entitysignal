@@ -87,7 +87,10 @@ or
 #### Create Client and Begin Syncing Data
 ```javascript
 var client = new EntitySignal.Client();
-var syncedList = client.syncWith("/SubscribeToAllMessages");
+var syncedList;
+client.syncWith("/SubscribeToAllMessages").then(function(x){
+  syncedList = x;
+  });
 ```
 
 #### Not using VanillaJs?
