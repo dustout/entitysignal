@@ -19,7 +19,7 @@ client.syncWith("/subscribe/SubscribeToAllMessages")
 
 
 
-//declare var Vue: any;
+declare var Vue: any;
 //declare var MyPlugin: any;
 
 //var data = {
@@ -37,7 +37,7 @@ client.syncWith("/subscribe/SubscribeToAllMessages")
 //  data: data
 //});
 
-//new Vue({
-//  el: '#app2',
-//  data: data2
-//});
+new Vue({
+  el: '#app2',
+  data: data2
+});

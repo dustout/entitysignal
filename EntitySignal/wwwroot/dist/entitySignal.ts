@@ -215,9 +215,9 @@
         url.data.forEach(x => {
           if (x.state == EntityState.Added || x.state == EntityState.Modified) {
             var changeCount = 0;
-            this.subscriptions[url.url].forEach(msg => {
+            this.subscriptions[url.url].forEach((msg, index) => {
               if (x.object.id == msg.id) {
-                angular.copy(x.object, msg);
+                this.subscriptions[url.url].splice(index, 1, x.object);
                 changeCount++;
               }
             })

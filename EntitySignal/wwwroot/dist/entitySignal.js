@@ -137,9 +137,9 @@ var EntitySignal;
                 url.data.forEach(function (x) {
                     if (x.state == EntityState.Added || x.state == EntityState.Modified) {
                         var changeCount = 0;
-                        _this.subscriptions[url.url].forEach(function (msg) {
+                        _this.subscriptions[url.url].forEach(function (msg, index) {
                             if (x.object.id == msg.id) {
-                                angular.copy(x.object, msg);
+                                _this.subscriptions[url.url].splice(index, 1, x.object);
                                 changeCount++;
                             }
                         });

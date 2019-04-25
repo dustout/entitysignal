@@ -11,4 +11,8 @@ client.syncWith("/subscribe/SubscribeToAllMessages")
     data2.list = x;
     syncList = x;
 });
+new Vue({
+    el: '#app2',
+    data: data2
+});
 //# sourceMappingURL=testVueApp.js.map
