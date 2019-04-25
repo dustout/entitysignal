@@ -1,5 +1,5 @@
 {
-  "version": "0.0.6",
+  "version": "0.0.7",
   "name": "entity-signal",
   "description": "Real Time Entity Framework (EF) and ASP.NET core",
   "homepage": "https://entitysignal.com",
