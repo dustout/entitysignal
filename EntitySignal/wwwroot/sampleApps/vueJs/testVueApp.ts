@@ -94,7 +94,7 @@ client.syncWith("/subscribe/SubscribeToJokesWithGuidAnswer")
   })
 
 new Vue({
-  el: '#app2',
+  el: '#test-vue-app',
   data: data,
   methods: methods,
   computed:computed

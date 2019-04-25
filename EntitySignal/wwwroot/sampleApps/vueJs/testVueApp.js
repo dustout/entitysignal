@@ -84,7 +84,7 @@ client.syncWith("/subscribe/SubscribeToJokesWithGuidAnswer")
     data.guidJokes = x;
 });
 new Vue({
-    el: '#app2',
+    el: '#test-vue-app',
     data: data,
     methods: methods,
     computed: computed
