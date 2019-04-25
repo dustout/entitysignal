@@ -1,17 +1,104 @@
-﻿<div id="app">
-  {{ list }}
+﻿<div class="container pl-0 pr-0 pb-3">
+  <h1>VueJs Example</h1>
+  <hr />
 </div>
 
-<br />
-<br />
+
 <div id="app2">
-  {{status}}
-  <ul id="example-1">
-    <li v-for="item in list">
-      {{ item }}
-    </li>
-  </ul>
+  <div class="row">
+    <div class="col text-center">
+
+      <div v-show="client.status == 2" class="card border-success mb-3">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="text-success">Connected</strong> to entity framework through signalr
+          </p>
+        </div>
+      </div>
+
+      <div v-show="client.status == 0" class="card mb-3">
+        <div class="card-body">
+          <p class="card-text">
+            <strong>Disconnected</strong>
+          </p>
+        </div>
+      </div>
+
+      <div v-show="client.status == 3" class="card mb-3 border-primary">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="text-primary">Waiting</strong> for connectionId
+          </p>
+        </div>
+      </div>
+
+      <div v-show="client.status == 1" class="card mb-3 border-primary">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="text-primary">Connecting</strong> to entity framework through signalr
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pb-3">
+    <div class="col-6">
+      <button v-on:click="createNew" class="btn btn-primary btn-block btn-lg">Create 1 New</button>
+    </div>
+    <div class="col-6">
+      <button v-on:click="createFiveNew" class="btn btn-primary btn-block btn-lg">Create 5 New</button>
+    </div>
+  </div>
+  <div class="row pb-3">
+    <div class="col">
+      <button v-on:click="changeRandom" class="btn btn-primary btn-block btn-lg">Change Random</button>
+    </div>
+  </div>
+  <div class="row pb-3">
+    <div class="col-6">
+      <button v-on:click="deleteAll" class="btn btn-primary btn-block btn-lg">Delete All</button>
+    </div>
+    <div class="col-6">
+      <button v-on:click="deleteRandom" class="btn btn-primary btn-block btn-lg">Delete Random</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-lg-3">
+      <h4>Messages</h4>
+      <h3 v-show="messages == null"><i class="fas fa-spin fa-spinner"></i></h3>
+      <pre v-for="message in cMessages">{{message}}</pre>
+      <button v-if="!(messages == null || maxMessagesCount==null || messages.length <= maxMessagesCount)" class="btn btn-secondary btn-block" v-on:click="maxMessagesCount=null"><i class="fas fa-arrow-down"></i> Show {{messages.length - maxMessagesCount }} More</button>
+      <br />
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <h4>Messages with odd id</h4>
+      <h3 v-show="filterMessages == null"><i class="fas fa-spin fa-spinner"></i></h3>
+      <pre v-for="filterMessages in cFilterMessages">{{filterMessages}}</pre>
+      <button v-if="!(filterMessages == null || maxFilteredMessagesCount==null || filterMessages.length <= maxFilteredMessagesCount)" class="btn btn-secondary btn-block" v-on:click="maxFilteredMessagesCount=null"><i class="fas fa-arrow-down"></i> Show {{filterMessages.length - maxFilteredMessagesCount }} More</button>
+      <br />
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <h4>Jokes</h4>
+      <h3 v-show="jokes == null"><i class="fas fa-spin fa-spinner"></i></h3>
+      <pre v-for="joke in cJokes">{{joke}}</pre>
+      <button v-if="!(jokes == null || maxJokesCount==null || jokes.length <= maxJokesCount)" class="btn btn-secondary btn-block" v-on:click="maxJokesCount=null"><i class="fas fa-arrow-down"></i> Show {{jokes.length - maxJokesCount }} More</button>
+      <br />
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <h4>Jokes with guid answer</h4>
+      <h3 v-show="guidJokes == null"><i class="fas fa-spin fa-spinner"></i></h3>
+      <pre v-for="joke in cGuidJokes">{{joke}}</pre>
+      <button v-if="!(guidJokes == null || maxGuidJokesCount==null || guidJokes.length <= maxGuidJokesCount)" class="btn btn-secondary btn-block" v-on:click="maxGuidJokesCount=null"><i class="fas fa-arrow-down"></i> Show {{guidJokes.length - maxGuidJokesCount }} More</button>
+      <br />
+    </div>
+  </div>
 </div>
+
+
+
+
 
 @section Scripts{
   <script src="https://cdn.jsdelivr.net/npm/@@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
@@ -19,5 +106,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.11/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js"></script>
   <script src="~/sampleApps/vueJs/testVueApp.js"></script>
 }
