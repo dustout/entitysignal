@@ -51,7 +51,6 @@
     <TypeScriptCompile Include="wwwroot\sampleApps\angularJs\testAngularApp.ts" />
     <TypeScriptCompile Include="wwwroot\dist\entitySignal.ts" />
     <TypeScriptCompile Include="wwwroot\dist\angularJs\ngEntitySignal.ts" />
-    <TypeScriptCompile Include="wwwroot\sampleApps\react\testReactApp.ts" />
     <TypeScriptCompile Include="wwwroot\sampleApps\react\testReactAppTSX.tsx" />
     <TypeScriptCompile Include="wwwroot\sampleApps\vueJs\testVueApp.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\AbortController.d.ts" />
