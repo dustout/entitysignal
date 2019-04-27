@@ -26,13 +26,16 @@ var EntitySignal;
                 hubUrl: "/dataHub",
                 reconnectMinTime: 4000,
                 reconnectVariance: 3000,
-                maxWaitForConnectionId: 5000
+                maxWaitForConnectionId: 5000,
+                returnDeepCopy: false,
+                defaultId: "id"
             };
             if (options) {
                 Object.assign(this.options, options);
             }
             this.onStatusChangeCallbacks = [];
-            this.OnSyncCallbacks = [];
+            this.onSyncCallbacks = [];
+            this.onUrlCallbacks = {};
             this.subscriptions = {};
             this.status = EntitySignalStatus.Disconnected;
             this.hub = new window["signalR"].HubConnectionBuilder().withUrl("/dataHub", signalR.HttpTransportType.WebSockets).build();
@@ -43,8 +46,23 @@ var EntitySignal;
                 if (!_this.options.suppressInternalDataProcessing) {
                     _this.processSync(data);
                 }
-                _this.OnSyncCallbacks.forEach(function (callback) {
+                _this.onSyncCallbacks.forEach(function (callback) {
                     callback(data);
+                });
+                data.urls.forEach(function (x) {
+                    var urlCallbacks = _this.onUrlCallbacks[x.url];
+                    if (!urlCallbacks) {
+                        return;
+                    }
+                    urlCallbacks.forEach(function (callback) {
+                        if (_this.options.returnDeepCopy) {
+                            var deepCopy = JSON.parse(JSON.stringify(_this.subscriptions[x.url]));
+                            callback(deepCopy);
+                        }
+                        else {
+                            callback(_this.subscriptions[x.url]);
+                        }
+                    });
                 });
             });
         }
@@ -61,11 +79,47 @@ var EntitySignal;
             enumerable: true,
             configurable: true
         });
+        Client.prototype.onDataChange = function (url, callback) {
+            var urlCallbackArray = this.onUrlCallbacks[url];
+            if (!urlCallbackArray) {
+                this.onUrlCallbacks[url] = [];
+                urlCallbackArray = this.onUrlCallbacks[url];
+            }
+            urlCallbackArray.push(callback);
+            return callback;
+        };
+        Client.prototype.offDataChange = function (url, callback) {
+            var urlCallbackArray = this.onUrlCallbacks[url];
+            if (!urlCallbackArray) {
+                return;
+            }
+            var callbackIndex = urlCallbackArray.indexOf(callback);
+            if (callbackIndex == -1) {
+                return;
+            }
+            urlCallbackArray.splice(callbackIndex, 1);
+        };
         Client.prototype.onStatusChange = function (callback) {
             this.onStatusChangeCallbacks.push(callback);
+            return callback;
+        };
+        Client.prototype.offStatusChange = function (callback) {
+            var callbackIndex = this.onStatusChangeCallbacks.indexOf(callback);
+            if (callbackIndex == -1) {
+                return;
+            }
+            this.onStatusChangeCallbacks.splice(callbackIndex, 1);
         };
         Client.prototype.onSync = function (callback) {
-            this.OnSyncCallbacks.push(callback);
+            this.onSyncCallbacks.push(callback);
+            return callback;
+        };
+        Client.prototype.offSync = function (callback) {
+            var callbackIndex = this.onSyncCallbacks.indexOf(callback);
+            if (callbackIndex == -1) {
+                return;
+            }
+            this.onSyncCallbacks.splice(callbackIndex, 1);
         };
         Client.prototype.onClose = function () {
             this.status = EntitySignalStatus.Disconnected;
@@ -133,12 +187,14 @@ var EntitySignal;
         };
         Client.prototype.processSync = function (data) {
             var _this = this;
+            var changedUrls = [];
             data.urls.forEach(function (url) {
+                changedUrls.push(url.url);
                 url.data.forEach(function (x) {
                     if (x.state == EntityState.Added || x.state == EntityState.Modified) {
                         var changeCount = 0;
                         _this.subscriptions[url.url].forEach(function (msg, index) {
-                            if (x.object.id == msg.id) {
+                            if (x.object[_this.options.defaultId] == msg[_this.options.defaultId]) {
                                 _this.subscriptions[url.url].splice(index, 1, x.object);
                                 changeCount++;
                             }
@@ -150,13 +206,14 @@ var EntitySignal;
                     else if (x.state == EntityState.Deleted) {
                         for (var i = _this.subscriptions[url.url].length - 1; i >= 0; i--) {
                             var currentRow = _this.subscriptions[url.url][i];
-                            if (currentRow.id == x.object.id) {
+                            if (currentRow[_this.options.defaultId] == x.object[_this.options.defaultId]) {
                                 _this.subscriptions[url.url].splice(i, 1);
                             }
                         }
                     }
                 });
             });
+            return changedUrls;
         };
         Client.prototype.desyncFrom = function (url) {
             var _this = this;
@@ -191,7 +248,13 @@ var EntitySignal;
                                         _this.subscriptions[url].push(y);
                                     });
                                 }
-                                resolve(_this.subscriptions[url]);
+                                if (_this.options.returnDeepCopy) {
+                                    var deepCopy = JSON.parse(JSON.stringify(_this.subscriptions[url]));
+                                    resolve(deepCopy);
+                                }
+                                else {
+                                    resolve(_this.subscriptions[url]);
+                                }
                             }
                             else if (xhr.status == 204) {
                                 if (_this.subscriptions[url] == null) {

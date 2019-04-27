@@ -47,10 +47,18 @@
     suppressInternalDataProcessing: boolean;
     hubUrl: string;
     maxWaitForConnectionId: number;
+    returnDeepCopy: boolean;
+    defaultId: string;
+    defaultIdAlt: string;
   }
 
   type OnStatusChangedCallback = (status: EntitySignalStatus) => void;
   type OnSyncCallback = (newData: UserResult) => void;
+  type OnUrlDataChangeCallback = (urlData:any) => void;
+
+  interface UrlCallbackContainer {
+    [key: string]: OnUrlDataChangeCallback[];
+  }
 
   export class Client {
     subscriptions: SyncSubscription;
@@ -60,7 +68,8 @@
     connectionId: string;
 
     private onStatusChangeCallbacks: OnStatusChangedCallback[];
-    private OnSyncCallbacks: OnSyncCallback[];
+    private onSyncCallbacks: OnSyncCallback[];
+    private onUrlCallbacks: UrlCallbackContainer;
 
     private _status: EntitySignalStatus;
     get status(): EntitySignalStatus {
@@ -81,7 +90,9 @@
         hubUrl: "/dataHub",
         reconnectMinTime: 4000,
         reconnectVariance: 3000,
-        maxWaitForConnectionId: 5000
+        maxWaitForConnectionId: 5000,
+        returnDeepCopy: false,
+        defaultId: "id"
       };
 
       if (options) {
@@ -89,7 +100,8 @@
       }
 
       this.onStatusChangeCallbacks = [];
-      this.OnSyncCallbacks = [];
+      this.onSyncCallbacks = [];
+      this.onUrlCallbacks = <UrlCallbackContainer> {};
 
       this.subscriptions = {};
       this.status = EntitySignalStatus.Disconnected;
@@ -107,18 +119,81 @@
           this.processSync(data);
         }
 
-        this.OnSyncCallbacks.forEach(callback => {
+        this.onSyncCallbacks.forEach(callback => {
           callback(data);
         });
+
+        data.urls.forEach(x => {
+          var urlCallbacks = this.onUrlCallbacks[x.url];
+          if (!urlCallbacks) {
+            return;
+          }
+
+          urlCallbacks.forEach(callback => {
+            if (this.options.returnDeepCopy) {
+              var deepCopy = JSON.parse(JSON.stringify(this.subscriptions[x.url]));
+              callback(deepCopy);
+            }
+            else {
+              callback(this.subscriptions[x.url])
+            }
+          })
+        })
       });
+    }
+
+    onDataChange(url: string, callback: OnUrlDataChangeCallback) {
+      var urlCallbackArray = this.onUrlCallbacks[url];
+
+      if (!urlCallbackArray) {
+        this.onUrlCallbacks[url] = [];
+        urlCallbackArray = this.onUrlCallbacks[url];
+      }
+
+      urlCallbackArray.push(callback);
+
+      return callback;
+    }
+
+    offDataChange(url: string, callback: OnUrlDataChangeCallback) {
+      var urlCallbackArray = this.onUrlCallbacks[url];
+
+      if (!urlCallbackArray) {
+        return;
+      }
+
+      var callbackIndex = urlCallbackArray.indexOf(callback);
+      if (callbackIndex == -1) {
+        return;
+      }
+      urlCallbackArray.splice(callbackIndex, 1);
     }
 
     onStatusChange(callback: OnStatusChangedCallback) {
       this.onStatusChangeCallbacks.push(callback);
+
+      return callback;
+    }
+
+    offStatusChange(callback: OnStatusChangedCallback) {
+      var callbackIndex = this.onStatusChangeCallbacks.indexOf(callback);
+      if (callbackIndex == -1) {
+        return;
+      }
+      this.onStatusChangeCallbacks.splice(callbackIndex, 1);
     }
 
     onSync(callback: OnSyncCallback) {
-      this.OnSyncCallbacks.push(callback);
+      this.onSyncCallbacks.push(callback);
+      return callback;
+    }
+
+    offSync(callback: OnSyncCallback) {
+      var callbackIndex = this.onSyncCallbacks.indexOf(callback);
+      if (callbackIndex == -1) {
+        return;
+      }
+      this.onSyncCallbacks.splice(callbackIndex, 1);
     }
 
     private onClose() {
@@ -211,12 +286,15 @@
     }
 
     processSync(data: UserResult) {
+      var changedUrls: string[] = [];
+
       data.urls.forEach(url => {
+        changedUrls.push(url.url);
         url.data.forEach(x => {
           if (x.state == EntityState.Added || x.state == EntityState.Modified) {
             var changeCount = 0;
             this.subscriptions[url.url].forEach((msg, index) => {
-              if (x.object.id == msg.id) {
+              if (x.object[this.options.defaultId] == msg[this.options.defaultId]) {
                 this.subscriptions[url.url].splice(index, 1, x.object);
                 changeCount++;
               }
@@ -228,14 +306,15 @@
           else if (x.state == EntityState.Deleted) {
             for (var i = this.subscriptions[url.url].length - 1; i >= 0; i--) {
               var currentRow = this.subscriptions[url.url][i];
-              if (currentRow.id == x.object.id) {
+              if (currentRow[this.options.defaultId] == x.object[this.options.defaultId]) {
                 this.subscriptions[url.url].splice(i, 1);
               }
             }
           }
-
         })
       });
+
+      return changedUrls;
     }
 
     desyncFrom(url: string): Promise<void> {
@@ -279,7 +358,13 @@
                   });
                 }
 
-                resolve(this.subscriptions[url]);
+                if (this.options.returnDeepCopy) {
+                  var deepCopy = JSON.parse(JSON.stringify(this.subscriptions[url]));
+                  resolve(deepCopy);
+                }
+                else {
+                  resolve(this.subscriptions[url]);
+                }
               }
               else if (xhr.status == 204) {
                 if (this.subscriptions[url] == null) {
