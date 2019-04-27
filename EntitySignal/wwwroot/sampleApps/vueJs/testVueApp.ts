@@ -38,7 +38,19 @@ var methods = {
 
 var computed = {
   cMessages: () => {
-    var orderedArray: any[] = _.orderBy(data.messages, 'id', 'desc');
+    if (!data.messages) {
+      return null;
+    }
+
+    var orderedArray: any[] = data.messages.sort((a, b) => {
+      if (a.id < b.id) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    });
+
     if (data.maxMessagesCount) {
       return orderedArray.slice(0, data.maxMessagesCount);
     }
@@ -47,7 +59,19 @@ var computed = {
     }
   },
   cJokes: () => {
-    var orderedArray: any[] = _.orderBy(data.jokes, 'id', 'desc');
+    if (!data.jokes) {
+      return null;
+    }
+
+    var orderedArray: any[] = data.jokes.sort((a, b) => {
+      if (a.id < b.id) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    });
+
     if (data.maxJokesCount) {
       return orderedArray.slice(0, data.maxJokesCount);
     }
@@ -56,7 +80,19 @@ var computed = {
     }
   },
   cFilterMessages: () => {
-    var orderedArray: any[] = _.orderBy(data.filterMessages, 'id', 'desc');
+    if (!data.filterMessages) {
+      return null;
+    }
+
+    var orderedArray: any[] = data.filterMessages.sort((a, b) => {
+      if (a.id < b.id) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    });
+
     if (data.maxFilteredMessagesCount) {
       return orderedArray.slice(0, data.maxFilteredMessagesCount);
     }
@@ -65,7 +101,19 @@ var computed = {
     }
   },
   cGuidJokes: () => {
-    var orderedArray: any[] = _.orderBy(data.guidJokes, 'id', 'desc');
+    if (!data.guidJokes) {
+      return null;
+    }
+
+    var orderedArray: any[] = data.guidJokes.sort((a, b) => {
+      if (a.id < b.id) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+    });
+
     if (data.maxGuidJokesCount) {
       return orderedArray.slice(0, data.maxGuidJokesCount);
     }

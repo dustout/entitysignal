@@ -31,7 +31,17 @@ var methods = {
 };
 var computed = {
     cMessages: function () {
-        var orderedArray = _.orderBy(data.messages, 'id', 'desc');
+        if (!data.messages) {
+            return null;
+        }
+        var orderedArray = data.messages.sort(function (a, b) {
+            if (a.id < b.id) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        });
         if (data.maxMessagesCount) {
             return orderedArray.slice(0, data.maxMessagesCount);
         }
@@ -40,7 +50,17 @@ var computed = {
         }
     },
     cJokes: function () {
-        var orderedArray = _.orderBy(data.jokes, 'id', 'desc');
+        if (!data.jokes) {
+            return null;
+        }
+        var orderedArray = data.jokes.sort(function (a, b) {
+            if (a.id < b.id) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        });
         if (data.maxJokesCount) {
             return orderedArray.slice(0, data.maxJokesCount);
         }
@@ -49,7 +69,17 @@ var computed = {
         }
     },
     cFilterMessages: function () {
-        var orderedArray = _.orderBy(data.filterMessages, 'id', 'desc');
+        if (!data.filterMessages) {
+            return null;
+        }
+        var orderedArray = data.filterMessages.sort(function (a, b) {
+            if (a.id < b.id) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        });
         if (data.maxFilteredMessagesCount) {
             return orderedArray.slice(0, data.maxFilteredMessagesCount);
         }
@@ -58,7 +88,17 @@ var computed = {
         }
     },
     cGuidJokes: function () {
-        var orderedArray = _.orderBy(data.guidJokes, 'id', 'desc');
+        if (!data.guidJokes) {
+            return null;
+        }
+        var orderedArray = data.guidJokes.sort(function (a, b) {
+            if (a.id < b.id) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        });
         if (data.maxGuidJokesCount) {
             return orderedArray.slice(0, data.maxGuidJokesCount);
         }
