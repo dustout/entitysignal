@@ -1,4 +1,8 @@
-﻿<div class="container pl-0 pr-0 pb-3">
+﻿@{
+  ViewData["Title"] = "VueJs Example";
+}
+
+<div class="container pl-0 pr-0 pb-3">
   <h1>VueJs Example</h1>
   <hr />
 </div>
@@ -8,7 +12,7 @@
   <div class="row">
     <div class="col text-center">
 
-      <div v-show="client.status == 2" class="card border-success mb-3">
+      <div v-show="client.status == 2" v-cloak class="card border-success mb-3">
         <div class="card-body">
           <p class="card-text">
             <strong class="text-success">Connected</strong> to entity framework through signalr
@@ -24,7 +28,7 @@
         </div>
       </div>
 
-      <div v-show="client.status == 3" class="card mb-3 border-primary">
+      <div v-show="client.status == 3" v-cloak class="card mb-3 border-primary">
         <div class="card-body">
           <p class="card-text">
             <strong class="text-primary">Waiting</strong> for connectionId
@@ -32,7 +36,7 @@
         </div>
       </div>
 
-      <div v-show="client.status == 1" class="card mb-3 border-primary">
+      <div v-show="client.status == 1" v-cloak class="card mb-3 border-primary">
         <div class="card-body">
           <p class="card-text">
             <strong class="text-primary">Connecting</strong> to entity framework through signalr
@@ -69,28 +73,28 @@
       <h4>Messages</h4>
       <h3 v-show="messages == null"><i class="fas fa-spin fa-spinner"></i></h3>
       <pre v-for="message in cMessages">{{message}}</pre>
-      <button v-if="!(messages == null || maxMessagesCount==null || messages.length <= maxMessagesCount)" class="btn btn-secondary btn-block" v-on:click="maxMessagesCount=null"><i class="fas fa-arrow-down"></i> Show {{messages.length - maxMessagesCount }} More</button>
+      <button v-cloak v-if="!(messages == null || maxMessagesCount==null || messages.length <= maxMessagesCount)" class="btn btn-secondary btn-block" v-on:click="maxMessagesCount=null"><i class="fas fa-arrow-down"></i> Show {{messages.length - maxMessagesCount }} More</button>
       <br />
     </div>
     <div class="col-sm-6 col-lg-3">
       <h4>Messages with odd id</h4>
       <h3 v-show="filterMessages == null"><i class="fas fa-spin fa-spinner"></i></h3>
       <pre v-for="filterMessages in cFilterMessages">{{filterMessages}}</pre>
-      <button v-if="!(filterMessages == null || maxFilteredMessagesCount==null || filterMessages.length <= maxFilteredMessagesCount)" class="btn btn-secondary btn-block" v-on:click="maxFilteredMessagesCount=null"><i class="fas fa-arrow-down"></i> Show {{filterMessages.length - maxFilteredMessagesCount }} More</button>
+      <button v-cloak v-if="!(filterMessages == null || maxFilteredMessagesCount==null || filterMessages.length <= maxFilteredMessagesCount)" class="btn btn-secondary btn-block" v-on:click="maxFilteredMessagesCount=null"><i class="fas fa-arrow-down"></i> Show {{filterMessages.length - maxFilteredMessagesCount }} More</button>
       <br />
     </div>
     <div class="col-sm-6 col-lg-3">
       <h4>Jokes</h4>
       <h3 v-show="jokes == null"><i class="fas fa-spin fa-spinner"></i></h3>
       <pre v-for="joke in cJokes">{{joke}}</pre>
-      <button v-if="!(jokes == null || maxJokesCount==null || jokes.length <= maxJokesCount)" class="btn btn-secondary btn-block" v-on:click="maxJokesCount=null"><i class="fas fa-arrow-down"></i> Show {{jokes.length - maxJokesCount }} More</button>
+      <button v-cloak v-if="!(jokes == null || maxJokesCount==null || jokes.length <= maxJokesCount)" class="btn btn-secondary btn-block" v-on:click="maxJokesCount=null"><i class="fas fa-arrow-down"></i> Show {{jokes.length - maxJokesCount }} More</button>
       <br />
     </div>
     <div class="col-sm-6 col-lg-3">
       <h4>Jokes with guid answer</h4>
       <h3 v-show="guidJokes == null"><i class="fas fa-spin fa-spinner"></i></h3>
       <pre v-for="joke in cGuidJokes">{{joke}}</pre>
-      <button v-if="!(guidJokes == null || maxGuidJokesCount==null || guidJokes.length <= maxGuidJokesCount)" class="btn btn-secondary btn-block" v-on:click="maxGuidJokesCount=null"><i class="fas fa-arrow-down"></i> Show {{guidJokes.length - maxGuidJokesCount }} More</button>
+      <button v-cloak v-if="!(guidJokes == null || maxGuidJokesCount==null || guidJokes.length <= maxGuidJokesCount)" class="btn btn-secondary btn-block" v-on:click="maxGuidJokesCount=null"><i class="fas fa-arrow-down"></i> Show {{guidJokes.length - maxGuidJokesCount }} More</button>
       <br />
     </div>
   </div>
@@ -98,7 +102,13 @@
 
 
 
-
+@section Styles {
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+}
 
 @section Scripts{
   <script src="https://cdn.jsdelivr.net/npm/@@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
@@ -106,6 +116,5 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.11/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js"></script>
   <script src="~/sampleApps/vueJs/testVueApp.js"></script>
 }
