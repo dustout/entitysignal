@@ -36,7 +36,6 @@ namespace EntitySignal.Services
         var changedData = changedObjects
             .Select(x => new ChangedObject
             {
-              IdField = "id",
               Object = x.Entity,
               State = x.State,
               Type = x.Entity.GetType()
