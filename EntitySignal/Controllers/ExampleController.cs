@@ -17,5 +17,10 @@ namespace EntitySignal.Controllers
     {
       return View();
     }
+
+    public IActionResult React()
+    {
+      return View();
+    }
   }
 }

@@ -11,6 +11,8 @@
     <Content Remove="wwwroot\dist\entitySignal.ts" />
     <Content Remove="wwwroot\dist\ngEntitySignal.ts" />
     <Content Remove="wwwroot\dist\Template.tst" />
+    <Content Remove="wwwroot\sampleApps\react\testReactApp.ts" />
+    <Content Remove="wwwroot\sampleApps\react\testReactAppTSX.tsx" />
     <Content Remove="wwwroot\sampleApps\vueJs\testVueApp.ts" />
   </ItemGroup>
 
@@ -49,6 +51,8 @@
     <TypeScriptCompile Include="wwwroot\sampleApps\angularJs\testAngularApp.ts" />
     <TypeScriptCompile Include="wwwroot\dist\entitySignal.ts" />
     <TypeScriptCompile Include="wwwroot\dist\angularJs\ngEntitySignal.ts" />
+    <TypeScriptCompile Include="wwwroot\sampleApps\react\testReactApp.ts" />
+    <TypeScriptCompile Include="wwwroot\sampleApps\react\testReactAppTSX.tsx" />
     <TypeScriptCompile Include="wwwroot\sampleApps\vueJs\testVueApp.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\AbortController.d.ts" />
     <TypeScriptCompile Include="wwwroot\typings\signalr\browser-index.d.ts" />

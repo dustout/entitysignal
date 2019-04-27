@@ -1,0 +1,76 @@
+{
+  "_from": "@types/react-dom",
+  "_id": "@types/react-dom@16.8.4",
+  "_inBundle": false,
+  "_integrity": "sha512-eIRpEW73DCzPIMaNBDP5pPIpK1KXyZwNgfxiVagb5iGiz6da+9A5hslSX6GAQKdO7SayVCS/Fr2kjqprgAvkfA==",
+  "_location": "/@types/react-dom",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@types/react-dom",
+    "name": "@types/react-dom",
+    "escapedName": "@types%2freact-dom",
+    "scope": "@types",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.8.4.tgz",
+  "_shasum": "7fb7ba368857c7aa0f4e4511c4710ca2c5a12a88",
+  "_spec": "@types/react-dom",
+  "_where": "C:\\Users\\user\\Desktop\\New folder",
+  "bugs": {
+    "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Asana",
+      "url": "https://asana.com"
+    },
+    {
+      "name": "AssureSign",
+      "url": "http://www.assuresign.com"
+    },
+    {
+      "name": "Microsoft",
+      "url": "https://microsoft.com"
+    },
+    {
+      "name": "MartynasZilinskas",
+      "url": "https://github.com/MartynasZilinskas"
+    },
+    {
+      "name": "Josh Rutherford",
+      "url": "https://github.com/theruther4d"
+    },
+    {
+      "name": "Jessica Franco",
+      "url": "https://github.com/Jessidhia"
+    }
+  ],
+  "dependencies": {
+    "@types/react": "*"
+  },
+  "deprecated": false,
+  "description": "TypeScript definitions for React (react-dom)",
+  "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped#readme",
+  "license": "MIT",
+  "main": "",
+  "name": "@types/react-dom",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+    "directory": "types/react-dom"
+  },
+  "scripts": {},
+  "typeScriptVersion": "2.8",
+  "types": "index",
+  "typesPublisherContentHash": "7df644e84370d57e2e797b12e67fc402427275caf9abae68e3b53cdaceed02bc",
+  "version": "16.8.4"
+}

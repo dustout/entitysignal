@@ -1,0 +1,20 @@
+﻿@{
+  ViewData["Title"] = "React Example";
+}
+
+<div class="container pl-0 pr-0 pb-3">
+  <h1>React Example</h1>
+  <hr />
+</div>
+
+<div id="app"></div>
+
+
+@section Scripts{
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
+  <script src="~/dist/entitySignal.js" asp-append-version="true"></script>
+  <script src="~/sampleApps/react/testReactAppTSX.js" asp-append-version="true"></script>
+}
