@@ -1,7 +1,7 @@
 ﻿interface Message {
   id: number;
   name: string;
-  message: string;
+  text: string;
 }
 
 interface TestScope extends ng.IScope {
