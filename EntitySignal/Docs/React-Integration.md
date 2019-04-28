@@ -20,7 +20,7 @@ client.options.returnDeepCopy = true;
 client.connect();
 ```
 
-#### Create New Component (Example uses .tsx)
+#### Create New Component (Example uses .jsx)
 ```javascript
 class DataSyncTest extends React.Component {
   onDataChangeId: any;
