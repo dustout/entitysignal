@@ -96,8 +96,6 @@ client.syncWith("/SubscribeToAllMessages").then(function(x){
 #### Not using VanillaJs?
 [Configure Front End Using AngularJs](https://entitysignal.com/documentation/AngularJs-Integration)
 
-[Configure Front End Using Angular 2+](https://entitysignal.com/documentation/Angular-Integration)
-
 [Configure Front End Using React](https://entitysignal.com/documentation/React-Integration)
 
 [Configure Front End Using Vue](https://entitysignal.com/documentation/Vue-Integration)
