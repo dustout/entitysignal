@@ -52,33 +52,11 @@
     <TypeScriptCompile Include="wwwroot\dist\angularJs\ngEntitySignal.ts" />
     <TypeScriptCompile Include="wwwroot\sampleApps\react\testReactAppTSX.tsx" />
     <TypeScriptCompile Include="wwwroot\sampleApps\vueJs\testVueApp.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\AbortController.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\browser-index.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\Errors.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\HandshakeProtocol.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\HttpClient.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\HttpConnection.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\HubConnection.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\HubConnectionBuilder.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\IConnection.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\IHttpConnectionOptions.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\IHubProtocol.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\ILogger.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\index.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\ITransport.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\JsonHubProtocol.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\Loggers.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\LongPollingTransport.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\ServerSentEventsTransport.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\Stream.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\TextMessageFormat.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\Utils.d.ts" />
-    <TypeScriptCompile Include="wwwroot\typings\signalr\WebSocketTransport.d.ts" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Folder Include="wwwroot\typings\vuejs\" />
+    <Folder Include="wwwroot\typings\" />
   </ItemGroup>
 
 </Project>
