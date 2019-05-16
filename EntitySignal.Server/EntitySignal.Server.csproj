@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.8</Version>
+    <Version>0.0.9</Version>
     <Authors>Dustin Gamester</Authors>
     <Company />
     <Description>Connect to entity framework through SignalR</Description>
@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://entitysignal.com/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dustout/entitysignal</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Added support for other implementations of IdentityDbContext</PackageReleaseNotes>
     <PackageIconUrl>https://entitysignal.com/mstile-150x150.png</PackageIconUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags />
