@@ -16,15 +16,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.HttpOverrides;
 using EntitySignal.Extensions;
 using EntitySignal.Hubs;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace EntitySignal
 {
   public class Startup
   {
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IHostingEnvironment env)
     {
       Configuration = configuration;
+      CurrentEnvironment = env;
     }
+
+    private IHostingEnvironment CurrentEnvironment { get; set; }
 
     public IConfiguration Configuration { get; }
 
@@ -45,6 +49,24 @@ namespace EntitySignal
           .AddDefaultUI(UIFramework.Bootstrap4)
           .AddEntityFrameworkStores<ApplicationDbContext>();
 
+      if (CurrentEnvironment.IsDevelopment())
+      {
+        services.Configure<MvcOptions>(options =>
+        {
+          options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAnyOrigin"));
+        });
+
+        services.AddCors(options =>
+        {
+          options.AddPolicy("AllowAnyOrigin",
+          builder => builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin()
+                          );
+        });
+      }
+
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
       services.AddSignalR();
@@ -58,6 +80,7 @@ namespace EntitySignal
       {
         app.UseDeveloperExceptionPage();
         app.UseDatabaseErrorPage();
+        app.UseCors("AllowAnyOrigin");
       }
       else
       {
