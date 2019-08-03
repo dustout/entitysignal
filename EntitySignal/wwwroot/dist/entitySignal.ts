@@ -340,7 +340,7 @@
           var xhr = new XMLHttpRequest();
           xhr.open("GET", url, true);
           xhr.setRequestHeader('Content-Type', 'application/json');
-          xhr.setRequestHeader('SignalRConnectionId', this.connectionId);
+          xhr.setRequestHeader('x-signalr-connection-id', this.connectionId);
 
           xhr.onreadystatechange = () => {
             if (xhr.readyState == 4) {
