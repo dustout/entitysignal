@@ -1,6 +1,8 @@
-﻿interface Message {
+﻿/// <reference path="../../../../EntitySignal.TypeScript.AngularJs/src/ngEntitySignal.ts"/>
+
+interface Message {
   id: number;
-  name: string;
+  name: string; 
   text: string;
 }
 
@@ -45,7 +47,7 @@ angular.module("app").controller("testController", [
   function (
     $scope: TestScope,
     $http: ng.IHttpService,
-    EntitySignal: ngEntitySignal
+    EntitySignal: ngEntitySignal 
   ) {
     $scope.entitySignal = EntitySignal;
 
@@ -53,7 +55,6 @@ angular.module("app").controller("testController", [
     $scope.maxFilteredMessagesCount = 4;
     $scope.maxJokesCount = 4;
     $scope.maxGuidJokesCount = 4;
-
     $scope.createNew = () => {
       $http.get("/crud/create");
     };

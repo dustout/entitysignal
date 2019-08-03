@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "devDependencies": {
+    "entity-signal": "0.0.9",
+    "@types/angular": "1.x"
+  }
+}

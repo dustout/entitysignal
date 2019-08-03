@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "devDependencies": {
+    "entity-signal": "0.0.9",
+    "@types/vue": "1.x",
+    "@types/vue-resource": "0.9.34"
+  }
+}

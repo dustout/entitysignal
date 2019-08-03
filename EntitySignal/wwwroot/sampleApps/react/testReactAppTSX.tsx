@@ -1,4 +1,6 @@
-﻿declare var axios: any;
+﻿/// <reference path="node_modules/entity-signal/wwwroot/dist/entitySignal.ts"/>
+
+declare var axios: any;
 
 var client = new EntitySignal.Client();
 client.options.returnDeepCopy = true;

@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="node_modules\**" />
+    <Compile Remove="src\node_modules\**" />
+    <EmbeddedResource Remove="node_modules\**" />
+    <EmbeddedResource Remove="src\node_modules\**" />
+    <None Remove="node_modules\**" />
+    <None Remove="src\node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="dist\ngEntitySignal.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="dist\ngEntitySignal.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="src\ngEntitySignal.ts">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

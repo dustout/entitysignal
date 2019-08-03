@@ -1,6 +1,4 @@
-﻿declare var Vue: any;
-declare var _: any;
-
+﻿/// <reference path="node_modules/entity-signal/wwwroot/dist/entitySignal.ts"/>
 
 var client = new EntitySignal.Client();
 client.options.debug = true;

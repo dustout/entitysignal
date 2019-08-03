@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySignal", "EntitySignal\EntitySignal.csproj", "{7433A848-477A-48DA-BBDC-A786406314D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySignal.Examples", "EntitySignal\EntitySignal.Examples.csproj", "{7433A848-477A-48DA-BBDC-A786406314D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySignal.Server", "EntitySignal.Server\EntitySignal.Server.csproj", "{A9EA1E59-DE0A-4390-B82E-737426EA9E30}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySignal.TypeScript", "EntitySignal.TypeScript\EntitySignal.TypeScript.csproj", "{4C2FB5A4-6E77-461F-8F3C-5C5DCCCC25BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntitySignal.TypeScript.AngularJs", "EntitySignal.TypeScript.AngularJs\EntitySignal.TypeScript.AngularJs.csproj", "{4ECADCFF-BAC7-4482-B5F6-B10E650CDBB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{A9EA1E59-DE0A-4390-B82E-737426EA9E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9EA1E59-DE0A-4390-B82E-737426EA9E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9EA1E59-DE0A-4390-B82E-737426EA9E30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C2FB5A4-6E77-461F-8F3C-5C5DCCCC25BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C2FB5A4-6E77-461F-8F3C-5C5DCCCC25BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C2FB5A4-6E77-461F-8F3C-5C5DCCCC25BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C2FB5A4-6E77-461F-8F3C-5C5DCCCC25BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ECADCFF-BAC7-4482-B5F6-B10E650CDBB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ECADCFF-BAC7-4482-B5F6-B10E650CDBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ECADCFF-BAC7-4482-B5F6-B10E650CDBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ECADCFF-BAC7-4482-B5F6-B10E650CDBB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

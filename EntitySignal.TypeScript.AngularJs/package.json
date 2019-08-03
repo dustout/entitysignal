@@ -1,0 +1,30 @@
+{
+  "version": "0.0.9",
+  "name": "ng-entity-signal",
+  "description": "Real Time Entity Framework (EF) and ASP.NET core",
+  "homepage": "https://entitysignal.com",
+  "bugs": {
+    "email": "dustout@gmail.com",
+    "url": "https://github.com/dustout/entitysignal/issues"
+  },
+  "author": {
+    "name": "Dustin Gamester",
+    "email": "dustout@gmail.com",
+    "url": "https://github.com/dustout"
+  },
+  "files": [
+    "**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dustout/entitysignal.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "npm-publish": "npm publish",
+    "npm-version-patch": "npm version patch"
+  },
+  "devDependencies": {
+    "@types/angular": "1.x"
+  }
+}

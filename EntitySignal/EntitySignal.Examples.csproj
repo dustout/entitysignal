@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>aspnet-EntitySignal-35198A59-D305-4639-A3D2-A952B3D85876</UserSecretsId>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\sampleApps\angularJs\tsconfig.json" />
+    <Content Remove="wwwroot\sampleApps\react\testReactApp.ts" />
+    <Content Remove="wwwroot\sampleApps\react\tsconfig.json" />
+    <Content Remove="wwwroot\sampleApps\vueJs\tsconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Docs\AngularJs-Integration.md" />
+    <None Remove="Docs\Quick-Start.md" />
+    <None Remove="Docs\React-Integration.md" />
+    <None Remove="Docs\Vue-Integration.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Docs\*.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.16.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\EntitySignal.Server\EntitySignal.Server.csproj" />
+    <ProjectReference Include="..\EntitySignal.TypeScript.AngularJs\EntitySignal.TypeScript.AngularJs.csproj" />
+    <ProjectReference Include="..\EntitySignal.TypeScript\EntitySignal.TypeScript.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\sampleApps\angularJs\testAngularApp.ts" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\sampleApps\angularJs\tsconfig.json" />
+    <None Include="wwwroot\sampleApps\react\tsconfig.json" />
+    <None Include="wwwroot\sampleApps\vueJs\tsconfig.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\dist\angular\" />
+  </ItemGroup>
+
+</Project>

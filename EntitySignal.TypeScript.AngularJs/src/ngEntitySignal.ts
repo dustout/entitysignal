@@ -1,4 +1,7 @@
-﻿interface ngEntitySignal {
+﻿/// <reference path="../../EntitySignal.TypeScript/src/entitySignal.ts"/>
+
+
+interface ngEntitySignal {
   syncWith(url: string): ng.IPromise<any>;
   hardRefresh(url: string): ng.IPromise<any>;
   desyncFrom(url: string): ng.IPromise<any>;
@@ -33,7 +36,7 @@ angular.module("EntitySignal").factory("EntitySignal", [
       })
     });
 
-    vm.syncWith = (url: string) => {
+    vm.syncWith = (url: string) => { 
       var syncDefer = $q.defer<any>();
 
       vm.client.syncWith(url).then(

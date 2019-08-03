@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using EntitySignal.Extensions;
 using EntitySignal.Hubs;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace EntitySignal
 {
