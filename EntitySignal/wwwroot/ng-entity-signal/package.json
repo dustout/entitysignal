@@ -1,7 +1,7 @@
 {
-  "version": "0.0.9",
+  "version": "1.0.0",
   "name": "ng-entity-signal",
-  "description": "Real Time Entity Framework (EF) and ASP.NET core",
+  "description": "AngularJs Real Time Entity Framework (EF) and ASP.NET core",
   "homepage": "https://entitysignal.com",
   "bugs": {
     "email": "dustout@gmail.com",
