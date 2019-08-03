@@ -24,5 +24,7 @@
   "scripts": {
     "npm-publish": "npm publish",
     "npm-version-patch": "npm version patch"
+  },
+  "devDependencies": {
   }
 }
