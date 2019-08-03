@@ -234,7 +234,7 @@ var EntitySignal;
                     var xhr = new XMLHttpRequest();
                     xhr.open("GET", url, true);
                     xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.setRequestHeader('SignalRConnectionId', _this.connectionId);
+                    xhr.setRequestHeader('x-signalr-connection-id', _this.connectionId);
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState == 4) {
                             if (xhr.status == 200) {
