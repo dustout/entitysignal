@@ -17,7 +17,7 @@ namespace EntitySignal.Controllers
   public class SubscribeController : Controller
   {
     private ApplicationDbContext _db;
-    private EntitySignalSubscribe _entitySignalSubscribe;
+    private EntitySignalSubscribe _entitySignal;
 
     public SubscribeController(
       ApplicationDbContext context,
@@ -25,13 +25,13 @@ namespace EntitySignal.Controllers
       )
     {
       _db = context;
-      _entitySignalSubscribe = entitySignalSubscribe;
+      _entitySignal = entitySignalSubscribe;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<Message>> SubscribeToAllMessages()
     {
-      _entitySignalSubscribe.Subscribe<Message>();
+      _entitySignal.Subscribe<Message>();
 
       return _db.Messages.ToList();
     }
@@ -39,7 +39,7 @@ namespace EntitySignal.Controllers
     [HttpGet]
     public IEnumerable<Message> SubscribeToOddIdMessages()
     {
-      var userContainer = _entitySignalSubscribe.Subscribe<Message>(x=> x.Id % 2 == 1);
+      var userContainer = _entitySignal.Subscribe<Message>(x=> x.Id % 2 == 1);
 
       return _db.Messages
         .Where(userContainer.Query)
@@ -49,7 +49,7 @@ namespace EntitySignal.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Joke>>> SubscribeToAllJokes()
     {
-      _entitySignalSubscribe.Subscribe<Joke>();
+      _entitySignal.Subscribe<Joke>();
 
       return await _db.Jokes.ToListAsync();
     }
@@ -57,7 +57,7 @@ namespace EntitySignal.Controllers
     [HttpGet]
     public IEnumerable<Joke> SubscribeToJokesWithGuidAnswer()
     {
-      var userContainer = _entitySignalSubscribe.Subscribe<Joke>(x => Guid.TryParse(x.Punchline, out Guid g));
+      var userContainer = _entitySignal.Subscribe<Joke>(x => Guid.TryParse(x.Punchline, out Guid g));
      
       return _db.Jokes
         .Where(userContainer.Query)
