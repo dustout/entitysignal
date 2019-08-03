@@ -1,14 +1,13 @@
 ﻿### [View Example](https://entitysignal.com/example/angularjs)
 
 #### Install Scripts
-*NPM:* `npm install entity-signal`
+*NPM:* `npm install ng-entity-signal`
 or
 [download from GitHub](https://github.com/dustout/entitysignal/releases)
 
 #### Add Javascript Files To Html After SignalR
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
-<script src="~/dist/entitySignal.js"></script>
 <script src="~/dist/angularJs/ngEntitySignal.js"></script>
 ```
 
