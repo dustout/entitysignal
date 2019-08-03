@@ -13,7 +13,7 @@
     "url": "https://github.com/dustout"
   },
   "files": [
-    "**/*.ts"
+    "**/*"
   ],
   "repository": {
     "type": "git",

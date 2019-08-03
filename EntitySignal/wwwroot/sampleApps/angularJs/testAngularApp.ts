@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../../EntitySignal.TypeScript.AngularJs/src/ngEntitySignal.ts"/>
+﻿/// <reference path="../../ng-entity-signal/src/ngEntitySignal.ts"/>
 
 interface Message {
   id: number;

@@ -12,7 +12,7 @@
   },
   "include": [
     "**/*.ts",
-    "../../EntitySignal.TypeScript/src/**/*"
+    "../../entity-signal/src/**/*"
   ],
   "exclude": [
     "node_modules",

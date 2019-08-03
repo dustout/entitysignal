@@ -1,4 +1,4 @@
-﻿/// <reference path="../../EntitySignal.TypeScript/src/entitySignal.ts"/>
+﻿/// <reference path="../../entity-signal/src/entitySignal.ts"/>
 
 
 interface ngEntitySignal {
