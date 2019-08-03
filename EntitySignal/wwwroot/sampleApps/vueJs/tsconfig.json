@@ -9,10 +9,6 @@
     "target": "es5",
     "typeRoots": [ "node_modules/@types/" ]
   },
-  "include": [
-    "**/*.ts",
-    "node_modules/entity-signal/**/*.ts"
-  ],
   "exclude": [
     "wwwroot",
     "lib",

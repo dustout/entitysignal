@@ -1,4 +1,4 @@
-﻿/// <reference path="node_modules/entity-signal/wwwroot/dist/entitySignal.ts"/>
+﻿/// <reference path="../../entity-signal/src/entitySignal.ts"/>
 
 declare var axios: any;
 
