@@ -8,12 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\entity-signal\dist\entitySignal.js" />
     <Content Remove="wwwroot\entity-signal\dist\entitySignal.js.map" />
     <Content Remove="wwwroot\entity-signal\package.json" />
     <Content Remove="wwwroot\entity-signal\src\entitySignal.js" />
     <Content Remove="wwwroot\entity-signal\src\entitySignal.js.map" />
-    <Content Remove="wwwroot\entity-signal\src\entitySignal.ts" />
     <Content Remove="wwwroot\entity-signal\src\tsconfig.json" />
     <Content Remove="wwwroot\ng-entity-signal\dist\ngEntitySignal.js.map" />
     <Content Remove="wwwroot\ng-entity-signal\package.json" />
@@ -58,12 +56,10 @@
 
 
   <ItemGroup>
-    <None Include="wwwroot\entity-signal\dist\entitySignal.js" />
     <None Include="wwwroot\entity-signal\dist\entitySignal.js.map" />
     <None Include="wwwroot\entity-signal\package.json" />
     <None Include="wwwroot\entity-signal\src\entitySignal.js" />
     <None Include="wwwroot\entity-signal\src\entitySignal.js.map" />
-    <None Include="wwwroot\entity-signal\src\entitySignal.ts" />
     <None Include="wwwroot\entity-signal\src\tsconfig.json" />
     <None Include="wwwroot\ng-entity-signal\dist\ngEntitySignal.js.map" />
     <None Include="wwwroot\ng-entity-signal\package.json" />
