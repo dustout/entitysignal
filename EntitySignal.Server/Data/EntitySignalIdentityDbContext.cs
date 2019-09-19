@@ -1,4 +1,5 @@
 ﻿using EntitySignal.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -83,8 +84,8 @@ namespace EntitySignal.Server.EFDbContext.Data
   }
 
   public abstract class EntitySignalIdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken> : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
-    where TUser : IdentityUser<TKey, TUserClaim, TUserRole, TUserLogin>
-    where TRole : IdentityRole<TKey, TUserRole, TRoleClaim>
+    where TUser : IdentityUser<TKey>
+    where TRole : IdentityRole<TKey>
     where TKey : IEquatable<TKey>
     where TUserClaim : IdentityUserClaim<TKey>
     where TUserRole : IdentityUserRole<TKey>
