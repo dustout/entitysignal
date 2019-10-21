@@ -92,7 +92,8 @@
         reconnectVariance: 3000,
         maxWaitForConnectionId: 5000,
         returnDeepCopy: false,
-        defaultId: "id"
+        defaultId: "id",
+        defaultIdAlt: "Id"
       };
 
       if (options) {
@@ -293,9 +294,20 @@
           if (x.state == EntityState.Added || x.state == EntityState.Modified) {
             var changeCount = 0;
             this.subscriptions[url.url].forEach((msg, index) => {
-              if (x.object[this.options.defaultId] == msg[this.options.defaultId]) {
-                this.subscriptions[url.url].splice(index, 1, x.object);
-                changeCount++;
+              //check default ID type
+              if (x.object[this.options.defaultId]) {
+                if (x.object[this.options.defaultId] == msg[this.options.defaultId]) {
+                  this.subscriptions[url.url].splice(index, 1, x.object);
+                  changeCount++;
+                }
+              }
+
+              //check alt ID type
+              if (x.object[this.options.defaultIdAlt]) {
+                if (x.object[this.options.defaultIdAlt] == msg[this.options.defaultIdAlt]) {
+                  this.subscriptions[url.url].splice(index, 1, x.object);
+                  changeCount++;
+                }
               }
             })
             if (changeCount == 0) {
@@ -305,8 +317,19 @@
           else if (x.state == EntityState.Deleted) {
             for (var i = this.subscriptions[url.url].length - 1; i >= 0; i--) {
               var currentRow = this.subscriptions[url.url][i];
-              if (currentRow[this.options.defaultId] == x.object[this.options.defaultId]) {
-                this.subscriptions[url.url].splice(i, 1);
+
+              //check default ID type
+              if (x.object[this.options.defaultId]) {
+                if (currentRow[this.options.defaultId] == x.object[this.options.defaultId]) {
+                  this.subscriptions[url.url].splice(i, 1);
+                }
+              }
+
+              //check alt ID type
+              if (x.object[this.options.defaultIdAlt]) {
+                if (currentRow[this.options.defaultIdAlt] == x.object[this.options.defaultIdAlt]) {
+                  this.subscriptions[url.url].splice(i, 1);
+                }
               }
             }
           }

@@ -38,6 +38,7 @@ angular.module("app", ["EntitySignal"])
       EntitySignal: ngEntitySignal
     ) {
       EntitySignal.client.options.debug = true;
+      //EntitySignal.client.options.defaultId = "Id";
       EntitySignal.client.connect();
     }]);
 angular.module("app").controller("testController", [

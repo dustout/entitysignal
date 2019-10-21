@@ -19,6 +19,7 @@ using EntitySignal.Hubs;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Newtonsoft.Json.Serialization;
 
 namespace EntitySignal
 {
@@ -69,9 +70,18 @@ namespace EntitySignal
         });
       }
 
-      services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+      services.AddMvc()
+        .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+        .AddJsonOptions(options =>
+        {
+          options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+        }); ;
 
-      services.AddSignalR();
+      services.AddSignalR()
+        .AddJsonProtocol(options =>
+        {
+          options.PayloadSerializerSettings.ContractResolver = new DefaultContractResolver();
+        });
       services.AddEntitySignal();
     }
 
