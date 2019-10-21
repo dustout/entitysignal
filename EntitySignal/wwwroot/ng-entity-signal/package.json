@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.2",
   "name": "ng-entity-signal",
   "description": "AngularJs Real Time Entity Framework (EF) and ASP.NET core",
   "homepage": "https://entitysignal.com",
