@@ -60,6 +60,11 @@ namespace EntitySignal.Services
 
     public async Task PostSaveAsync(ChangedObjectsContainer changedData)
     {
+      if (changedData == null || changedData.ChangedObjects == null)
+      {
+        return;
+      }
+
       var changedByType = changedData.ChangedObjects
         .GroupBy(x => x.Type)
         .ToList();
