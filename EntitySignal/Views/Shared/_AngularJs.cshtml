@@ -63,7 +63,7 @@
       <h4>Messages</h4>
       <pre><code class="c-sharp hljs css">_entitySignal<span class="hljs-selector-class">.Subscribe</span>&lt;<span class="hljs-selector-tag">Message</span>&gt;();</code></pre>
       <h3 ng-show="messages == null"><i class="fas fa-spin fa-spinner"></i></h3>
-      <pre ng-repeat="message in messages | orderBy:'-id' | limitTo:maxMessagesCount">{{message | json}}</pre>
+      <pre ng-repeat="message in messages | orderBy:'-Id' | limitTo:maxMessagesCount">{{message | json}}</pre>
       <button ng-cloak ng-hide="messages == null || maxMessagesCount==null || messages.length <= maxMessagesCount" class="btn btn-secondary btn-block" ng-click="maxMessagesCount=null"><i class="fas fa-arrow-down"></i> Show {{messages.length - maxMessagesCount }} More</button>
       <br />
     </div>
@@ -71,7 +71,7 @@
       <h4>Messages with odd id</h4>
       <pre><code class="c-sharp hljs css">_entitySignal<span class="hljs-selector-class">.Subscribe</span>&lt;<span class="hljs-selector-tag">Message</span>&gt;(x=>x.Id % 2 == 1);</code></pre>
       <h3 ng-show="filterMessages == null"><i class="fas fa-spin fa-spinner"></i></h3>
-      <pre ng-repeat="filterMessages in filterMessages | orderBy:'-id' | limitTo:maxFilteredMessagesCount">{{filterMessages | json}}</pre>
+      <pre ng-repeat="filterMessages in filterMessages | orderBy:'-Id' | limitTo:maxFilteredMessagesCount">{{filterMessages | json}}</pre>
       <button ng-cloak ng-hide="filterMessages == null || maxFilteredMessagesCount==null || filterMessages.length <= maxFilteredMessagesCount" class="btn btn-secondary btn-block" ng-click="maxFilteredMessagesCount=null"><i class="fas fa-arrow-down"></i> Show {{filterMessages.length - maxFilteredMessagesCount }} More</button>
       <br />
     </div>
@@ -79,7 +79,7 @@
       <h4>Jokes</h4>
       <pre><code class="c-sharp hljs css">_entitySignal<span class="hljs-selector-class">.Subscribe</span>&lt;<span class="hljs-selector-tag">Joke</span>&gt;();</code></pre>
       <h3 ng-show="jokes == null"><i class="fas fa-spin fa-spinner"></i></h3>
-      <pre ng-repeat="joke in jokes | orderBy:'-id' | limitTo:maxJokesCount">{{joke | json}}</pre>
+      <pre ng-repeat="joke in jokes | orderBy:'-Id' | limitTo:maxJokesCount">{{joke | json}}</pre>
       <button ng-cloak ng-hide="jokes == null || maxJokesCount==null || jokes.length <= maxJokesCount" class="btn btn-secondary btn-block" ng-click="maxJokesCount=null"><i class="fas fa-arrow-down"></i> Show {{jokes.length - maxJokesCount }} More</button>
       <br />
     </div>
@@ -87,7 +87,7 @@
       <h4>Jokes with guid answer</h4>
       <pre><code class="c-sharp hljs css">_entitySignal<span class="hljs-selector-class">.Subscribe</span>&lt;<span class="hljs-selector-tag">Joke</span>&gt;(x => Guid.TryParse(x.Punchline, out Guid g));</code></pre>
       <h3 ng-show="guidJokes == null"><i class="fas fa-spin fa-spinner"></i></h3>
-      <pre ng-repeat="joke in guidJokes | orderBy:'-id' | limitTo:maxGuidJokesCount">{{joke | json}}</pre>
+      <pre ng-repeat="joke in guidJokes | orderBy:'-Id' | limitTo:maxGuidJokesCount">{{joke | json}}</pre>
       <button ng-cloak ng-hide="guidJokes == null || maxGuidJokesCount==null || guidJokes.length <= maxGuidJokesCount" class="btn btn-secondary btn-block" ng-click="maxGuidJokesCount=null"><i class="fas fa-arrow-down"></i> Show {{guidJokes.length - maxGuidJokesCount }} More</button>
       <br />
     </div>
