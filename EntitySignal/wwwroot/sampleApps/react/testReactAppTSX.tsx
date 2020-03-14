@@ -67,11 +67,10 @@ class DataSyncTest extends React.Component<DataSyncTestProps, DataSyncTestState>
     }
 
     const messagesDisplay = sortedMessages.map((message) =>
-      <pre key={message.id.toString()}>
+      <pre key={message.Id.toString()}>
         {JSON.stringify(message, null, 2)}
       </pre>
     );
-
     return (
       <div>
         <h4>{this.props.title}</h4>

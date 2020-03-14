@@ -59,7 +59,7 @@ var DataSyncTest = (function (_super) {
             sortedMessages = sortedMessages.slice(0, this.state.maxMessages);
         }
         var messagesDisplay = sortedMessages.map(function (message) {
-            return React.createElement("pre", { key: message.id.toString() }, JSON.stringify(message, null, 2));
+            return React.createElement("pre", { key: message.Id.toString() }, JSON.stringify(message, null, 2));
         });
         return (React.createElement("div", null,
             React.createElement("h4", null, this.props.title),
