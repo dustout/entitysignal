@@ -45,7 +45,7 @@ namespace EntitySignal.Client
     public EntitySignalClient(EntitySignalOptions options = null,
         Func<HttpMessageHandler, HttpMessageHandler> httpMessageHandlerFactory = null)
     {
-      //if (options != null)
+      if (options != null)
       {
         _options = options;
       }
@@ -114,13 +114,6 @@ namespace EntitySignal.Client
       {
         urlDataChangeCallback.Remove(action);
       }
-    }
-
-    private bool ValidateCertificate(HttpRequestMessage arg1, X509Certificate2 arg2, X509Chain arg3, SslPolicyErrors arg4)
-    {
-      // TODO: You can do custom validation here, or just return true to always accept the certificate.
-      // DO NOT use custom validation logic in a production application as it is insecure.
-      return true;
     }
 
     private Task OnClose(Exception arg)
