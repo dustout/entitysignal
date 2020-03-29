@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/dustout/entitysignal</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageReleaseNotes>Added support for C# Entity Signal Client</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
