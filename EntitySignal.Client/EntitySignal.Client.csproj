@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.1</LangVersion>
+    <Version>1.0.3</Version>
+    <Authors>EntitySignal Team</Authors>
+    <Company></Company>
+    <Description>Connect to Entity Signal via C#</Description>
+    <PackageProjectUrl>https://entitysignal.com/</PackageProjectUrl>
+    <PackageIconUrl>https://entitysignal.com/mstile-150x150.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/dustout/entitysignal</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageReleaseNotes>Added support for C# Entity Signal Client</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
