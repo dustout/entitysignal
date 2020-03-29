@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Security;
@@ -42,7 +43,8 @@ namespace EntitySignal.Client
             }
         }
 
-        public EntitySignalClient(EntitySignalOptions options = null)
+        public EntitySignalClient(EntitySignalOptions options = null,
+            Func<HttpMessageHandler, HttpMessageHandler> httpMessageHandlerFactory = null)
         {
             //if (options != null)
             {
@@ -52,16 +54,8 @@ namespace EntitySignal.Client
             _hub = new HubConnectionBuilder()
                 .WithUrl(_options.HubUrl, connectionOption =>
                 {
-                    connectionOption.HttpMessageHandlerFactory = (handler) =>
-                    {
-                        if (handler is HttpClientHandler clientHandler)
-                        {
-                            clientHandler.ServerCertificateCustomValidationCallback = ValidateCertificate;
-                        }
-                        return handler;
-                    };
+                    connectionOption.HttpMessageHandlerFactory = httpMessageHandlerFactory;
                 })
-                .ConfigureLogging(Log)
                 .Build();
 
             _hub.Closed += OnClose;
@@ -74,9 +68,9 @@ namespace EntitySignal.Client
 
                 OnSync?.Invoke(data);
 
-                data.Urls.ForEach(x =>
+                data.Urls.GroupBy(x => x.Url).Select(g => g.LastOrDefault()).ToList().ForEach(x =>
                 {
-                    var urlCallbacks = UrlDataChangeCallbacks[x.Url];
+                    var urlCallbacks = UrlDataChangeCallbacks.FirstOrDefault(ud => ud.Key.EndsWith(x.Url)).Value;
 
                     if (urlCallbacks == null)
                     {
@@ -87,19 +81,15 @@ namespace EntitySignal.Client
                     {
                         if (_options.ReturnDeepCopy)
                         {
-                            callback(_subscriptions[x.Url].DeepClone() as JArray);
+                            callback(GetSubscription(x).DeepClone() as JArray);
                         }
                         else
                         {
-                            callback(_subscriptions[x.Url]);
+                            callback(GetSubscription(x));
                         }
                     });
                 });
             });
-        }
-
-        private void Log(ILoggingBuilder obj)
-        {
         }
 
         public void OnDataChange(string url, Action<JArray> action)
@@ -254,32 +244,51 @@ namespace EntitySignal.Client
                         x.State == EntityState.Modified)
                     {
                         var changeCount = 0;
-                        _subscriptions[url.Url].ForEach((msg, index) =>
+                        var subscription = GetSubscription(url);
+
+                        if (subscription == null)
+                        {
+                            return;
+                        }
+
+                        subscription.ForEach((msg, index) =>
                         {
                             if (x.Object[_options.DefaultId] == msg[_options.DefaultId] || //check default ID type
                                 x.Object[_options.DefaultIdAlt] == msg[_options.DefaultIdAlt]) //check alt ID type
                             {
-                                _subscriptions[url.Url].Replace(x.Object);
+                                GetSubscription(url)[index].Replace(x.Object);
                                 changeCount++;
                             }
-
-                            if (changeCount == 0)
-                            {
-                                _subscriptions[url.Url].Add(x.Object);
-                            }
                         });
+
+                        if (changeCount == 0)
+                        {
+                            GetSubscription(url).Add(x.Object);
+                        }
                     }
                     else if (x.State == EntityState.Deleted)
                     {
-                        for (var i = _subscriptions[url.Url].Count - 1; i >= 0; i--)
+                        var subscription = GetSubscription(url);
+                        
+                        if (subscription == null)
                         {
-                            var currentRow = _subscriptions[url.Url][i];
+                            return;
+                        }
+
+                        for (var i = subscription.Count - 1; i >= 0; i--)
+                        {
+                            var currentRow = GetSubscription(url)[i];
+
+                            if (currentRow == null)
+                            {
+                                return;
+                            }
 
                             //check default ID type
                             if (x.Object[_options.DefaultId] == currentRow[_options.DefaultId] || //check default ID type
                                 x.Object[_options.DefaultIdAlt] == currentRow[_options.DefaultIdAlt]) //check alt ID type
                             {
-                                _subscriptions[url.Url].RemoveAt(i);
+                                GetSubscription(url)?.RemoveAt(i);
                             }
                         }
                     }
@@ -287,6 +296,11 @@ namespace EntitySignal.Client
             });
 
             return changedUrls;
+        }
+
+        private JArray GetSubscription(UserUrlResult userUrlResult)
+        {
+            return _subscriptions.FirstOrDefault(s => s.Key.EndsWith(userUrlResult.Url)).Value;
         }
 
         private async Task<PromiseOutput<string>> DesyncFrom(string url)

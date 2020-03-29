@@ -1,5 +1,7 @@
 ﻿using EntitySignal.Client;
 using EntitySignal.Client.Enums;
+using EntitySignal.Client.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
@@ -22,19 +24,65 @@ namespace EntitySignal.ConsoleApp
 
         private static async void StartClient()
         {
-            var result1 = await client.SyncWith("https://localhost:44315/subscribe/SubscribeToAllMessages");
-            var result2 = await client.SyncWith("https://localhost:44315/subscribe/SubscribeToOddIdMessages");
-            var result3 = await client.SyncWith("https://localhost:44315/subscribe/SubscribeToAllJokes");
-            var result4 = await client.SyncWith("https://localhost:44315/subscribe/SubscribeToJokesWithGuidAnswer");
+            var allMessagesUrl = "https://localhost:44315/subscribe/SubscribeToAllMessages";
+            var oddIdMessagesUrl = "https://localhost:44315/subscribe/SubscribeToOddIdMessages";
+            var allJokesUrl = "https://localhost:44315/subscribe/SubscribeToAllJokes";
+            var jokesWithGuidAnswerUrl = "https://localhost:44315/subscribe/SubscribeToJokesWithGuidAnswer";
 
-            Console.WriteLine("Messages");
-            Console.WriteLine(result1.SuccessResult.ToString(Newtonsoft.Json.Formatting.Indented));
-            Console.WriteLine("Messages with odd id");
-            Console.WriteLine(result2.SuccessResult.ToString(Newtonsoft.Json.Formatting.Indented));
-            Console.WriteLine("Jokes");
-            Console.WriteLine(result3.SuccessResult.ToString(Newtonsoft.Json.Formatting.Indented));
+            var allMessagesResult = await client.SyncWith(allMessagesUrl);
+            var oddIdMessagesResult = await client.SyncWith(oddIdMessagesUrl);
+            var allJokesResult = await client.SyncWith(allJokesUrl);
+            var jokesWithGuidAnswerResult = await client.SyncWith(jokesWithGuidAnswerUrl);
+
+            if (allMessagesResult.Succeeded)
+            {
+                AllMessagesChanged(allMessagesResult.SuccessResult);
+            }
+            if (oddIdMessagesResult.Succeeded)
+            {
+                OddIdMessagesChanged(oddIdMessagesResult.SuccessResult);
+            }
+            if (allJokesResult.Succeeded)
+            {
+                JokesChanged(allJokesResult.SuccessResult);
+            }
+            if (jokesWithGuidAnswerResult.Succeeded)
+            {
+                JokesWithGuidAnswerChanged(jokesWithGuidAnswerResult.SuccessResult);
+            }
+
+            client.OnDataChange(allMessagesUrl, AllMessagesChanged);
+            client.OnDataChange(oddIdMessagesUrl, OddIdMessagesChanged);
+            client.OnDataChange(allJokesUrl, JokesChanged);
+            client.OnDataChange(jokesWithGuidAnswerUrl, JokesWithGuidAnswerChanged);
+        }
+
+        private static void JokesWithGuidAnswerChanged(JArray jArray)
+        {
             Console.WriteLine("Jokes with guid answer");
-            Console.WriteLine(result4.SuccessResult.ToString(Newtonsoft.Json.Formatting.Indented));
+            Console.WriteLine(jArray.ToString(Newtonsoft.Json.Formatting.Indented));
+            Console.WriteLine(string.Empty);
+        }
+
+        private static void JokesChanged(JArray jArray)
+        {
+            Console.WriteLine("Jokes");
+            Console.WriteLine(jArray.ToString(Newtonsoft.Json.Formatting.Indented));
+            Console.WriteLine(string.Empty);
+        }
+
+        private static void OddIdMessagesChanged(JArray jArray)
+        {
+            Console.WriteLine("Messages with odd id");
+            Console.WriteLine(jArray.ToString(Newtonsoft.Json.Formatting.Indented));
+            Console.WriteLine(string.Empty);
+        }
+
+        private static void AllMessagesChanged(JArray jArray)
+        {
+            Console.WriteLine("Messages");
+            Console.WriteLine(jArray.ToString(Newtonsoft.Json.Formatting.Indented));
+            Console.WriteLine(string.Empty);
         }
 
         private static async void OnStatusChanged(EntitySignalStatus status)
