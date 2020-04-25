@@ -19,11 +19,16 @@ Map a `EntitySignalHub` with SignalR to `/dataHub` endpoint.
 ```csharp
 public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 {
-  //normal stuff here
-  app.UseSignalR(routes =>
+  app.UseEndpoints(endpoints =>
   {
-    routes.MapHub<EntitySignalHub>("/dataHub");
+    endpoints.MapHub<EntitySignalHub>("/dataHub");
   });
+
+  //or do this for asp.net core 2.x
+  //app.UseSignalR(routes =>
+  //{
+  //  routes.MapHub<EntitySignalHub>("/dataHub");
+  //});
 }
 ```
 
@@ -81,7 +86,7 @@ or
 #### Add Javascript Files To Html After SignalR
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
-<script src="~/dist/entitySignal.js" asp-append-version="true"></script>
+<script src="https://cdn.jsdelivr.net/npm/entity-signal@1.0.2/dist/entitySignal.js"></script>
 ```
 
 #### Create Client and Begin Syncing Data
