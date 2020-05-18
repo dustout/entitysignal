@@ -1,5 +1,5 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "entity-signal",
   "description": "Real Time Entity Framework (EF) and ASP.NET core",
   "homepage": "https://entitysignal.com",
@@ -24,6 +24,5 @@
     "npm-publish": "npm publish",
     "npm-version-patch": "npm version patch"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
