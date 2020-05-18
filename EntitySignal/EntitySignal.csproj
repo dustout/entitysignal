@@ -28,6 +28,7 @@
   <ItemGroup>
     <None Remove="Docs\.Net-Standard-and-Xamarin.md" />
     <None Remove="Docs\AngularJs-Integration.md" />
+    <None Remove="Docs\Custom-DB-Context.md" />
     <None Remove="Docs\Quick-Start.md" />
     <None Remove="Docs\React-Integration.md" />
     <None Remove="Docs\Vue-Integration.md" />
