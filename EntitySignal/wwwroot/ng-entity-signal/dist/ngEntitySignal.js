@@ -279,7 +279,7 @@ var EntitySignal;
                                 resolve(_this.subscriptions[url]);
                             }
                             else {
-                                reject(xhr.responseText);
+                                reject(xhr);
                             }
                         }
                     };

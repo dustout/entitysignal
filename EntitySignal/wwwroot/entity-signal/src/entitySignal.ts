@@ -396,7 +396,7 @@
                 resolve(this.subscriptions[url]);
               }
               else {
-                reject(xhr.responseText);
+                reject(xhr);
               }
             }
           }
