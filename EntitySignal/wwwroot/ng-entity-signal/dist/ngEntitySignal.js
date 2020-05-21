@@ -204,6 +204,9 @@ var EntitySignal;
                                 else {
                                     var subscriptionReference = _this.subscriptions[url.url][index];
                                     for (var variableKey in subscriptionReference) {
+                                        if (variableKey.startsWith("$$")) {
+                                            continue;
+                                        }
                                         if (subscriptionReference.hasOwnProperty(variableKey)) {
                                             delete subscriptionReference[variableKey];
                                         }
@@ -221,15 +224,18 @@ var EntitySignal;
                     else if (x.state == EntityState.Deleted) {
                         for (var i = _this.subscriptions[url.url].length - 1; i >= 0; i--) {
                             var currentRow = _this.subscriptions[url.url][i];
-                            if (x.object[_this.options.defaultId]) {
-                                if (currentRow[_this.options.defaultId] == x.object[_this.options.defaultId]) {
-                                    _this.subscriptions[url.url].splice(i, 1);
+                            if ((x.object[_this.options.defaultId] && currentRow[_this.options.defaultId] == x.object[_this.options.defaultId])
+                                || (x.object[_this.options.defaultIdAlt] && currentRow[_this.options.defaultIdAlt] == x.object[_this.options.defaultIdAlt])) {
+                                var subscriptionReference = _this.subscriptions[url.url][i];
+                                for (var variableKey in subscriptionReference) {
+                                    if (variableKey.startsWith("$$")) {
+                                        continue;
+                                    }
+                                    if (subscriptionReference.hasOwnProperty(variableKey)) {
+                                        delete subscriptionReference[variableKey];
+                                    }
                                 }
-                            }
-                            if (x.object[_this.options.defaultIdAlt]) {
-                                if (currentRow[_this.options.defaultIdAlt] == x.object[_this.options.defaultIdAlt]) {
-                                    _this.subscriptions[url.url].splice(i, 1);
-                                }
+                                _this.subscriptions[url.url].splice(i, 1);
                             }
                         }
                     }

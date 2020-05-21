@@ -295,19 +295,22 @@
         url.data.forEach(x => {
           if (x.state == EntityState.Added || x.state == EntityState.Modified) {
             var changeCount = 0;
-            this.subscriptions[url.url].forEach((msg, index) => {
 
-              //check if already in list
+            //check if already in list
+            this.subscriptions[url.url].forEach((msg, index) => {
               if ((x.object[this.options.defaultId] && x.object[this.options.defaultId] == msg[this.options.defaultId])
                 || (x.object[this.options.defaultIdAlt] && x.object[this.options.defaultIdAlt] == msg[this.options.defaultIdAlt])) {
                 if (this.options.spliceModifications) {
                   this.subscriptions[url.url].splice(index, 1, x.object);
                 }
                 else {
-                  var subscriptionReference = this.subscriptions[url.url][index];
-
                   //clear object
+                  var subscriptionReference = this.subscriptions[url.url][index];
                   for (var variableKey in subscriptionReference) {
+                    if (variableKey.startsWith("$$")) {
+                      continue;
+                    }
+
                     if (subscriptionReference.hasOwnProperty(variableKey)) {
                       delete subscriptionReference[variableKey];
                     }
@@ -320,6 +323,8 @@
                 changeCount++;
               }
             })
+
+            //if not in the list then add to end of list
             if (changeCount == 0) {
               this.subscriptions[url.url].push(x.object);
             }
@@ -329,17 +334,21 @@
               var currentRow = this.subscriptions[url.url][i];
 
               //check default ID type
-              if (x.object[this.options.defaultId]) {
-                if (currentRow[this.options.defaultId] == x.object[this.options.defaultId]) {
-                  this.subscriptions[url.url].splice(i, 1);
-                }
-              }
+              if ((x.object[this.options.defaultId] && currentRow[this.options.defaultId] == x.object[this.options.defaultId])
+                || (x.object[this.options.defaultIdAlt] && currentRow[this.options.defaultIdAlt] == x.object[this.options.defaultIdAlt])) {
+                //clear object
+                var subscriptionReference = this.subscriptions[url.url][i];
+                for (var variableKey in subscriptionReference) {
+                  if (variableKey.startsWith("$$")) {
+                    continue;
+                  }
 
-              //check alt ID type
-              if (x.object[this.options.defaultIdAlt]) {
-                if (currentRow[this.options.defaultIdAlt] == x.object[this.options.defaultIdAlt]) {
-                  this.subscriptions[url.url].splice(i, 1);
+                  if (subscriptionReference.hasOwnProperty(variableKey)) {
+                    delete subscriptionReference[variableKey];
+                  }
                 }
+
+                this.subscriptions[url.url].splice(i, 1);
               }
             }
           }
