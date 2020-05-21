@@ -29,7 +29,8 @@ var EntitySignal;
                 maxWaitForConnectionId: 5000,
                 returnDeepCopy: false,
                 defaultId: "id",
-                defaultIdAlt: "Id"
+                defaultIdAlt: "Id",
+                spliceModifications: false
             };
             if (options) {
                 Object.assign(this.options, options);
@@ -195,17 +196,22 @@ var EntitySignal;
                     if (x.state == EntityState.Added || x.state == EntityState.Modified) {
                         var changeCount = 0;
                         _this.subscriptions[url.url].forEach(function (msg, index) {
-                            if (x.object[_this.options.defaultId]) {
-                                if (x.object[_this.options.defaultId] == msg[_this.options.defaultId]) {
+                            if ((x.object[_this.options.defaultId] && x.object[_this.options.defaultId] == msg[_this.options.defaultId])
+                                || (x.object[_this.options.defaultIdAlt] && x.object[_this.options.defaultIdAlt] == msg[_this.options.defaultIdAlt])) {
+                                if (_this.options.spliceModifications) {
                                     _this.subscriptions[url.url].splice(index, 1, x.object);
+                                }
+                                else {
+                                    var subscriptionReference = _this.subscriptions[url.url][index];
+                                    for (var variableKey in subscriptionReference) {
+                                        if (subscriptionReference.hasOwnProperty(variableKey)) {
+                                            delete subscriptionReference[variableKey];
+                                        }
+                                    }
+                                    Object.assign(subscriptionReference, x.object);
                                     changeCount++;
                                 }
-                            }
-                            if (x.object[_this.options.defaultIdAlt]) {
-                                if (x.object[_this.options.defaultIdAlt] == msg[_this.options.defaultIdAlt]) {
-                                    _this.subscriptions[url.url].splice(index, 1, x.object);
-                                    changeCount++;
-                                }
+                                changeCount++;
                             }
                         });
                         if (changeCount == 0) {

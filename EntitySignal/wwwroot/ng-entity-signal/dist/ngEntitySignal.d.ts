@@ -41,6 +41,7 @@ declare namespace EntitySignal {
         returnDeepCopy: boolean;
         defaultId: string;
         defaultIdAlt: string;
+        spliceModifications: boolean;
     }
     type OnStatusChangedCallback = (status: EntitySignalStatus) => void;
     type OnSyncCallback = (newData: UserResult) => void;

@@ -4,7 +4,7 @@
     Unchanged = 1,
     Deleted = 2,
     Modified = 3,
-    Added = 4    
+    Added = 4
   };
 
   interface DataContainer<T> {
@@ -50,11 +50,12 @@
     returnDeepCopy: boolean;
     defaultId: string;
     defaultIdAlt: string;
+    spliceModifications: boolean;
   }
 
   type OnStatusChangedCallback = (status: EntitySignalStatus) => void;
   type OnSyncCallback = (newData: UserResult) => void;
-  type OnUrlDataChangeCallback = (urlData:any) => void;
+  type OnUrlDataChangeCallback = (urlData: any) => void;
 
   interface UrlCallbackContainer {
     [key: string]: OnUrlDataChangeCallback[];
@@ -93,7 +94,8 @@
         maxWaitForConnectionId: 5000,
         returnDeepCopy: false,
         defaultId: "id",
-        defaultIdAlt: "Id"
+        defaultIdAlt: "Id",
+        spliceModifications: false
       };
 
       if (options) {
@@ -102,7 +104,7 @@
 
       this.onStatusChangeCallbacks = [];
       this.onSyncCallbacks = [];
-      this.onUrlCallbacks = <UrlCallbackContainer> {};
+      this.onUrlCallbacks = <UrlCallbackContainer>{};
 
       this.subscriptions = {};
       this.status = EntitySignalStatus.Disconnected;
@@ -294,20 +296,28 @@
           if (x.state == EntityState.Added || x.state == EntityState.Modified) {
             var changeCount = 0;
             this.subscriptions[url.url].forEach((msg, index) => {
-              //check default ID type
-              if (x.object[this.options.defaultId]) {
-                if (x.object[this.options.defaultId] == msg[this.options.defaultId]) {
-                  this.subscriptions[url.url].splice(index, 1, x.object);
-                  changeCount++;
-                }
-              }
 
-              //check alt ID type
-              if (x.object[this.options.defaultIdAlt]) {
-                if (x.object[this.options.defaultIdAlt] == msg[this.options.defaultIdAlt]) {
+              //check if already in list
+              if ((x.object[this.options.defaultId] && x.object[this.options.defaultId] == msg[this.options.defaultId])
+                || (x.object[this.options.defaultIdAlt] && x.object[this.options.defaultIdAlt] == msg[this.options.defaultIdAlt])) {
+                if (this.options.spliceModifications) {
                   this.subscriptions[url.url].splice(index, 1, x.object);
+                }
+                else {
+                  var subscriptionReference = this.subscriptions[url.url][index];
+
+                  //clear object
+                  for (var variableKey in subscriptionReference) {
+                    if (subscriptionReference.hasOwnProperty(variableKey)) {
+                      delete subscriptionReference[variableKey];
+                    }
+                  }
+
+                  //copy back (to keep the same object reference)
+                  Object.assign(subscriptionReference, x.object);
                   changeCount++;
                 }
+                changeCount++;
               }
             })
             if (changeCount == 0) {
