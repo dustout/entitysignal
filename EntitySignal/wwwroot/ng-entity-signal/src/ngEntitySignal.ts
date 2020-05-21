@@ -20,7 +20,7 @@ angular.module("EntitySignal").factory("EntitySignal", [
   ) {
     var vm: ngEntitySignal = <ngEntitySignal>{};
 
-    vm.client = new EntitySignal.Client()
+    vm.client = new EntitySignal.Client();
     vm.client.options.suppressInternalDataProcessing = true;
 
     vm.status = vm.client.status;
