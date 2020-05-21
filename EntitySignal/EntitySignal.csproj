@@ -42,7 +42,6 @@
 
 
   <ItemGroup>
-    <PackageReference Include="EntitySignal.Server" Version="1.0.4" />
     <PackageReference Include="Markdig" Version="0.16.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
@@ -75,6 +74,11 @@
     <None Include="wwwroot\sampleApps\angularJs\tsconfig.json" />
     <None Include="wwwroot\sampleApps\react\tsconfig.json" />
     <None Include="wwwroot\sampleApps\vueJs\tsconfig.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\EntitySignal.Server\EntitySignal.Server.csproj" />
   </ItemGroup>
 
 
