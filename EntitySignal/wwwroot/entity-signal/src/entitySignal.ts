@@ -39,6 +39,10 @@
     [key: string]: any[];
   }
 
+  interface PendingHardRefreshes {
+    [key: string]: Promise<any>;
+  }
+
   export interface EntitySignalOptions {
     autoreconnect: boolean;
     reconnectMinTime: number;
@@ -63,6 +67,7 @@
 
   export class Client {
     subscriptions: SyncSubscription;
+    pendingHardRefreshes: PendingHardRefreshes;
     hub: any;
     options: EntitySignalOptions;
     private connectingDefer: Promise<void>;
@@ -107,6 +112,7 @@
       this.onUrlCallbacks = <UrlCallbackContainer>{};
 
       this.subscriptions = {};
+      this.pendingHardRefreshes = {};
       this.status = EntitySignalStatus.Disconnected;
 
       this.hub = new window["signalR"].HubConnectionBuilder().withUrl(this.options.hubUrl, window["signalR"].HttpTransportType.WebSockets).build();
@@ -376,7 +382,11 @@
     }
 
     hardRefresh(url: string) {
-      return new Promise((resolve, reject) => {
+      if (this.pendingHardRefreshes[url]) {
+        return this.pendingHardRefreshes[url];
+      }
+
+      var hardRefreshPromise = new Promise((resolve, reject) => {
         this.connect().then(() => {
 
           var xhr = new XMLHttpRequest();
@@ -386,6 +396,8 @@
 
           xhr.onreadystatechange = () => {
             if (xhr.readyState == 4) {
+              this.pendingHardRefreshes[url] = null;
+
               if (xhr.status == 200) {
                 var data = JSON.parse(xhr.responseText);
 
@@ -423,6 +435,10 @@
           xhr.send();
         });
       });
+
+      this.pendingHardRefreshes[url] = hardRefreshPromise;
+
+      return hardRefreshPromise;
     }
 
     syncWith(url: string): Promise<any> {

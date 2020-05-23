@@ -29,6 +29,9 @@ declare namespace EntitySignal {
     interface SyncSubscription {
         [key: string]: any[];
     }
+    interface PendingHardRefreshes {
+        [key: string]: Promise<any>;
+    }
     interface EntitySignalOptions {
         autoreconnect: boolean;
         reconnectMinTime: number;
@@ -47,6 +50,7 @@ declare namespace EntitySignal {
     type OnUrlDataChangeCallback = (urlData: any) => void;
     class Client {
         subscriptions: SyncSubscription;
+        pendingHardRefreshes: PendingHardRefreshes;
         hub: any;
         options: EntitySignalOptions;
         private connectingDefer;
@@ -69,7 +73,7 @@ declare namespace EntitySignal {
         reconnect(): void;
         processSync(data: UserResult): string[];
         desyncFrom(url: string): Promise<void>;
-        hardRefresh(url: string): Promise<{}>;
+        hardRefresh(url: string): Promise<any>;
         syncWith(url: string): Promise<any>;
     }
 }

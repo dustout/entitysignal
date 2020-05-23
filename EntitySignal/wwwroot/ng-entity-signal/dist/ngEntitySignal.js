@@ -39,6 +39,7 @@ var EntitySignal;
             this.onSyncCallbacks = [];
             this.onUrlCallbacks = {};
             this.subscriptions = {};
+            this.pendingHardRefreshes = {};
             this.status = EntitySignalStatus.Disconnected;
             this.hub = new window["signalR"].HubConnectionBuilder().withUrl(this.options.hubUrl, window["signalR"].HttpTransportType.WebSockets).build();
             this.hub.onclose(function () {
@@ -257,7 +258,10 @@ var EntitySignal;
         };
         Client.prototype.hardRefresh = function (url) {
             var _this = this;
-            return new Promise(function (resolve, reject) {
+            if (this.pendingHardRefreshes[url]) {
+                return this.pendingHardRefreshes[url];
+            }
+            var hardRefreshPromise = new Promise(function (resolve, reject) {
                 _this.connect().then(function () {
                     var xhr = new XMLHttpRequest();
                     xhr.open("GET", url, true);
@@ -265,6 +269,7 @@ var EntitySignal;
                     xhr.setRequestHeader('x-signalr-connection-id', _this.connectionId);
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState == 4) {
+                            _this.pendingHardRefreshes[url] = null;
                             if (xhr.status == 200) {
                                 var data = JSON.parse(xhr.responseText);
                                 if (_this.subscriptions[url] == null) {
@@ -298,6 +303,8 @@ var EntitySignal;
                     xhr.send();
                 });
             });
+            this.pendingHardRefreshes[url] = hardRefreshPromise;
+            return hardRefreshPromise;
         };
         Client.prototype.syncWith = function (url) {
             if (this.subscriptions[url]) {

@@ -29,7 +29,8 @@ var EntitySignal;
                 maxWaitForConnectionId: 5000,
                 returnDeepCopy: false,
                 defaultId: "id",
-                defaultIdAlt: "Id"
+                defaultIdAlt: "Id",
+                spliceModifications: false
             };
             if (options) {
                 Object.assign(this.options, options);
@@ -38,6 +39,7 @@ var EntitySignal;
             this.onSyncCallbacks = [];
             this.onUrlCallbacks = {};
             this.subscriptions = {};
+            this.pendingHardRefreshes = {};
             this.status = EntitySignalStatus.Disconnected;
             this.hub = new window["signalR"].HubConnectionBuilder().withUrl(this.options.hubUrl, window["signalR"].HttpTransportType.WebSockets).build();
             this.hub.onclose(function () {
@@ -195,17 +197,25 @@ var EntitySignal;
                     if (x.state == EntityState.Added || x.state == EntityState.Modified) {
                         var changeCount = 0;
                         _this.subscriptions[url.url].forEach(function (msg, index) {
-                            if (x.object[_this.options.defaultId]) {
-                                if (x.object[_this.options.defaultId] == msg[_this.options.defaultId]) {
+                            if ((x.object[_this.options.defaultId] && x.object[_this.options.defaultId] == msg[_this.options.defaultId])
+                                || (x.object[_this.options.defaultIdAlt] && x.object[_this.options.defaultIdAlt] == msg[_this.options.defaultIdAlt])) {
+                                if (_this.options.spliceModifications) {
                                     _this.subscriptions[url.url].splice(index, 1, x.object);
+                                }
+                                else {
+                                    var subscriptionReference = _this.subscriptions[url.url][index];
+                                    for (var variableKey in subscriptionReference) {
+                                        if (variableKey.startsWith("$$")) {
+                                            continue;
+                                        }
+                                        if (subscriptionReference.hasOwnProperty(variableKey)) {
+                                            delete subscriptionReference[variableKey];
+                                        }
+                                    }
+                                    Object.assign(subscriptionReference, x.object);
                                     changeCount++;
                                 }
-                            }
-                            if (x.object[_this.options.defaultIdAlt]) {
-                                if (x.object[_this.options.defaultIdAlt] == msg[_this.options.defaultIdAlt]) {
-                                    _this.subscriptions[url.url].splice(index, 1, x.object);
-                                    changeCount++;
-                                }
+                                changeCount++;
                             }
                         });
                         if (changeCount == 0) {
@@ -215,15 +225,18 @@ var EntitySignal;
                     else if (x.state == EntityState.Deleted) {
                         for (var i = _this.subscriptions[url.url].length - 1; i >= 0; i--) {
                             var currentRow = _this.subscriptions[url.url][i];
-                            if (x.object[_this.options.defaultId]) {
-                                if (currentRow[_this.options.defaultId] == x.object[_this.options.defaultId]) {
-                                    _this.subscriptions[url.url].splice(i, 1);
+                            if ((x.object[_this.options.defaultId] && currentRow[_this.options.defaultId] == x.object[_this.options.defaultId])
+                                || (x.object[_this.options.defaultIdAlt] && currentRow[_this.options.defaultIdAlt] == x.object[_this.options.defaultIdAlt])) {
+                                var subscriptionReference = _this.subscriptions[url.url][i];
+                                for (var variableKey in subscriptionReference) {
+                                    if (variableKey.startsWith("$$")) {
+                                        continue;
+                                    }
+                                    if (subscriptionReference.hasOwnProperty(variableKey)) {
+                                        delete subscriptionReference[variableKey];
+                                    }
                                 }
-                            }
-                            if (x.object[_this.options.defaultIdAlt]) {
-                                if (currentRow[_this.options.defaultIdAlt] == x.object[_this.options.defaultIdAlt]) {
-                                    _this.subscriptions[url.url].splice(i, 1);
-                                }
+                                _this.subscriptions[url.url].splice(i, 1);
                             }
                         }
                     }
@@ -245,7 +258,10 @@ var EntitySignal;
         };
         Client.prototype.hardRefresh = function (url) {
             var _this = this;
-            return new Promise(function (resolve, reject) {
+            if (this.pendingHardRefreshes[url]) {
+                return this.pendingHardRefreshes[url];
+            }
+            var hardRefreshPromise = new Promise(function (resolve, reject) {
                 _this.connect().then(function () {
                     var xhr = new XMLHttpRequest();
                     xhr.open("GET", url, true);
@@ -253,6 +269,7 @@ var EntitySignal;
                     xhr.setRequestHeader('x-signalr-connection-id', _this.connectionId);
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState == 4) {
+                            _this.pendingHardRefreshes[url] = null;
                             if (xhr.status == 200) {
                                 var data = JSON.parse(xhr.responseText);
                                 if (_this.subscriptions[url] == null) {
@@ -279,13 +296,15 @@ var EntitySignal;
                                 resolve(_this.subscriptions[url]);
                             }
                             else {
-                                reject(xhr.responseText);
+                                reject(xhr);
                             }
                         }
                     };
                     xhr.send();
                 });
             });
+            this.pendingHardRefreshes[url] = hardRefreshPromise;
+            return hardRefreshPromise;
         };
         Client.prototype.syncWith = function (url) {
             if (this.subscriptions[url]) {
