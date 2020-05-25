@@ -310,7 +310,7 @@
                   this.subscriptions[url.url].splice(index, 1, x.object);
                 }
                 else {
-                  this.updateObjectWhilePersistingReference(this.subscriptions[url.url][index], x.object)
+                  this.updateObjectWhilePersistingReference(this.subscriptions[url.url][index], x.object);
                   changeCount++;
                 }
                 changeCount++;
