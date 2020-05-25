@@ -197,22 +197,12 @@ var EntitySignal;
                     if (x.state == EntityState.Added || x.state == EntityState.Modified) {
                         var changeCount = 0;
                         _this.subscriptions[url.url].forEach(function (msg, index) {
-                            if ((x.object[_this.options.defaultId] && x.object[_this.options.defaultId] == msg[_this.options.defaultId])
-                                || (x.object[_this.options.defaultIdAlt] && x.object[_this.options.defaultIdAlt] == msg[_this.options.defaultIdAlt])) {
+                            if (_this.idsMatch(x.object, msg)) {
                                 if (_this.options.spliceModifications) {
                                     _this.subscriptions[url.url].splice(index, 1, x.object);
                                 }
                                 else {
-                                    var subscriptionReference = _this.subscriptions[url.url][index];
-                                    for (var variableKey in subscriptionReference) {
-                                        if (variableKey.startsWith("$$")) {
-                                            continue;
-                                        }
-                                        if (subscriptionReference.hasOwnProperty(variableKey)) {
-                                            delete subscriptionReference[variableKey];
-                                        }
-                                    }
-                                    Object.assign(subscriptionReference, x.object);
+                                    _this.updateObjectWhilePersistingReference(_this.subscriptions[url.url][index], x.object);
                                     changeCount++;
                                 }
                                 changeCount++;
@@ -225,24 +215,75 @@ var EntitySignal;
                     else if (x.state == EntityState.Deleted) {
                         for (var i = _this.subscriptions[url.url].length - 1; i >= 0; i--) {
                             var currentRow = _this.subscriptions[url.url][i];
-                            if ((x.object[_this.options.defaultId] && currentRow[_this.options.defaultId] == x.object[_this.options.defaultId])
-                                || (x.object[_this.options.defaultIdAlt] && currentRow[_this.options.defaultIdAlt] == x.object[_this.options.defaultIdAlt])) {
-                                var subscriptionReference = _this.subscriptions[url.url][i];
-                                for (var variableKey in subscriptionReference) {
-                                    if (variableKey.startsWith("$$")) {
-                                        continue;
-                                    }
-                                    if (subscriptionReference.hasOwnProperty(variableKey)) {
-                                        delete subscriptionReference[variableKey];
-                                    }
-                                }
-                                _this.subscriptions[url.url].splice(i, 1);
+                            if (_this.idsMatch(x.object, currentRow)) {
+                                _this.clearArrayItem(_this.subscriptions[url.url], i);
                             }
                         }
                     }
                 });
             });
             return changedUrls;
+        };
+        Client.prototype.idsMatch = function (object1, object2) {
+            var obj1Id = this.getId(object1);
+            var obj2Id = this.getId(object2);
+            if (obj1Id && obj2Id && obj1Id == obj2Id) {
+                return true;
+            }
+            return false;
+        };
+        Client.prototype.getId = function (obj) {
+            if (obj[this.options.defaultId]) {
+                return obj[this.options.defaultId];
+            }
+            if (obj[this.options.defaultIdAlt]) {
+                return obj[this.options.defaultIdAlt];
+            }
+            return null;
+        };
+        Client.prototype.updateArrayWhilePersistingObjectReferences = function (target, source) {
+            var _this = this;
+            var targetArrayItemsToRemove = [];
+            var indexedSource = {};
+            source.forEach(function (sourceValue, index) {
+                var sourceId = _this.getId(sourceValue);
+                if (sourceId) {
+                    indexedSource[sourceId] = index;
+                }
+            });
+            target.forEach(function (targetValue, index) {
+                var targetId = _this.getId(targetValue);
+                var matchingSourceIndex = indexedSource[targetId];
+                var matchingSourceValue = source[matchingSourceIndex];
+                if (indexedSource[targetId]) {
+                    _this.updateObjectWhilePersistingReference(targetValue, matchingSourceValue);
+                }
+                else {
+                    targetArrayItemsToRemove.push(index);
+                }
+            });
+            targetArrayItemsToRemove.slice().reverse().forEach(function (indexToRemove) {
+                _this.clearArrayItem(target, indexToRemove);
+            });
+        };
+        Client.prototype.updateObjectWhilePersistingReference = function (target, source) {
+            this.clearObject(target);
+            Object.assign(target, source);
+        };
+        Client.prototype.clearObject = function (obj) {
+            var objectReference = obj;
+            for (var variableKey in objectReference) {
+                if (variableKey.startsWith("$$")) {
+                    continue;
+                }
+                if (objectReference.hasOwnProperty(variableKey)) {
+                    delete objectReference[variableKey];
+                }
+            }
+        };
+        Client.prototype.clearArrayItem = function (array, i) {
+            this.clearObject(array[i]);
+            array.splice(i, 1);
         };
         Client.prototype.desyncFrom = function (url) {
             var _this = this;
@@ -276,10 +317,15 @@ var EntitySignal;
                                     _this.subscriptions[url] = data;
                                 }
                                 else {
-                                    _this.subscriptions[url].splice(0);
-                                    data.forEach(function (y) {
-                                        _this.subscriptions[url].push(y);
-                                    });
+                                    if (_this.options.returnDeepCopy) {
+                                        _this.subscriptions[url].splice(0);
+                                        data.forEach(function (y) {
+                                            _this.subscriptions[url].push(y);
+                                        });
+                                    }
+                                    else {
+                                        _this.updateArrayWhilePersistingObjectReferences(data, _this.subscriptions[url]);
+                                    }
                                 }
                                 if (_this.options.returnDeepCopy) {
                                     var deepCopy = JSON.parse(JSON.stringify(_this.subscriptions[url]));

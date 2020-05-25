@@ -304,26 +304,13 @@
 
             //check if already in list
             this.subscriptions[url.url].forEach((msg, index) => {
-              if ((x.object[this.options.defaultId] && x.object[this.options.defaultId] == msg[this.options.defaultId])
-                || (x.object[this.options.defaultIdAlt] && x.object[this.options.defaultIdAlt] == msg[this.options.defaultIdAlt])) {
+
+              if (this.idsMatch(x.object, msg)) {
                 if (this.options.spliceModifications) {
                   this.subscriptions[url.url].splice(index, 1, x.object);
                 }
                 else {
-                  //clear object
-                  var subscriptionReference = this.subscriptions[url.url][index];
-                  for (var variableKey in subscriptionReference) {
-                    if (variableKey.startsWith("$$")) {
-                      continue;
-                    }
-
-                    if (subscriptionReference.hasOwnProperty(variableKey)) {
-                      delete subscriptionReference[variableKey];
-                    }
-                  }
-
-                  //copy back (to keep the same object reference)
-                  Object.assign(subscriptionReference, x.object);
+                  this.updateObjectWhilePersistingReference(this.subscriptions[url.url][index], x.object)
                   changeCount++;
                 }
                 changeCount++;
@@ -340,21 +327,8 @@
               var currentRow = this.subscriptions[url.url][i];
 
               //check default ID type
-              if ((x.object[this.options.defaultId] && currentRow[this.options.defaultId] == x.object[this.options.defaultId])
-                || (x.object[this.options.defaultIdAlt] && currentRow[this.options.defaultIdAlt] == x.object[this.options.defaultIdAlt])) {
-                //clear object
-                var subscriptionReference = this.subscriptions[url.url][i];
-                for (var variableKey in subscriptionReference) {
-                  if (variableKey.startsWith("$$")) {
-                    continue;
-                  }
-
-                  if (subscriptionReference.hasOwnProperty(variableKey)) {
-                    delete subscriptionReference[variableKey];
-                  }
-                }
-
-                this.subscriptions[url.url].splice(i, 1);
+              if (this.idsMatch(x.object, currentRow)) {
+                this.clearArrayItem(this.subscriptions[url.url], i);
               }
             }
           }
@@ -362,6 +336,90 @@
       });
 
       return changedUrls;
+    }
+
+    idsMatch(object1: any, object2: any): boolean {
+      var obj1Id = this.getId(object1);
+      var obj2Id = this.getId(object2);
+
+      if (obj1Id && obj2Id && obj1Id == obj2Id) {
+        return true;
+      }
+
+      return false;
+    }
+
+    getId(obj: any): number {
+      if (obj[this.options.defaultId]) {
+        return obj[this.options.defaultId];
+      }
+
+      if (obj[this.options.defaultIdAlt]) {
+        return obj[this.options.defaultIdAlt];
+      }
+
+      return null;
+    }
+
+    updateArrayWhilePersistingObjectReferences(target: any[], source: any[], ) {
+      var targetArrayItemsToRemove: number[] = [];
+
+      //to make this efficient we need to index the source array
+      //create data structure of indexedSource["idValue"] = arrayIndexValue
+      var indexedSource = {};
+      source.forEach((sourceValue, index) => {
+        var sourceId = this.getId(sourceValue);
+        if (sourceId) {
+          indexedSource[sourceId] = index;
+        }
+      })
+
+      //now that we can do a O(1) lookup we can quickly merge the source into the target
+      target.forEach((targetValue, index) => {
+        var targetId = this.getId(targetValue);
+        var matchingSourceIndex = indexedSource[targetId];
+        var matchingSourceValue = source[matchingSourceIndex];
+
+        //if found then update the reference
+        if (indexedSource[targetId]) {
+          this.updateObjectWhilePersistingReference(targetValue, matchingSourceValue)
+        }
+        else {
+          //if not found mark for deletion
+          targetArrayItemsToRemove.push(index)
+        }
+      });
+
+      //go through the items to remove list in reverse and remove them
+      targetArrayItemsToRemove.slice().reverse().forEach(indexToRemove => {
+        this.clearArrayItem(target, indexToRemove);
+      });
+    }
+
+    updateObjectWhilePersistingReference(target: any, source: any) {
+      this.clearObject(target);
+
+      //copy back (to keep the same object reference)
+      Object.assign(target, source);
+    }
+
+    clearObject(obj: any) {
+      //clear object
+      var objectReference = obj;
+      for (var variableKey in objectReference) {
+        if (variableKey.startsWith("$$")) {
+          continue;
+        }
+
+        if (objectReference.hasOwnProperty(variableKey)) {
+          delete objectReference[variableKey];
+        }
+      }
+    }
+
+    clearArrayItem(array: any[], i: number) {
+      this.clearObject(array[i])
+      array.splice(i, 1);
     }
 
     desyncFrom(url: string): Promise<void> {
@@ -401,16 +459,26 @@
               if (xhr.status == 200) {
                 var data = JSON.parse(xhr.responseText);
 
+                //update the subscription
                 if (this.subscriptions[url] == null) {
                   this.subscriptions[url] = data;
                 }
                 else {
-                  this.subscriptions[url].splice(0);
-                  data.forEach(y => {
-                    this.subscriptions[url].push(y);
-                  });
+                  //if return deep dopy then just splice and swap the list
+                  if (this.options.returnDeepCopy) {
+                    this.subscriptions[url].splice(0);
+                    data.forEach(y => {
+                      this.subscriptions[url].push(y);
+                    });
+                  }
+                  else {
+                    //if not return deep copy then we must keep the object references
+                    this.updateArrayWhilePersistingObjectReferences(data, this.subscriptions[url]);
+                  }
                 }
 
+
+                //resolve the promise
                 if (this.options.returnDeepCopy) {
                   var deepCopy = JSON.parse(JSON.stringify(this.subscriptions[url]));
                   resolve(deepCopy);

@@ -72,6 +72,12 @@ declare namespace EntitySignal {
         connect(): Promise<void>;
         reconnect(): void;
         processSync(data: UserResult): string[];
+        idsMatch(object1: any, object2: any): boolean;
+        getId(obj: any): number;
+        updateArrayWhilePersistingObjectReferences(target: any[], source: any[]): void;
+        updateObjectWhilePersistingReference(target: any, source: any): void;
+        clearObject(obj: any): void;
+        clearArrayItem(array: any[], i: number): void;
         desyncFrom(url: string): Promise<void>;
         hardRefresh(url: string): Promise<any>;
         syncWith(url: string): Promise<any>;
