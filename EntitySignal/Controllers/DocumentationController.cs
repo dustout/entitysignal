@@ -13,10 +13,10 @@ namespace EntitySignal.Controllers
   [Route("Documentation")]
   public class DocumentationController : Controller
   {
-    private readonly IHostingEnvironment _hostingEnvironment;
+    private readonly IWebHostEnvironment _hostingEnvironment;
 
     public DocumentationController(
-      IHostingEnvironment hostingEnvironment
+      IWebHostEnvironment hostingEnvironment
       )
     {
       _hostingEnvironment = hostingEnvironment;
