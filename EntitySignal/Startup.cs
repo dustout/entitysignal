@@ -16,22 +16,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.HttpOverrides;
 using EntitySignal.Extensions;
 using EntitySignal.Hubs;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.Hosting;
 
 namespace EntitySignal
 {
   public class Startup
   {
-    public Startup(IConfiguration configuration, IHostingEnvironment env)
+    public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
       Configuration = configuration;
       CurrentEnvironment = env;
     }
 
-    private IHostingEnvironment CurrentEnvironment { get; set; }
+    private IWebHostEnvironment CurrentEnvironment { get; set; }
 
     public IConfiguration Configuration { get; }
 
@@ -48,17 +48,11 @@ namespace EntitySignal
       services.AddDbContext<ApplicationDbContext>(options =>
           options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-      services.AddDefaultIdentity<IdentityUser>()
-          .AddDefaultUI(UIFramework.Bootstrap4)
+      services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
           .AddEntityFrameworkStores<ApplicationDbContext>();
 
       if (CurrentEnvironment.IsDevelopment())
       {
-        services.Configure<MvcOptions>(options =>
-        {
-          options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAnyOrigin"));
-        });
-
         services.AddCors(options =>
         {
           options.AddPolicy("AllowAnyOrigin",
@@ -70,15 +64,14 @@ namespace EntitySignal
         });
       }
 
-      services.AddMvc()
-        .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-        .AddJsonOptions(options =>
+      services.AddMvc(option => option.EnableEndpointRouting = false)
+        .AddNewtonsoftJson(options =>
         {
           options.SerializerSettings.ContractResolver = new DefaultContractResolver();
         }); ;
 
       services.AddSignalR()
-        .AddJsonProtocol(options =>
+        .AddNewtonsoftJsonProtocol(options =>
         {
           options.PayloadSerializerSettings.ContractResolver = new DefaultContractResolver();
         });
@@ -86,12 +79,11 @@ namespace EntitySignal
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
-        app.UseDatabaseErrorPage();
         app.UseCors("AllowAnyOrigin");
       }
       else
