@@ -86,6 +86,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EntitySignal.Blazor\Client\EntitySignal.Blazor.Client.csproj" />
+    <ProjectReference Include="..\EntitySignal.Models\EntitySignal.Models.csproj" />
     <ProjectReference Include="..\EntitySignal.Server\EntitySignal.Server.csproj" />
   </ItemGroup>
 
