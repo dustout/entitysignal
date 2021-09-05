@@ -23,98 +23,100 @@ using Microsoft.Extensions.Hosting;
 
 namespace EntitySignal
 {
-  public class Startup
-  {
-    public Startup(IConfiguration configuration, IWebHostEnvironment env)
+    public class Startup
     {
-      Configuration = configuration;
-      CurrentEnvironment = env;
-    }
-
-    private IWebHostEnvironment CurrentEnvironment { get; set; }
-
-    public IConfiguration Configuration { get; }
-
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.Configure<CookiePolicyOptions>(options =>
-      {
-              // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-              options.CheckConsentNeeded = context => true;
-        options.MinimumSameSitePolicy = SameSiteMode.None;
-      });
-
-      services.AddDbContext<ApplicationDbContext>(options =>
-          options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-
-      services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-          .AddEntityFrameworkStores<ApplicationDbContext>();
-
-      if (CurrentEnvironment.IsDevelopment())
-      {
-        services.AddCors(options =>
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-          options.AddPolicy("AllowAnyOrigin",
-          builder => builder
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowAnyOrigin()
-                          );
-        });
-      }
+            Configuration = configuration;
+            CurrentEnvironment = env;
+        }
 
-      services.AddMvc(option => option.EnableEndpointRouting = false)
-        .AddNewtonsoftJson(options =>
+        private IWebHostEnvironment CurrentEnvironment { get; set; }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
         {
-          options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-        }); ;
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+          // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+          options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
-      services.AddSignalR()
-        .AddNewtonsoftJsonProtocol(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            if (CurrentEnvironment.IsDevelopment())
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("AllowAnyOrigin",
+            builder => builder
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowAnyOrigin()
+                            );
+                });
+            }
+
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+              .AddNewtonsoftJson(options =>
+              {
+                  options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+              }); ;
+
+            services.AddSignalR()
+              .AddNewtonsoftJsonProtocol(options =>
+              {
+                  options.PayloadSerializerSettings.ContractResolver = new DefaultContractResolver();
+              });
+            services.AddEntitySignal();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-          options.PayloadSerializerSettings.ContractResolver = new DefaultContractResolver();
-        });
-      services.AddEntitySignal();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseCors("AllowAnyOrigin");
+                app.UseWebAssemblyDebugging();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseHttpsRedirection();
+            app.UseBlazorFrameworkFiles();
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
+            app.UseAuthentication();
+
+            app.UseWebSockets();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<EntitySignalHub>("/dataHub");
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
     }
-
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-      if (env.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-        app.UseCors("AllowAnyOrigin");
-      }
-      else
-      {
-        app.UseExceptionHandler("/Home/Error");
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-        app.UseHsts();
-      }
-
-      app.UseForwardedHeaders(new ForwardedHeadersOptions
-      {
-        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-      });
-
-      app.UseHttpsRedirection();
-      app.UseStaticFiles();
-      app.UseCookiePolicy();
-      app.UseAuthentication();
-
-      app.UseWebSockets();
-      app.UseSignalR(routes =>
-      {
-        routes.MapHub<EntitySignalHub>("/dataHub");
-      });
-
-      app.UseMvc(routes =>
-      {
-        routes.MapRoute(
-                  name: "default",
-                  template: "{controller=Home}/{action=Index}/{id?}");
-      });
-    }
-  }
 }

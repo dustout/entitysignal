@@ -1,114 +1,116 @@
 ﻿@{
-  ViewData["Title"] = "Real Time Entity Framework (EF) and ASP.NET core";
+    ViewData["Title"] = "Real Time Entity Framework (EF) and ASP.NET core";
 }
 <br class="d-none d-sm-block" />
 
 <div class="container pl-0 pr-0">
-  <div class="row mt-3 mb-5">
-    <div class="col">
-      <div class="card">
-        <div class="card-body text-center">
-          <h1 class="mt-3">@ViewData["Title"]</h1>
-          <p class="lead" style="font-weight:400">Make all of your data real time. Receive updates no matter where the object was created or edited! Uses existing ASP.NET core permissions system.</p>
-          <p class="pb-3">
-            <img class="img-fluid" src="~/img/explainer/Explainer.gif" />
-          </p>
-          <p>
-            <a class="btn btn-primary btn-block btn-lg" href="https://github.com/dustout/entitysignal" style="background-color:#C2255C;border-color:#b12355;font-size:1.32875rem"><i class="fab fa-github"></i> View On GitHub</a>
-          </p>
+    <div class="row mt-3 mb-5">
+        <div class="col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="mt-3">@ViewData["Title"]</h1>
+                    <p class="lead" style="font-weight:400">Make all of your data real time. Receive updates no matter where the object was created or edited! Uses existing ASP.NET core permissions system.</p>
+                    <p class="pb-3">
+                        <img class="img-fluid" src="~/img/explainer/Explainer.gif" />
+                    </p>
+                    <p>
+                        <a class="btn btn-primary btn-block btn-lg" href="https://github.com/dustout/entitysignal" style="background-color:#C2255C;border-color:#b12355;font-size:1.32875rem"><i class="fab fa-github"></i> View On GitHub</a>
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 
 <div class="container pl-0 pr-0 pb-5">
-  <h2>What is Entity Signal?</h2>
-  <hr />
-  <p>
-    Entity Signal allows you
-    to connect to Entity Framework through SignalR and get updates on subscribed data in real time. This lowers the number
-    of refreshes done by the user and ultimately allows you to do more with fewer servers. It is also requires minimal changes,
-    so you can make real-time apps about as easily as you can make standard apps.
-  </p>
+    <h2>What is Entity Signal?</h2>
+    <hr />
+    <p>
+        Entity Signal allows you
+        to connect to Entity Framework through SignalR and get updates on subscribed data in real time. This lowers the number
+        of refreshes done by the user and ultimately allows you to do more with fewer servers. It is also requires minimal changes,
+        so you can make real-time apps about as easily as you can make standard apps.
+    </p>
 </div>
 
 
 <div class="container pl-0 pr-0 pb-5">
-  <h2>Top Features</h2>
-  <hr />
-  <p>
-    <strong><i class="fas fa-sync"></i> Sync Frontend Collection To Backend</strong> Entity signal will make sure that a given collection will remain in sync with the backend
-    <br />
-    <strong><i class="fas fa-hat-wizard"></i> Second Query Instant</strong> Requesting the same endpoint 2 times? The second request is returned instantly if the first is already synced.
-    <br />
-    <strong><i class="fas fa-tachometer-alt"></i> Performance</strong> Entity signal allows you to do more with less, while also delivering realtime functionality
-    <br />
-    <strong><i class="fas fa-expand-arrows-alt"></i> Stable and Scaleable Foundation</strong> Built inbetween entity framework and signalr entity signal is built on a stable and scaleable foundation
-    <br />
-  </p>
+    <h2>Top Features</h2>
+    <hr />
+    <p>
+        <strong><i class="fas fa-sync"></i> Sync Frontend Collection To Backend</strong> Entity signal will make sure that a given collection will remain in sync with the backend
+        <br />
+        <strong><i class="fas fa-hat-wizard"></i> Second Query Instant</strong> Requesting the same endpoint 2 times? The second request is returned instantly if the first is already synced.
+        <br />
+        <strong><i class="fas fa-tachometer-alt"></i> Performance</strong> Entity signal allows you to do more with less, while also delivering realtime functionality
+        <br />
+        <strong><i class="fas fa-expand-arrows-alt"></i> Stable and Scaleable Foundation</strong> Built inbetween entity framework and signalr entity signal is built on a stable and scaleable foundation
+        <br />
+    </p>
 </div>
 
 <div class="container pl-0 pr-0 pb-5">
-  <h2>Works with Javascript and C#</h2>
-  <hr />
-  <p>
-    <i class="fab fa-js"></i> VanillaJs (<a href="/quick-start">Quick Start Guide</a>)
-    <br />
-    <i class="fab fa-react"></i> React (<a href="/example/react">Example</a>) (<a href="/documentation/React-Integration">Integration Guide</a>)
-    <br />
-    <i class="fab fa-vuejs"></i> VueJs (<a href="/example/vuejs">Example</a>) (<a href="/documentation/Vue-Integration">Integration Guide</a>)
-    <br />
-    <i class="fab fa-angular"></i> AngularJs (<a href="/example/angularjs">Example</a>) (<a href="/documentation/AngularJs-Integration">Integration Guide</a>)
-    <br />
-    <i class="fas fa-code"></i> .Net Standard (<a href="/documentation/.Net-Standard-and-Xamarin">Integration Guide</a>)
-    <br />
-    <i class="fas fa-code"></i> Xamarin (<a href="/documentation/.Net-Standard-and-Xamarin">Integration Guide</a>)
-  </p>
+    <h2>Works with Javascript and C#</h2>
+    <hr />
+    <p>
+        <i class="fab fa-js"></i> VanillaJs (<a href="/quick-start">Quick Start Guide</a>)
+        <br />
+        <i class="fab fa-react"></i> React (<a href="/example/react">Example</a>) (<a href="/documentation/React-Integration">Integration Guide</a>)
+        <br />
+        <i class="fab fa-vuejs"></i> VueJs (<a href="/example/vuejs">Example</a>) (<a href="/documentation/Vue-Integration">Integration Guide</a>)
+        <br />
+        <i class="fab fa-angular"></i> AngularJs (<a href="/example/angularjs">Example</a>) (<a href="/documentation/AngularJs-Integration">Integration Guide</a>)
+        <br />
+        <i class="fas fa-code"></i> .Net Standard (<a href="/documentation/.Net-Standard-and-Xamarin">Integration Guide</a>)
+        <br />
+        <i class="fas fa-code"></i> Xamarin (<a href="/documentation/.Net-Standard-and-Xamarin">Integration Guide</a>)
+        <br />
+        <i class="fas fa-code"></i> Blazor (<a href="/example/blazor">Example</a>)
+    </p>
 </div>
 
 <div class="container pl-0 pr-0 pb-5">
-  <h2>Testimonials</h2>
-  <hr />
-  <div class="row">
-    <div class="col-sm">
-      <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Clever solution from <a href="https://twitter.com/dustout?ref_src=twsrc%5Etfw">@@dustout</a> called EntitySignal that bridges .NET&#39;s Entity Framework and ASPNET Core&#39;s SignalR&#39;s realtime websocket notifications <a href="https://t.co/D9UXUFbLXh">https://t.co/D9UXUFbLXh</a></p>&mdash; Scott Hanselman (@@shanselman) <a href="https://twitter.com/shanselman/status/1128194960979677184?ref_src=twsrc%5Etfw">May 14, 2019</a></blockquote>
+    <h2>Testimonials</h2>
+    <hr />
+    <div class="row">
+        <div class="col-sm">
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Clever solution from <a href="https://twitter.com/dustout?ref_src=twsrc%5Etfw">@@dustout</a> called EntitySignal that bridges .NET&#39;s Entity Framework and ASPNET Core&#39;s SignalR&#39;s realtime websocket notifications <a href="https://t.co/D9UXUFbLXh">https://t.co/D9UXUFbLXh</a></p>&mdash; Scott Hanselman (@@shanselman) <a href="https://twitter.com/shanselman/status/1128194960979677184?ref_src=twsrc%5Etfw">May 14, 2019</a></blockquote>
+        </div>
+        <div class="col-sm">
+            <blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">Amazing!! It’s remember me Firebase real-time</p>&mdash; Alexsandro (@@alexsandro_xpt) <a href="https://twitter.com/alexsandro_xpt/status/1128845774979325953?ref_src=twsrc%5Etfw">May 16, 2019</a></blockquote>
+        </div>
     </div>
-    <div class="col-sm">
-      <blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">Amazing!! It’s remember me Firebase real-time</p>&mdash; Alexsandro (@@alexsandro_xpt) <a href="https://twitter.com/alexsandro_xpt/status/1128845774979325953?ref_src=twsrc%5Etfw">May 16, 2019</a></blockquote>
-    </div>
-  </div>
 </div>
 
 <div class="container pl-0 pr-0 pb-5">
-  <h2>Performance <small class="text-muted">(Don't believe me? <a href="/examples/angularjs">Try it yourself</a> and watch the stats <a href="/stats">here</a>)</small></h2>
-  <hr />
-  <div class="embed-responsive embed-responsive-16by9">
-    <video controls autoplay muted loop>
-      <source src="~/img/explainer/entitySignalVideo.mp4" type="video/mp4">
-    </video>
-  </div>
+    <h2>Performance <small class="text-muted">(Don't believe me? <a href="/examples/angularjs">Try it yourself</a> and watch the stats <a href="/stats">here</a>)</small></h2>
+    <hr />
+    <div class="embed-responsive embed-responsive-16by9">
+        <video controls autoplay muted loop>
+            <source src="~/img/explainer/entitySignalVideo.mp4" type="video/mp4">
+        </video>
+    </div>
 </div>
 
 <div class="container pl-0 pr-0">
-  <h2>Example <small class="text-muted">(Open In Multiple Tabs for best experience)</small></h2>
-  <hr />
+    <h2>Example <small class="text-muted">(Open In Multiple Tabs for best experience)</small></h2>
+    <hr />
 </div>
 
 @{
-  await Html.RenderPartialAsync("_AngularJs");
+    await Html.RenderPartialAsync("_AngularJs");
 }
 
 @section Scripts{
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
-  <script src="~/ng-entity-signal/dist/ngEntitySignal.js" asp-append-version="true"></script>
-  <script src="~/sampleApps/angularJs/testAngularApp.js" asp-append-version="true"></script>
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@aspnet/signalr@1.1.2/dist/browser/signalr.min.js"></script>
+    <script src="~/ng-entity-signal/dist/ngEntitySignal.js" asp-append-version="true"></script>
+    <script src="~/sampleApps/angularJs/testAngularApp.js" asp-append-version="true"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 }
 
 
 @section Styles{
-  <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-dark.min.css" />
+    <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-dark.min.css" />
 }

@@ -6,21 +6,26 @@ using System.Threading.Tasks;
 
 namespace EntitySignal.Controllers
 {
-  public class ExampleController : Controller
-  {
-    public IActionResult AngularJs()
+    public class ExampleController : Controller
     {
-      return View();
-    }
+        public IActionResult AngularJs()
+        {
+            return View();
+        }
 
-    public IActionResult VueJs()
-    {
-      return View();
-    }
+        public IActionResult VueJs()
+        {
+            return View();
+        }
 
-    public IActionResult React()
-    {
-      return View();
+        public IActionResult React()
+        {
+            return View();
+        }
+
+        public IActionResult Blazor()
+        {
+            return View();
+        }
     }
-  }
 }

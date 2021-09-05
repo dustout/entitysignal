@@ -49,6 +49,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.10" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -84,6 +85,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\EntitySignal.Blazor\Client\EntitySignal.Blazor.Client.csproj" />
     <ProjectReference Include="..\EntitySignal.Server\EntitySignal.Server.csproj" />
   </ItemGroup>
 

@@ -14,48 +14,48 @@ using System.Threading.Tasks;
 namespace EntitySignal.Controllers
 {
 
-  public class SubscribePost
-  {
-    public string ConnectionId { get; set; }
-  }
-
-  [ResponseCache(NoStore = true, Duration = 0)]
-  public class HomeController : Controller
-  {
-    private readonly IWebHostEnvironment _hostingEnvironment;
-
-    public HomeController(
-      IWebHostEnvironment hostingEnvironment
-      )
+    public class SubscribePost
     {
-      _hostingEnvironment = hostingEnvironment;
+        public string ConnectionId { get; set; }
     }
 
-    public IActionResult Index()
+    [ResponseCache(NoStore = true, Duration = 0)]
+    public class HomeController : Controller
     {
-      ViewData["IsRoot"] = true;
-      return View();
-    }
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-    [HttpGet("stats")]
-    public IActionResult Stats()
-    {
-      return View();
-    }
+        public HomeController(
+          IWebHostEnvironment hostingEnvironment
+          )
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
 
-    [HttpGet("quick-start")]
-    public async Task<IActionResult> QuickStart()
-    {
-      string quickStartPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Docs", "Quick-Start.md");
-      var markdownFileText = await System.IO.File.ReadAllTextAsync(quickStartPath);
+        public IActionResult Index()
+        {
+            ViewData["IsRoot"] = true;
+            return View();
+        }
 
-      return View(model: markdownFileText);
-    }
+        [HttpGet("stats")]
+        public IActionResult Stats()
+        {
+            return View();
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-      return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        [HttpGet("quick-start")]
+        public async Task<IActionResult> QuickStart()
+        {
+            string quickStartPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Docs", "Quick-Start.md");
+            var markdownFileText = await System.IO.File.ReadAllTextAsync(quickStartPath);
+
+            return View(model: markdownFileText);
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
-  }
 }
