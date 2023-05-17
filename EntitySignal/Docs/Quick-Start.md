@@ -11,6 +11,7 @@ public void ConfigureServices(IServiceCollection services)
 {
   //Normal stuff here
   services.AddSignalR();
+  services.AddHttpContextAccessor();
   services.AddEntitySignal();
 }
 ```
